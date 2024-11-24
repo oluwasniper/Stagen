@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
         DefaultCupertinoLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
       ],
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appName,
       supportedLocales: L10n.all,
       locale: L10n.all[0],
       title: AppLocalizations.of(context)!.appName,
