@@ -38,10 +38,6 @@ dependencies:
   flutter_riverpod: ^2.6.1 # State management
   go_router: ^14.6.0 # Routing
   http: ^1.2.2 # Http requests
-  firebase_auth: ^5.2.0 # Firebase authentication
-  firebase_core: ^3.4.0 # Firebase core
-  cloud_firestore: ^5.4.0 # Firestore
-  firebase_storage: ^12.2.0 # Firebase storage
   flutter_secure_storage: ^9.2.2 # Secure storage
   page_transition: ^2.1.0 # Page transitions
   pretty_qr_code: ^3.3.0 # QR code generation
