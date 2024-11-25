@@ -1,0 +1,12 @@
+
+{
+    "@@locale" : "en",
+    "language": "English",
+    "@language":{
+        "description": "The current language"
+    },
+    "appName": "Scagen",
+    "@appName":{
+        "description": "The name of the software application"
+    }
+}
