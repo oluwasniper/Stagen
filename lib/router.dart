@@ -1,51 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:revolutionary_stuff/screens/generate_home_screen.dart';
+import 'package:revolutionary_stuff/screens/history_screen.dart';
+import 'package:revolutionary_stuff/screens/onboarding.dart';
+import 'package:revolutionary_stuff/screens/scan_home_screen.dart';
+import 'package:revolutionary_stuff/screens/splash_screen.dart';
 
 final GoRouter _router = GoRouter(
   routes: <GoRoute>[
-    // GoRoute(
-    //   path: '/',
-    //   builder: (BuildContext context, GoRouterState state) =>
-    //       const ProductListingScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/home',
-    //   builder: (BuildContext context, GoRouterState state) =>
-    //       const ProductListingScreen(),
-    // ),
-    // GoRoute(
-    //   // path: '/auth',
-    //   path: '/',
-    //   builder: (BuildContext context, GoRouterState state) =>
-    //       const AuthScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/sign-up',
-    //   builder: (BuildContext context, GoRouterState state) =>
-    //       const SignUpScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/product-details/:productId',
-    //   builder: (BuildContext context, GoRouterState state) =>
-    //       ProductDetailsScreen(
-    //     productId: int.parse(state.pathParameters['productId']!),
-    //   ),
-    // ),
-    // GoRoute(
-    //   path: '/home',
-    //   builder: (BuildContext context, GoRouterState state) =>
-    //       const ProfileScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/profile',
-    //   builder: (BuildContext context, GoRouterState state) =>
-    //       const ProfileScreen(),
-    // ),
-    // GoRoute(
-    //   path: '/favorites',
-    //   builder: (BuildContext context, GoRouterState state) =>
-    //       const FavoritesScreen(),
-    // ),
+    routeMethod(name: '', screen: SplashScreen()),
+    routeMethod(name: 'onboarding', screen: OnboardingScreen()),
+    routeMethod(name: 'home', screen: ScanHomeScreen()),
+    routeMethod(name: 'generateHome', screen: GenerateHomeScreen()),
+    routeMethod(name: 'history', screen: HistoryScreen()),
   ],
   redirect: (BuildContext context, GoRouterState state) {
     final loggedIn =
@@ -56,5 +23,13 @@ final GoRouter _router = GoRouter(
     return null;
   },
 );
+
+GoRoute routeMethod({required String name, required Widget screen}) {
+  return GoRoute(
+    name: name == '' ? 'splash' : name,
+    path: '/$name',
+    builder: (BuildContext context, GoRouterState state) => screen,
+  );
+}
 
 GoRouter get router => _router;
