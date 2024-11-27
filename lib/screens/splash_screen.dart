@@ -2,7 +2,7 @@ import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:revolutionary_stuff/router.dart';
+import 'package:revolutionary_stuff/utils/app_router.dart';
 import 'package:revolutionary_stuff/utils/app_asset.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
