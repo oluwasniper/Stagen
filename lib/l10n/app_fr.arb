@@ -1,5 +1,6 @@
 {
     "@@locale" : "fr",
     "language": "Français",
-     "appName": "Scagen"
+     "appName": "Scagen",
+    "generateCode": "Générer un Code"
 }
