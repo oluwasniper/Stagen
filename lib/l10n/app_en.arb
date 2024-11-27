@@ -8,5 +8,9 @@
     "appName": "Scagen",
     "@appName":{
         "description": "The name of the software application"
+    },
+    "generateCode": "Generate a Code",
+    "@generateCode":{
+        "description": "Button to generate a code"
     }
 }
