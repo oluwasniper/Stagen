@@ -21,7 +21,7 @@ class OnboardingScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text('Onboarding Screen'),
+                const Text('Onboarding Screens'),
                 Text(
                   AppLocalizations.of(context)!.generateCode,
                 ),
