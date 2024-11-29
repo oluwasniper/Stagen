@@ -1,5 +1,11 @@
 {
     "@@locale" : "fr",
     "language": "Français",
-     "appName": "Scagen"
+     "appName": "Scagen",
+ 
+    "onboardingHeader": "Commencer",
+    "onboardingSubHeader": "Allez et profitez de nos fonctionnalités gratuitement et facilitez-vous la vie avec nous.",
+    "onboardingSkipButton": "Allons-y",
+    "generateCode": "Générer un code"
+
 }
