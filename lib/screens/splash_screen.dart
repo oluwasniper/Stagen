@@ -3,15 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:revolutionary_stuff/utils/app_router.dart';
-import 'package:revolutionary_stuff/utils/app_asset.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:revolutionary_stuff/widgets/splash_logo_widget.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final iconSize = MediaQuery.sizeOf(context).width - 150;
     return AnnotatedRegion(
       value:
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
@@ -25,21 +23,9 @@ class SplashScreen extends StatelessWidget {
           systemNavigationBarIconBrightness: Brightness.dark,
         ),
         child: FlutterSplashScreen(
-          splashScreenBody: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 200.0),
-              child: Image.asset(
-                kAsset.icon,
-                height: iconSize,
-                width: iconSize,
-                filterQuality: FilterQuality.high,
-                semanticLabel:
-                    '${AppLocalizations.of(context)!.appName} App Icon',
-              ),
-            ),
-          ),
+          splashScreenBody: SplashLogoWidget(),
           backgroundColor: Color(0xffFDB623),
-          duration: Duration(seconds: 7),
+          duration: Duration(seconds: 2),
           onEnd: () {
             router.replace('/onboarding');
           },
