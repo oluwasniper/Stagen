@@ -25,7 +25,7 @@ class SplashScreen extends StatelessWidget {
         child: FlutterSplashScreen(
           splashScreenBody: SplashLogoWidget(),
           backgroundColor: Color(0xffFDB623),
-          duration: Duration(seconds: 2),
+          duration: Duration(seconds: 3),
           onEnd: () {
             // router.replace('/onboarding');
             AppGoRouter.router.go('/onboarding');
