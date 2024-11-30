@@ -18,7 +18,7 @@ class SplashLogoWidget extends StatelessWidget {
             left: (iconSize / 0.6) * 0.2,
           ),
           child: Image.asset(
-            kAsset.icon,
+            KAsset.icon,
             height: iconSize,
             width: iconSize,
             filterQuality: FilterQuality.high,

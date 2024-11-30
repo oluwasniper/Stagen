@@ -1,110 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-// class BottomNavigationPage extends StatefulWidget {
-//   const BottomNavigationPage({
-//     super.key,
-//     required this.child,
-//   });
+class BottomNavigationPage extends StatefulWidget {
+  const BottomNavigationPage({
+    super.key,
+    required this.navigationShell,
+  });
 
-//   final StatefulNavigationShell child;
-
-//   @override
-//   State<BottomNavigationPage> createState() => _BottomNavigationPageState();
-// }
-
-// class _BottomNavigationPageState extends State<BottomNavigationPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Bottom Navigator Shell'),
-//       ),
-//       body: SafeArea(
-//         child: widget.child,
-//       ),
-//       bottomNavigationBar: BottomNavigationBar(
-//         type: BottomNavigationBarType.fixed,
-//         currentIndex: widget.child.currentIndex,
-//         onTap: (index) {
-//           widget.child.goBranch(
-//             index,
-//             initialLocation: index == widget.child.currentIndex,
-//           );
-//           setState(() {});
-//         },
-//         items: const [
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.home),
-//             label: 'home',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.search),
-//             label: 'search',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.settings),
-//             label: 'settings',
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-class BottomNavPage extends StatefulWidget {
-  const BottomNavPage({super.key});
+  final StatefulNavigationShell navigationShell;
 
   @override
-  State<BottomNavPage> createState() => _BottomNavPageState();
+  State<BottomNavigationPage> createState() => _BottomNavigationPageState();
 }
 
-class _BottomNavPageState extends State<BottomNavPage> {
-  int _selectedIndex = 0;
-
+class _BottomNavigationPageState extends State<BottomNavigationPage> {
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    // setState(() {
+    //   widget.navigationShell.goBranch(
+    //     index,
+    //     initialLocation: index == widget.navigationShell.currentIndex,
+    //   );
+    // });
+    widget.navigationShell.goBranch(
+      index,
+      initialLocation: index == widget.navigationShell.currentIndex,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    const List<Widget> pages = <Widget>[
-      Icon(
-        Icons.call,
-        size: 150,
-      ),
-      Icon(
-        Icons.camera,
-        size: 150,
-      ),
-      Icon(
-        Icons.chat,
-        size: 150,
-      ),
-    ];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BottomNavigationBar Demo'),
+        title: const Text('Bottom Navigator Shell'),
       ),
-      body: Center(
-        child: pages.elementAt(1),
-      ),
+      body: widget.navigationShell,
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex, //New
-        onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
+        type: BottomNavigationBarType.fixed,
+        currentIndex: widget.navigationShell.currentIndex,
+        onTap: (index) {
+          // widget.navigationShell.goBranch(
+          //   index,
+          //   initialLocation: index == widget.navigationShell.currentIndex,
+          // );
+          // setState(() {});
+          _onItemTapped(index);
+        },
+        items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.call),
-            label: 'Calls',
+            icon: Icon(Icons.home),
+            label: 'home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            label: 'Camera',
+            icon: Icon(Icons.search),
+            label: 'search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chats',
+            icon: Icon(Icons.settings),
+            label: 'settings',
           ),
         ],
       ),
