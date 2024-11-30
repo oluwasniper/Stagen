@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:revolutionary_stuff/utils/app_asset.dart';
+import '../utils/app_asset.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplashLogoWidget extends StatelessWidget {
@@ -18,7 +18,7 @@ class SplashLogoWidget extends StatelessWidget {
             left: (iconSize / 0.6) * 0.2,
           ),
           child: Image.asset(
-            KAsset.icon,
+            AppAsset.icon,
             height: iconSize,
             width: iconSize,
             filterQuality: FilterQuality.high,
