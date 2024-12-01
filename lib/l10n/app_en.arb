@@ -8,5 +8,23 @@
     "appName": "Scagen",
     "@appName":{
         "description": "The name of the software application"
+    },
+    "onboardingHeader": "Get Started",
+    "@onboardingHeader":{
+        "description": "Onboarding screen content heading"
+    },
+
+    "onboardingSubHeader": "Go and enjoy our features for free and make your life easy with us.",
+    "@onboardingSubHeader":{
+        "description": "Onboarding screen content subheading"
+    },
+    "onboardingSkipButton": "Let's Go",
+    "@onboardingSkipButton":{
+        "description": "Button to skip the onboarding screen"
+    },
+    "generateCode": "Generate a Code",
+    "@generateCode":{
+        "description": "Button to generate a code"
     }
 }
+
