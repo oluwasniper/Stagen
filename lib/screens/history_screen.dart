@@ -3,6 +3,7 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:revolutionary_stuff/utils/app_router.dart';
 import 'package:revolutionary_stuff/utils/route/app_path.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -35,7 +36,7 @@ class _HistoryScreenState extends State<HistoryScreen>
         title: Padding(
           padding: const EdgeInsets.only(left: 20),
           child: Text(
-            'History',
+            AppLocalizations.of(context)!.history,
             style: TextStyle(
               fontSize: 27,
               fontWeight: FontWeight.w500,
@@ -107,7 +108,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                 SizedBox(
                   width: (MediaQuery.of(context).size.width * 7 / 4) - 12,
                   child: Tab(
-                    text: 'Scan',
+                    text: AppLocalizations.of(context)!.scanHistoryTab,
                   ),
                 ),
 
@@ -117,7 +118,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                   // width: (MediaQuery.of(context).size.width * 7 / 4) - 12,
                   width: (MediaQuery.of(context).size.width * 8 / 4),
                   child: Tab(
-                    text: 'Create',
+                    text: AppLocalizations.of(context)!.createHistoryTab,
                   ),
                 ),
               ],
