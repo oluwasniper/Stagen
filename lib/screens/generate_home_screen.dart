@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:revolutionary_stuff/utils/app_asset.dart';
 import 'package:revolutionary_stuff/utils/app_router.dart';
 import 'package:revolutionary_stuff/utils/route/app_path.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -54,29 +55,171 @@ class GenerateHomeScreen extends StatelessWidget {
         ),
         child: SizedBox(
           child: GridView.builder(
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-              itemCount: 12,
-              itemBuilder: (_, index) {
-                return FlutterLogo();
-                // return Stack(
-                //   children: [
-                //     ClipRRect(
-                //       borderRadius: BorderRadius.circular(15),
-                //       child: Container(
-                //           color: Color(0xff333333), child: FlutterLogo()),
-                //     ),
-                //   ],
-                // );
-                // return Container(
-                //   margin: const EdgeInsets.all(43),
-                //   padding: const EdgeInsets.all(42),
-                //   color: Color(0xff333333),
-                //   child: Text("Text", style: TextStyle(color: Colors.black)),
-                // );
-              }),
+            physics: BouncingScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 40),
+            itemCount: QROptions.options.length,
+            itemBuilder: (context, index) {
+              final option = QROptions.options[index];
+              return QROptionCard(option: option);
+            },
+          ),
         ),
       ),
+    );
+  }
+}
+
+// create enum for qr options
+enum QROptionType {
+  text,
+  website,
+  wifi,
+  event,
+  contact,
+  business,
+  location,
+  whatsapp,
+  email,
+  twitter,
+  instagram,
+  telephone,
+}
+
+class QROption {
+  final String label;
+  final String svgData;
+  final QROptionType type;
+
+  const QROption({
+    required this.label,
+    required this.svgData,
+    required this.type,
+  });
+}
+
+class QROptions {
+  static final List<QROption> options = [
+    QROption(
+      label: 'Text',
+      svgData: AppAsset.textIconSvg,
+      type: QROptionType.text,
+    ),
+    QROption(
+      label: 'Website',
+      svgData: AppAsset.websiteIconSvg,
+      type: QROptionType.website,
+    ),
+    QROption(
+      label: 'Wi-Fi',
+      svgData: AppAsset.wifiIconSvg,
+      type: QROptionType.wifi,
+    ),
+    // event
+    QROption(
+      label: 'Event',
+      svgData: AppAsset.eventIconSvg,
+      type: QROptionType.event,
+    ),
+    // contact
+    QROption(
+      label: 'Contact',
+      svgData: AppAsset.contactIconSvg,
+      type: QROptionType.contact,
+    ),
+    // business
+    QROption(
+      label: 'Business',
+      svgData: AppAsset.businessIconSvg,
+      type: QROptionType.business,
+    ),
+    // location
+    QROption(
+      label: 'Location',
+      svgData: AppAsset.locationIconSvg,
+      type: QROptionType.location,
+    ),
+    // whatsapp
+    QROption(
+      label: 'WhatsApp',
+      svgData: AppAsset.whatsappIconSvg,
+      type: QROptionType.whatsapp,
+    ),
+    // email
+    QROption(
+      label: 'Email',
+      svgData: AppAsset.emailIconSvg,
+      type: QROptionType.email,
+    ),
+    // twitter
+    QROption(
+      label: 'Twitter',
+      svgData: AppAsset.twitterIconSvg,
+      type: QROptionType.twitter,
+    ),
+    // instagram
+    QROption(
+      label: 'Instagram',
+      svgData: AppAsset.instagramIconSvg,
+      type: QROptionType.instagram,
+    ),
+    // telephone
+    QROption(
+      label: 'Telephone',
+      svgData: AppAsset.telephoneIconSvg,
+      type: QROptionType.telephone,
+    ),
+  ];
+}
+
+class QROptionCard extends StatelessWidget {
+  final QROption option;
+
+  const QROptionCard({super.key, required this.option});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Center(
+          child: Container(
+            padding: const EdgeInsets.all(30),
+            decoration: BoxDecoration(
+              border: Border.all(color: Color(0xffFDB623), width: 2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            // child: Icon(option.icon, color: Color(0xffFDB623), size: 30),
+            child: SvgPicture.asset(
+              option.svgData,
+              colorFilter: ColorFilter.mode(
+                Color(0xffFDB623),
+                BlendMode.srcIn,
+              ),
+              width: 30,
+              height: 30,
+            ),
+          ),
+        ),
+        Positioned(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: Color(0xffFDB623),
+              border: Border.all(color: Color(0xffFDB623), width: 2),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Text(
+              option.label,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w300,
+                color: Color(0xff2D3047),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
