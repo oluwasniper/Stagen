@@ -69,75 +69,167 @@ class _HistoryScreenState extends State<HistoryScreen>
         backgroundColor: Colors.transparent,
         centerTitle: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            // give the tab bar a height [can change hheight to preferred height]
-            Container(
-              height: 45,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
+      body: Column(
+        children: [
+          // give the tab bar a height [can change hheight to preferred height]
+          Container(
+            height: 60,
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: Color(0xff333333).withOpacity(0.84),
+              borderRadius: BorderRadius.circular(
+                6.0,
+              ),
+            ),
+            child: TabBar(
+              enableFeedback: true,
+
+              padding: EdgeInsets.only(
+                top: 6,
+                bottom: 6,
+              ),
+              controller: _tabController,
+              // give the indicator a decoration (color and border radius)
+              indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(
-                  25.0,
+                  6.0,
                 ),
+                color: Color(0xffFDB623),
               ),
-              child: TabBar(
-                controller: _tabController,
-                // give the indicator a decoration (color and border radius)
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    25.0,
+              labelColor: Colors.white,
+
+              // indicatorColor: Colors.green,
+              dividerColor: Colors.transparent,
+              unselectedLabelColor: Colors.black,
+
+              tabs: [
+                // first tab [you can add an icon using the icon property]
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width * 7 / 4) - 12,
+                  child: Tab(
+                    text: 'Scan',
                   ),
-                  color: Colors.green,
                 ),
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.black,
-                tabs: [
-                  // first tab [you can add an icon using the icon property]
-                  Tab(
-                    text: 'Place Bid',
-                  ),
 
-                  // second tab [you can add an icon using the icon property]
-                  Tab(
-                    text: 'Buy Now',
-                  ),
-                ],
-              ),
-            ),
-            // tab bar view here
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  // first tab bar view widget
-                  Center(
-                    child: Text(
-                      'Place Bid',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                // second tab [you can add an icon using the icon property]
 
-                  // second tab bar view widget
-                  Center(
-                    child: Text(
-                      'Buy Now',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                SizedBox(
+                  // width: (MediaQuery.of(context).size.width * 7 / 4) - 12,
+                  width: (MediaQuery.of(context).size.width * 8 / 4),
+                  child: Tab(
+                    text: 'Create',
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          // tab bar view here
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                // first tab bar view widget
+                _scanCreateMock(),
+
+                // second tab bar view widget
+                _scanCreateMock(),
+              ],
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Padding _scanCreateMock() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 30.0),
+      child: ListView.separated(
+          physics: BouncingScrollPhysics(),
+          separatorBuilder: (context, index) {
+            return SizedBox(
+              height: 19,
+            );
+          },
+          itemCount: 15,
+          itemBuilder: (context, index) {
+            return Container(
+              height: 60,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Color(0xff333333).withOpacity(0.84),
+                borderRadius: BorderRadius.circular(
+                  6.0,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xff000000).withOpacity(0.25),
+                    spreadRadius: 0,
+                    blurRadius: 4,
+                    offset: Offset(0, 4), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Iconify(
+                      Ri.qr_code_line,
+                      size: 50,
+                      color: Color(0xffFDB623),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 7.0, bottom: 7.0, right: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // add the url and the delete button
+
+                          children: [
+                            SizedBox(
+                              width:
+                                  MediaQuery.of(context).size.width * (2 / 3) -
+                                      10,
+                              child: Text(
+                                'https://itunes.com',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Iconify(
+                              Ri.delete_bin_5_fill,
+                              size: 30,
+                              color: Color(0xffFDB623),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              '16 Dec 2022, 9:30 pm',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                                color: Color(0xffA4A4A4),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
     );
   }
 }
