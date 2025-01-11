@@ -36,6 +36,11 @@
     "createHistoryTab": "Create",
     "@createHistoryTab":{
         "description": "Tab to view the create history"
+    },
+
+    "history": "History",
+    "@history":{
+        "description": "Tab to view the history"
     }
 }
 

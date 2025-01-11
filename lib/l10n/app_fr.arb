@@ -8,5 +8,6 @@
     "onboardingSkipButton": "Allons-y",
     "generateCode": "Générer un code",
     "scanHistoryTab": "Balayer",
-    "createHistoryTab": "Créer"
+    "createHistoryTab": "Créer",
+    "history": "Historique"
 }

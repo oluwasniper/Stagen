@@ -8,6 +8,7 @@
     "onboardingSkipButton": "Vamos lá",
     "generateCode": "Gerar um Código",
     "scanHistoryTab": "Digitalizar",
-    "createHistoryTab": "Criar"
+    "createHistoryTab": "Criar",
+    "history": "Histórico"
 
 }

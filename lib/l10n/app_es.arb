@@ -9,7 +9,8 @@
 
     "generateCode": "Generar un Código",
     "scanHistoryTab": "Escanear",
-    "createHistoryTab": "Crear"
+    "createHistoryTab": "Crear",
+    "history": "Historial"
     
 
 }
