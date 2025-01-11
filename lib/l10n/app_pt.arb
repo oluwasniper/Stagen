@@ -6,6 +6,8 @@
     "onboardingHeader": "Comece",
     "onboardingSubHeader": "Vá e aproveite nossos recursos gratuitos e facilite sua vida conosco.",
     "onboardingSkipButton": "Vamos lá",
-    "generateCode": "Gerar um Código"
+    "generateCode": "Gerar um Código",
+    "scanHistoryTab": "Digitalizar",
+    "createHistoryTab": "Criar"
 
 }
