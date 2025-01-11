@@ -119,7 +119,8 @@ class CustomFloatingNavBar extends StatelessWidget {
               child: Container(
                 height: 70,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
+                  // color: Theme.of(context).primaryColor,
+                  color: Color(0xff333333),
                   borderRadius: BorderRadius.circular(6),
                   boxShadow: [
                     BoxShadow(
@@ -189,7 +190,8 @@ class CustomFloatingNavBar extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: selectedIndex == 1
                             ? Color(0xffFDB623)
-                            : Theme.of(context).primaryColor,
+                            // : Theme.of(context).primaryColor,
+                            : Color(0xff333333),
                         borderRadius: BorderRadius.circular(35),
                         boxShadow: [
                           BoxShadow(
