@@ -97,11 +97,20 @@ class _HistoryScreenState extends State<HistoryScreen>
                 ),
                 color: Color(0xffFDB623),
               ),
-              labelColor: Colors.white,
 
-              // indicatorColor: Colors.green,
+              labelStyle: TextStyle(
+                fontSize: 17,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
+
+              unselectedLabelStyle: TextStyle(
+                fontSize: 19,
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+              ),
+
               dividerColor: Colors.transparent,
-              unselectedLabelColor: Colors.black,
 
               tabs: [
                 // first tab [you can add an icon using the icon property]
