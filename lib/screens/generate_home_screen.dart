@@ -1,58 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:revolutionary_stuff/utils/app_asset.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:revolutionary_stuff/utils/app_router.dart';
 import 'package:revolutionary_stuff/utils/route/app_path.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/ri.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:revolutionary_stuff/widgets/background_screen_widget.dart';
 
 class GenerateHomeScreen extends StatelessWidget {
   const GenerateHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xff3D3D3D),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        centerTitle: false,
-        title: Padding(
-          padding: EdgeInsets.only(left: 46),
-          child: Text(
-            AppLocalizations.of(context)!.generateQR,
-            style: TextStyle(
-              color: Color(0xffD9D9D9),
-              fontSize: 27,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              AppGoRouter.router.push(AppPath.settings);
-            },
-            child: Container(
-              margin: EdgeInsets.only(right: 31),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Color(0xff333333),
-              ),
-              child: Iconify(
-                Ri.menu_3_line,
-                size: 30,
-                color: Color(0xffFDB623),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return BackgroundScreenWidget(
+      screenTitle: AppLocalizations.of(context)!.generateQR,
+      actionButton: () => AppGoRouter.router.push(AppPath.settings),
       body: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 30,
-          vertical: 90,
+          vertical: 30,
         ),
         child: SizedBox(
           child: GridView.builder(

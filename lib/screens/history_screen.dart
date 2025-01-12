@@ -4,6 +4,7 @@ import 'package:iconify_flutter/icons/ri.dart';
 import 'package:revolutionary_stuff/utils/app_router.dart';
 import 'package:revolutionary_stuff/utils/route/app_path.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:revolutionary_stuff/widgets/background_screen_widget.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -30,46 +31,9 @@ class _HistoryScreenState extends State<HistoryScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xff3D3D3D),
-      appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            AppLocalizations.of(context)!.history,
-            style: TextStyle(
-              fontSize: 27,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              AppGoRouter.router.push(AppPath.settings);
-            },
-            child: Padding(
-              padding: EdgeInsets.only(
-                right: 20,
-              ),
-              child: Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    // color: Color(0xffFDB623),
-                    color: Color(0xff333333)),
-                child: Iconify(
-                  Ri.menu_3_line,
-                  size: 30,
-                  color: Color(0xffFDB623),
-                ),
-              ),
-            ),
-          ),
-        ],
-        backgroundColor: Colors.transparent,
-        centerTitle: false,
-      ),
+    return BackgroundScreenWidget(
+      screenTitle: AppLocalizations.of(context)!.history,
+      actionButton: () => AppGoRouter.router.push(AppPath.settings),
       body: Column(
         children: [
           // give the tab bar a height [can change hheight to preferred height]
