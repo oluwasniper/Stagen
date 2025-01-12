@@ -22,6 +22,8 @@
     "generateCode": "Gerar um Código",
     "scanHistoryTab": "Digitalizar",
     "createHistoryTab": "Criar",
-    "history": "Histórico"
+    "history": "Histórico",
+    "generate": "Gerar",
+    "scan": "Digitalizar"
 
 }
