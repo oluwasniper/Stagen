@@ -8,5 +8,92 @@
     "appName": "Scagen",
     "@appName":{
         "description": "The name of the software application"
+    },
+    "onboardingHeader": "Get Started",
+    "@onboardingHeader":{
+        "description": "Onboarding screen content heading"
+    },
+
+    "onboardingSubHeader": "Go and enjoy our features for free and make your life easy with us.",
+    "@onboardingSubHeader":{
+        "description": "Onboarding screen content subheading"
+    },
+
+    "onboardingSkipButton": "Let's Go",
+    "@onboardingSkipButton":{
+        "description": "Button to skip the onboarding screen"
+    },
+    "generateQR": "Generate QR",
+    "@generateQR":{
+        "description": "Screen to generate a QR code"
+    },
+    "textQR": "Text",
+    "@textQR":{
+        "description": "Text to be converted to QR code"
+    },
+    "websiteQR": "Website",
+    "@websiteQR":{
+        "description": "Website to be converted to QR code"
+    },
+    "wifiQR": "Wi-Fi",
+    "@wifiQR":{
+        "description": "Wi-Fi details to be converted to QR code"
+    },
+    "eventQR": "Event",
+    "@eventQR":{
+        "description": "Event details to be converted to QR code"
+    },
+    "contactQR": "Contact",
+    "@contactQR":{
+        "description": "Contact details to be converted to QR code"
+    },
+    "businessQR": "Business",
+    "@businessQR":{
+        "description": "Business details to be converted to QR code"
+    },
+    "locationQR": "Location",
+    "@locationQR":{
+        "description": "Location details to be converted to QR code"
+    },
+    "whatsappQR": "WhatsApp",
+    "@whatsappQR":{
+        "description": "WhatsApp details to be converted to QR code"
+    },
+    "emailQR": "Email",
+    "@emailQR":{
+        "description": "Email details to be converted to QR code"
+    },
+    "twitterQR": "Twitter",
+    "@twitterQR":{
+        "description": "Twitter details to be converted to QR code"
+    },
+    "instagramQR": "Instagram",
+    "@instagramQR":{
+        "description": "Instagram details to be converted to QR code"
+    },
+    "telephoneQR": "Telephone",
+    "@telephoneQR":{
+        "description": "Telephone details to be converted to QR code"
+    },
+
+    "generateCode": "Generate a Code",
+    "@generateCode":{
+        "description": "Button to generate a code"
+    },
+
+    "scanHistoryTab": "Scan",
+    "@scanHistoryTab":{
+        "description": "Tab to view the scan history"
+    },
+    "createHistoryTab": "Create",
+    "@createHistoryTab":{
+        "description": "Tab to view the create history"
+    },
+
+    "history": "History",
+    "@history":{
+        "description": "Tab to view the history"
     }
+    
 }
+
