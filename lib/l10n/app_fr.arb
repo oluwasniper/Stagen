@@ -18,9 +18,7 @@
     "emailQR": "Email",
     "twitterQR": "Twitter",
     "instagramQR": "Instagram",
-    "telephoneQR": "Téléphone",
-    
-    
+    "telephoneQR": "Téléphone", 
     "generateCode": "Générer un code",
     "scanHistoryTab": "Balayer",
     "createHistoryTab": "Créer",
