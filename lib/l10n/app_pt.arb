@@ -1,5 +1,25 @@
 {
     "@@locale" : "pt",
     "language": "Português (Brasil)",
-     "appName": "Scagen"
+     "appName": "Scagen",
+
+    "onboardingHeader": "Comece",
+    "onboardingSubHeader": "Vá e aproveite nossos recursos gratuitos e facilite sua vida conosco.",
+    "onboardingSkipButton": "Vamos lá",
+    "generateQR": "Gerar QR",
+    "textQR": "Texto",
+    "websiteQR": "Site",
+    "wifiQR": "Wi-Fi",
+    "eventQR": "Evento",
+    "contactQR": "Contato",
+    "businessQR": "Negócio",
+    "locationQR": "Localização",
+    "whatsappQR": "WhatsApp",
+    "emailQR": "Email",
+    "twitterQR": "Twitter",
+    "instagramQR": "Instagram",
+    "telephoneQR": "Telefone",
+    
+    "generateCode": "Gerar um Código"
+
 }
