@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:revolutionary_stuff/utils/app_asset.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BottomNavigationPage extends StatefulWidget {
   const BottomNavigationPage({
@@ -45,11 +46,47 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   /// navigation bar elements, such as icons, labels, and associated pages/routes.
   /// The order of items in this list determines their display order in the
   /// navigation bar from left to right.
-  final List<CustomNavBarItem> _navItems = [
-    CustomNavBarItem(svgData: AppAsset.generateIconSvg, label: 'Generate'),
-    CustomNavBarItem(svgData: AppAsset.scanIconSvg, label: 'Search'),
-    CustomNavBarItem(svgData: AppAsset.historyIconSvg, label: 'History'),
-  ];
+  late List<CustomNavBarItem> _navItems;
+
+  @override
+  void initState() {
+    super.initState();
+    // _navItems = [
+    //   CustomNavBarItem(
+    //       svgData: AppAsset.generateIconSvg,
+    //       label: AppLocalizations.of(context)!.generate),
+    //   CustomNavBarItem(
+    //       svgData: AppAsset.scanIconSvg,
+    //       label: AppLocalizations.of(context)!.scan),
+    //   CustomNavBarItem(
+    //       svgData: AppAsset.historyIconSvg,
+    //       label: AppLocalizations.of(context)!.history),
+    // ];
+  }
+
+  @override
+  void didUpdateWidget(covariant BottomNavigationPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.navigationShell != widget.navigationShell) {
+      _selectedIndex = widget.navigationShell.currentIndex;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _navItems = [
+      CustomNavBarItem(
+          svgData: AppAsset.generateIconSvg,
+          label: AppLocalizations.of(context)!.generate),
+      CustomNavBarItem(
+          svgData: AppAsset.scanIconSvg,
+          label: AppLocalizations.of(context)!.scan),
+      CustomNavBarItem(
+          svgData: AppAsset.historyIconSvg,
+          label: AppLocalizations.of(context)!.history),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +137,7 @@ class CustomFloatingNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
       child: SizedBox(
         height: 105,
         child: Stack(

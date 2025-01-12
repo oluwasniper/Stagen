@@ -93,6 +93,14 @@
     "history": "History",
     "@history":{
         "description": "Tab to view the history"
+    },
+    "generate": "Generate",
+    "@generate":{
+        "description": "Tab to generate a QR code"
+    },
+    "scan": "Scan",
+    "@scan":{
+        "description": "Tab to scan a QR code"
     }
     
 }

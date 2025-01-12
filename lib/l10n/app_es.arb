@@ -23,7 +23,9 @@
     "generateCode": "Generar un Código",
     "scanHistoryTab": "Escanear",
     "createHistoryTab": "Crear",
-    "history": "Historial"
+    "history": "Historial",
+    "generate": "Generar",
+    "scan": "Escanear"
     
 
 }
