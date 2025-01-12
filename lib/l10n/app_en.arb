@@ -18,6 +18,7 @@
     "@onboardingSubHeader":{
         "description": "Onboarding screen content subheading"
     },
+
     "onboardingSkipButton": "Let's Go",
     "@onboardingSkipButton":{
         "description": "Button to skip the onboarding screen"
@@ -74,9 +75,24 @@
     "@telephoneQR":{
         "description": "Telephone details to be converted to QR code"
     },
+
     "generateCode": "Generate a Code",
     "@generateCode":{
         "description": "Button to generate a code"
+    },
+
+    "scanHistoryTab": "Scan",
+    "@scanHistoryTab":{
+        "description": "Tab to view the scan history"
+    },
+    "createHistoryTab": "Create",
+    "@createHistoryTab":{
+        "description": "Tab to view the create history"
+    },
+
+    "history": "History",
+    "@history":{
+        "description": "Tab to view the history"
     }
     
 }

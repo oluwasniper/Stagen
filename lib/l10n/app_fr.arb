@@ -20,5 +20,9 @@
     "instagramQR": "Instagram",
     "telephoneQR": "Téléphone",
     
-    "generateCode": "Générer un code"
+    
+    "generateCode": "Générer un code",
+    "scanHistoryTab": "Balayer",
+    "createHistoryTab": "Créer",
+    "history": "Historique"
 }
