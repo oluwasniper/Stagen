@@ -6,5 +6,19 @@
     "onboardingHeader": "Commencer",
     "onboardingSubHeader": "Allez et profitez de nos fonctionnalités gratuitement et facilitez-vous la vie avec nous.",
     "onboardingSkipButton": "Allons-y",
+    "generateQR": "Générer un QR",
+    "textQR": "Texte",
+    "websiteQR": "Site Web",
+    "wifiQR": "Wi-Fi",
+    "eventQR": "Événement",
+    "contactQR": "Contact",
+    "businessQR": "Entreprise",
+    "locationQR": "Emplacement",
+    "whatsappQR": "WhatsApp",
+    "emailQR": "Email",
+    "twitterQR": "Twitter",
+    "instagramQR": "Instagram",
+    "telephoneQR": "Téléphone",
+    
     "generateCode": "Générer un code"
 }
