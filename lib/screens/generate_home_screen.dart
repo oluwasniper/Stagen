@@ -5,6 +5,7 @@ import 'package:revolutionary_stuff/utils/app_router.dart';
 import 'package:revolutionary_stuff/utils/route/app_path.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GenerateHomeScreen extends StatelessWidget {
   const GenerateHomeScreen({super.key});
@@ -19,7 +20,7 @@ class GenerateHomeScreen extends StatelessWidget {
         title: Padding(
           padding: EdgeInsets.only(left: 46),
           child: Text(
-            "Generate QR",
+            AppLocalizations.of(context)!.generateQR,
             style: TextStyle(
               color: Color(0xffD9D9D9),
               fontSize: 27,
@@ -58,9 +59,9 @@ class GenerateHomeScreen extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 40),
-            itemCount: QROptions.options.length,
+            itemCount: QROptions.getOptions(context).length,
             itemBuilder: (context, index) {
-              final option = QROptions.options[index];
+              final option = QROptions.getOptions(context)[index];
               return QROptionCard(option: option);
             },
           ),
@@ -99,77 +100,79 @@ class QROption {
 }
 
 class QROptions {
-  static final List<QROption> options = [
-    QROption(
-      label: 'Text',
-      svgData: AppAsset.textIconSvg,
-      type: QROptionType.text,
-    ),
-    QROption(
-      label: 'Website',
-      svgData: AppAsset.websiteIconSvg,
-      type: QROptionType.website,
-    ),
-    QROption(
-      label: 'Wi-Fi',
-      svgData: AppAsset.wifiIconSvg,
-      type: QROptionType.wifi,
-    ),
-    // event
-    QROption(
-      label: 'Event',
-      svgData: AppAsset.eventIconSvg,
-      type: QROptionType.event,
-    ),
-    // contact
-    QROption(
-      label: 'Contact',
-      svgData: AppAsset.contactIconSvg,
-      type: QROptionType.contact,
-    ),
-    // business
-    QROption(
-      label: 'Business',
-      svgData: AppAsset.businessIconSvg,
-      type: QROptionType.business,
-    ),
-    // location
-    QROption(
-      label: 'Location',
-      svgData: AppAsset.locationIconSvg,
-      type: QROptionType.location,
-    ),
-    // whatsapp
-    QROption(
-      label: 'WhatsApp',
-      svgData: AppAsset.whatsappIconSvg,
-      type: QROptionType.whatsapp,
-    ),
-    // email
-    QROption(
-      label: 'Email',
-      svgData: AppAsset.emailIconSvg,
-      type: QROptionType.email,
-    ),
-    // twitter
-    QROption(
-      label: 'Twitter',
-      svgData: AppAsset.twitterIconSvg,
-      type: QROptionType.twitter,
-    ),
-    // instagram
-    QROption(
-      label: 'Instagram',
-      svgData: AppAsset.instagramIconSvg,
-      type: QROptionType.instagram,
-    ),
-    // telephone
-    QROption(
-      label: 'Telephone',
-      svgData: AppAsset.telephoneIconSvg,
-      type: QROptionType.telephone,
-    ),
-  ];
+  static List<QROption> getOptions(BuildContext context) {
+    return [
+      QROption(
+        label: AppLocalizations.of(context)!.textQR,
+        svgData: AppAsset.textIconSvg,
+        type: QROptionType.text,
+      ),
+      QROption(
+        label: AppLocalizations.of(context)!.websiteQR,
+        svgData: AppAsset.websiteIconSvg,
+        type: QROptionType.website,
+      ),
+      QROption(
+        label: AppLocalizations.of(context)!.wifiQR,
+        svgData: AppAsset.wifiIconSvg,
+        type: QROptionType.wifi,
+      ),
+      // event
+      QROption(
+        label: AppLocalizations.of(context)!.eventQR,
+        svgData: AppAsset.eventIconSvg,
+        type: QROptionType.event,
+      ),
+      // contact
+      QROption(
+        label: AppLocalizations.of(context)!.contactQR,
+        svgData: AppAsset.contactIconSvg,
+        type: QROptionType.contact,
+      ),
+      // business
+      QROption(
+        label: AppLocalizations.of(context)!.businessQR,
+        svgData: AppAsset.businessIconSvg,
+        type: QROptionType.business,
+      ),
+      // location
+      QROption(
+        label: AppLocalizations.of(context)!.locationQR,
+        svgData: AppAsset.locationIconSvg,
+        type: QROptionType.location,
+      ),
+      // whatsapp
+      QROption(
+        label: AppLocalizations.of(context)!.whatsappQR,
+        svgData: AppAsset.whatsappIconSvg,
+        type: QROptionType.whatsapp,
+      ),
+      // email
+      QROption(
+        label: AppLocalizations.of(context)!.emailQR,
+        svgData: AppAsset.emailIconSvg,
+        type: QROptionType.email,
+      ),
+      // twitter
+      QROption(
+        label: AppLocalizations.of(context)!.twitterQR,
+        svgData: AppAsset.twitterIconSvg,
+        type: QROptionType.twitter,
+      ),
+      // instagram
+      QROption(
+        label: AppLocalizations.of(context)!.instagramQR,
+        svgData: AppAsset.instagramIconSvg,
+        type: QROptionType.instagram,
+      ),
+      // telephone
+      QROption(
+        label: AppLocalizations.of(context)!.telephoneQR,
+        svgData: AppAsset.telephoneIconSvg,
+        type: QROptionType.telephone,
+      ),
+    ];
+  }
 }
 
 class QROptionCard extends StatelessWidget {
