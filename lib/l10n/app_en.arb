@@ -81,14 +81,6 @@
         "description": "Button to generate a code"
     },
 
-    "scanHistoryTab": "Scan",
-    "@scanHistoryTab":{
-        "description": "Tab to view the scan history"
-    },
-    "createHistoryTab": "Create",
-    "@createHistoryTab":{
-        "description": "Tab to view the create history"
-    },
 
     "history": "History",
     "@history":{
@@ -101,7 +93,73 @@
     "scan": "Scan",
     "@scan":{
         "description": "Tab to scan a QR code"
+    },
+
+    "create": "Create",
+    "@create":{
+        "description": "Tab to create a QR code"
+    },
+
+    "settings": "Settings",
+    "@settings":{
+        "description": "Tab to view the settings"
+    },
+
+    "vibrate": "Vibrate",
+    "@vibrate":{
+        "description": "Setting to enable or disable vibration"
+    },
+
+    "vibrateDesc": "Vibration when scan is done",
+    "@vibrateDesc":{
+        "description": "Description of the setting to enable or disable vibration"
+    },
+
+    "beep": "Beep",
+    "@beep":{
+        "description": "Setting to enable or disable beep"
+    },
+
+    "beepDesc": "Beep when scan is done",
+    "@beepDesc":{
+        "description": "Description of the setting to enable or disable beep"
+    },
+
+    "support": "Support",
+    "@support":{
+        "description": "Tab to view the support"
+    },
+
+    "rateUs": "Rate Us",
+    "@rateUs":{
+        "description": "Button to rate the app"
+    },
+
+    "rateUsDesc": "Your best reward to us",
+    "@rateUsDesc":{
+        "description": "Description to rate the app"
+    },
+
+    "share": "Share",
+    "@share":{
+        "description": "Button to share the app"
+    },
+
+    "shareDesc": "Share app with others.",
+    "@shareDesc":{
+        "description": "Description to share the app"
+    },
+
+    "privacyPolicy": "Privacy Policy",
+    "@privacyPolicy":{
+        "description": "Button to view the privacy policy"
+    },
+
+    "privacyPolicyDesc": "Follow our policies that benefits you.",
+    "@privacyPolicyDesc":{
+        "description": "Description to view the privacy policy"
     }
+
     
 }
 

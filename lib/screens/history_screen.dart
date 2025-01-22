@@ -81,7 +81,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                 SizedBox(
                   width: (MediaQuery.of(context).size.width * 7 / 4) - 12,
                   child: Tab(
-                    text: AppLocalizations.of(context)!.scanHistoryTab,
+                    text: AppLocalizations.of(context)!.scan,
                   ),
                 ),
 
@@ -91,7 +91,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                   // width: (MediaQuery.of(context).size.width * 7 / 4) - 12,
                   width: (MediaQuery.of(context).size.width * 8 / 4),
                   child: Tab(
-                    text: AppLocalizations.of(context)!.createHistoryTab,
+                    text: AppLocalizations.of(context)!.create,
                   ),
                 ),
               ],
