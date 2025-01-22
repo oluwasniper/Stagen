@@ -20,9 +20,21 @@
     "instagramQR": "Instagram",
     "telephoneQR": "Téléphone", 
     "generateCode": "Générer un code",
-    "scanHistoryTab": "Balayer",
-    "createHistoryTab": "Créer",
     "history": "Historique",
     "generate": "Générer",
-    "scan": "Balayer"
+    "scan": "Balayer",
+    "create": "Créer",
+
+    "settings": "Paramètres",
+    "vibrate": "Vibrer",
+    "vibrateDesc": "Paramètre pour activer ou désactiver la vibration",
+    "beep": "Bip",
+    "beepDesc": "Paramètre pour activer ou désactiver le bip",
+    "support": "Soutien",
+    "rateUs": "Évaluez-nous",
+    "rateUsDesc": "Votre meilleure récompense pour nous",
+    "share": "Partager",
+    "shareDesc": "Partager l'application avec d'autres personnes.",
+    "privacyPolicy": "Politique de confidentialité",
+    "privacyPolicyDesc": "Suivez nos politiques qui vous"
 }

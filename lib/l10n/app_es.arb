@@ -21,11 +21,26 @@
     "telephoneQR": "Teléfono",
 
     "generateCode": "Generar un Código",
-    "scanHistoryTab": "Escanear",
-    "createHistoryTab": "Crear",
+
     "history": "Historial",
     "generate": "Generar",
-    "scan": "Escanear"
+    "scan": "Escanear",
+    "create": "Crear",
+
+    "settings": "Ajustes",
+    "vibrate": "Vibrar",
+    "vibrateDesc": "Configuración para activar o desactivar la vibración",
+    "beep": "Pitido",
+    "beepDesc": "Configuración para activar o desactivar el pitido",
+    "support": "Soporte",
+    "rateUs": "Califícanos",
+    "rateUsDesc": "Su mejor recompensa para nosotros",
+    "share": "Compartir",
+    "shareDesc": "Compartir aplicación con otras personas.",
+    "privacyPolicy": "Política de Privacidad",
+    "privacyPolicyDesc": "Siga nuestras políticas que le beneficien."
+
+
     
 
 }
