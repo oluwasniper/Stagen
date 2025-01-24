@@ -32,6 +32,7 @@
     "scan": "Balayer",
     "create": "Créer",
 
+    
     "settings": "Paramètres",
     "vibrate": "Vibrer",
     "vibrateDesc": "Paramètre pour activer ou désactiver la vibration",
@@ -40,8 +41,14 @@
     "support": "Soutien",
     "rateUs": "Évaluez-nous",
     "rateUsDesc": "Votre meilleure récompense pour nous",
-    "share": "Partager",
+    "shareApp": "Partager",
     "shareDesc": "Partager l'application avec d'autres personnes.",
     "privacyPolicy": "Politique de confidentialité",
-    "privacyPolicyDesc": "Suivez nos politiques qui vous"
+    "privacyPolicyDesc": "Suivez nos politiques qui vous",
+
+
+    "openFileHeader": "Résultat",
+    "showQRCode": "Afficher le code QR",
+    "shareBtn": "Partager",
+    "copyBtn": "Copier"
 }

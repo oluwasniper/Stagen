@@ -157,8 +157,8 @@
         "description": "Description to rate the app"
     },
 
-    "share": "Share",
-    "@share":{
+    "shareApp": "Share",
+    "@shareApp":{
         "description": "Button to share the app"
     },
 
@@ -175,6 +175,29 @@
     "privacyPolicyDesc": "Follow our policies that benefits you.",
     "@privacyPolicyDesc":{
         "description": "Description to view the privacy policy"
+    },
+
+
+
+    
+    "openFileHeader": "Result",
+    "@openFileHeader" :{
+        "description": "The Header of the result screen"
+    },
+
+    "showQRCode": "Show QR Code",
+    "@showQRCode" :{
+        "description": "Button to show the QR code"
+    },
+
+    "shareBtn": "Share",
+    "@shareBtn" :{
+        "description": "Button to share the QR code"
+    },
+
+    "copyBtn": "Copy",
+    "@copyBtn" :{
+        "description": "Button to copy the QR code"
     }
 
     
