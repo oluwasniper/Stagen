@@ -6,6 +6,14 @@
     "onboardingHeader": "Comece",
     "onboardingSubHeader": "Vá e aproveite nossos recursos gratuitos e facilite sua vida conosco.",
     "onboardingSkipButton": "Vamos lá",
+
+    "errorText": "Erro: Página não encontrada",
+    "errorOR": "Ou",
+    "errorGoBack": "Voltar",
+
+
+
+
     "generateQR": "Gerar QR",
     "textQR": "Texto",
     "websiteQR": "Site",
@@ -20,10 +28,28 @@
     "instagramQR": "Instagram",
     "telephoneQR": "Telefone",
     "generateCode": "Gerar um Código",
-    "scanHistoryTab": "Digitalizar",
-    "createHistoryTab": "Criar",
     "history": "Histórico",
     "generate": "Gerar",
-    "scan": "Digitalizar"
+    "scan": "Digitalizar",
+    "create": "Criar",
+
+    "settings": "Configurações",
+    "vibrate": "Vibrar",
+    "vibrateDesc": "Configuração para ativar ou desativar a vibração",
+    "beep": "Bip",
+    "beepDesc": "Configuração para ativar ou desativar o bip",
+    "support": "Apoio",
+    "rateUs": "Avalie-n",
+    "rateUsDesc": "Sua melhor recompensa para nós",
+    "shareApp": "Compartilhar",
+    "shareDesc": "Compartilhe o aplicativo com outras pessoas.",
+    "privacyPolicy": "Política de Privacidade",
+    "privacyPolicyDesc": "Siga nossas políticas que beneficiam você",
+
+
+    "openFileHeader": "Resultado",
+    "showQRCode": "Mostrar código QR",
+    "shareBtn": "Compartilhar",
+    "copyBtn": "Copiar"
 
 }

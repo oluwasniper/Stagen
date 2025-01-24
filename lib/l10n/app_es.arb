@@ -6,6 +6,12 @@
     "onboardingHeader": "Empezar",
     "onboardingSubHeader": "Ve y disfruta de nuestras funciones de forma gratuita y haz tu vida más fácil con nosotros.",
     "onboardingSkipButton": "Vamos",
+
+    "errorText": "Error: Página no encontrada",
+    "errorOR": "O",
+    "errorGoBack": "Regresar",
+
+
     "generateQR": "Generar QR",
     "textQR": "Texto",
     "websiteQR": "Sitio Web",
@@ -21,11 +27,28 @@
     "telephoneQR": "Teléfono",
 
     "generateCode": "Generar un Código",
-    "scanHistoryTab": "Escanear",
-    "createHistoryTab": "Crear",
+
     "history": "Historial",
     "generate": "Generar",
-    "scan": "Escanear"
-    
+    "scan": "Escanear",
+    "create": "Crear",
 
+    "settings": "Ajustes",
+    "vibrate": "Vibrar",
+    "vibrateDesc": "Configuración para activar o desactivar la vibración",
+    "beep": "Pitido",
+    "beepDesc": "Configuración para activar o desactivar el pitido",
+    "support": "Soporte",
+    "rateUs": "Califícanos",
+    "rateUsDesc": "Su mejor recompensa para nosotros",
+    "shareApp": "Compartir",
+    "shareDesc": "Compartir aplicación con otras personas.",
+    "privacyPolicy": "Política de Privacidad",
+    "privacyPolicyDesc": "Siga nuestras políticas que le beneficien.",
+
+
+    "openFileHeader": "Resultado",
+    "showQRCode": "Mostrar código QR",
+    "shareBtn": "Compartir",
+    "copyBtn": "Copiar"
 }
