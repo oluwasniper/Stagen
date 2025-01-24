@@ -6,6 +6,14 @@
     "onboardingHeader": "Comece",
     "onboardingSubHeader": "Vá e aproveite nossos recursos gratuitos e facilite sua vida conosco.",
     "onboardingSkipButton": "Vamos lá",
+
+    "errorText": "Erro: Página não encontrada",
+    "errorOR": "Ou",
+    "errorGoBack": "Voltar",
+
+
+
+
     "generateQR": "Gerar QR",
     "textQR": "Texto",
     "websiteQR": "Site",

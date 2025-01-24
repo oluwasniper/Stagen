@@ -23,6 +23,23 @@
     "@onboardingSkipButton":{
         "description": "Button to skip the onboarding screen"
     },
+
+    "errorText": "Error: Page not found",
+    "@errorText":{
+        "description": "Error message when page is not found"
+    },
+
+    "errorOR": "OR",
+    "@errorOR":{
+        "description": "Error message to show OR"
+    },
+    "errorGoBack": "Go Back",
+    "@errorGoBack":{
+        "description": "Button to go back"
+    },
+
+
+
     "generateQR": "Generate QR",
     "@generateQR":{
         "description": "Screen to generate a QR code"
