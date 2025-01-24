@@ -11,6 +11,7 @@ class ErrorScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Error: Page not found'),
             ElevatedButton(
@@ -18,6 +19,13 @@ class ErrorScreen extends StatelessWidget {
                 AppGoRouter.router.go('/onboarding');
               },
               child: Text(AppLocalizations.of(context)!.onboardingHeader),
+            ),
+            Text('OR'),
+            ElevatedButton(
+              onPressed: () {
+                AppGoRouter.router.pop();
+              },
+              child: Text("Go Back"),
             ),
           ],
         ),
