@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:revolutionary_stuff/screens/open_file_screen.dart';
 import '../bottom_nav.dart';
 import '../screens/generate_home_screen.dart';
 import '../screens/generated_qr_screen.dart';
@@ -216,6 +217,7 @@ class AppGoRouter {
               },
             ),
           ]),
+
           StatefulShellBranch(navigatorKey: historyTabNavigatorKey, routes: [
             /// A route configuration for the history tab.
             GoRoute(
@@ -260,6 +262,17 @@ class AppGoRouter {
                       state: state,
                     );
                   },
+                ),
+
+                /// A route configuration for the open file screen.
+                GoRoute(
+                  path: AppPath.openFile,
+                  name: PathName.openFile,
+                  // builder: (context, state) => OpenFileScreen(),
+                  pageBuilder: (context, state) {
+                    return getPage(child: OpenFileScreen(), state: state);
+                  },
+                  parentNavigatorKey: historyTabNavigatorKey,
                 ),
               ],
             ),

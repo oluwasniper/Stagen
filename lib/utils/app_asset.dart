@@ -3,6 +3,8 @@ class AppAsset {
 
   static const String icon = 'assets/icons/icon.png';
 
+  static const String iconNoBGPNG = 'assets/icons/icon-no-bg.png';
+
 // bottom navigation bar icons
   static const String generateIconSvg = 'assets/svgs/generateIcon.svg';
   static const String scanIconSvg = 'assets/svgs/scanIcon.svg';
