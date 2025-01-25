@@ -23,6 +23,23 @@
     "@onboardingSkipButton":{
         "description": "Button to skip the onboarding screen"
     },
+
+    "errorText": "Error: Page not found",
+    "@errorText":{
+        "description": "Error message when page is not found"
+    },
+
+    "errorOR": "OR",
+    "@errorOR":{
+        "description": "Error message to show OR"
+    },
+    "errorGoBack": "Go Back",
+    "@errorGoBack":{
+        "description": "Button to go back"
+    },
+
+
+
     "generateQR": "Generate QR",
     "@generateQR":{
         "description": "Screen to generate a QR code"
@@ -140,8 +157,8 @@
         "description": "Description to rate the app"
     },
 
-    "share": "Share",
-    "@share":{
+    "shareApp": "Share",
+    "@shareApp":{
         "description": "Button to share the app"
     },
 
@@ -158,6 +175,39 @@
     "privacyPolicyDesc": "Follow our policies that benefits you.",
     "@privacyPolicyDesc":{
         "description": "Description to view the privacy policy"
+    },
+
+
+
+    
+    "openFileHeader": "Result",
+    "@openFileHeader" :{
+        "description": "The Header of the result screen"
+    },
+
+    "showQRCode": "Show QR Code",
+    "@showQRCode" :{
+        "description": "Button to show the QR code"
+    },
+
+    "shareBtn": "Share",
+    "@shareBtn" :{
+        "description": "Button to share the QR code"
+    },
+
+    "copyBtn": "Copy",
+    "@copyBtn" :{
+        "description": "Button to copy the QR code"
+    },
+
+    "qrCode": "QR Code",
+    "@qrCode" :{
+        "description": "The QR code"
+    },
+
+    "saveBtn": "Save",
+    "@saveBtn" :{
+        "description": "Button to save the QR code"
     }
 
     

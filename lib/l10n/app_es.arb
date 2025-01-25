@@ -6,6 +6,12 @@
     "onboardingHeader": "Empezar",
     "onboardingSubHeader": "Ve y disfruta de nuestras funciones de forma gratuita y haz tu vida más fácil con nosotros.",
     "onboardingSkipButton": "Vamos",
+
+    "errorText": "Error: Página no encontrada",
+    "errorOR": "O",
+    "errorGoBack": "Regresar",
+
+
     "generateQR": "Generar QR",
     "textQR": "Texto",
     "websiteQR": "Sitio Web",
@@ -35,12 +41,17 @@
     "support": "Soporte",
     "rateUs": "Califícanos",
     "rateUsDesc": "Su mejor recompensa para nosotros",
-    "share": "Compartir",
+    "shareApp": "Compartir",
     "shareDesc": "Compartir aplicación con otras personas.",
     "privacyPolicy": "Política de Privacidad",
-    "privacyPolicyDesc": "Siga nuestras políticas que le beneficien."
+    "privacyPolicyDesc": "Siga nuestras políticas que le beneficien.",
 
 
-    
+    "openFileHeader": "Resultado",
+    "showQRCode": "Mostrar código QR",
+    "shareBtn": "Compartir",
+    "copyBtn": "Copiar",
 
+    "qrCode": "Código QR",
+    "saveBtn": "Guardar"
 }
