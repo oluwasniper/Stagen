@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:revolutionary_stuff/screens/open_file_screen.dart';
-import 'package:revolutionary_stuff/screens/show_qr_screen.dart';
+import '../screens/open_file_screen.dart';
+import '../screens/show_qr_screen.dart';
 import '../bottom_nav.dart';
 import '../screens/generate_home_screen.dart';
 import '../screens/generated_qr_screen.dart';
