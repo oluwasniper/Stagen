@@ -77,7 +77,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsListTile(
                 isSwitched: false,
                 showSwitch: false,
-                title: AppLocalizations.of(context)!.share,
+                title: AppLocalizations.of(context)!.shareBtn,
                 subtitle: AppLocalizations.of(context)!.shareDesc,
                 iconData: Icons.share_rounded,
                 onTap: () {

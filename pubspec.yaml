@@ -40,7 +40,7 @@ dependencies:
   http: ^1.2.2 # Http requests
   flutter_secure_storage: ^9.2.2 # Secure storage
   page_transition: ^2.1.0 # Page transitions
-  pretty_qr_code: ^3.3.0 # QR code generation
+  qr_flutter: ^4.1.0 # QR code generation
   appwrite: ^13.0.0 # Appwrite
   flutter_localizations:
     sdk: flutter 

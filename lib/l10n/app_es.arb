@@ -50,5 +50,8 @@
     "openFileHeader": "Resultado",
     "showQRCode": "Mostrar código QR",
     "shareBtn": "Compartir",
-    "copyBtn": "Copiar"
+    "copyBtn": "Copiar",
+
+    "qrCode": "Código QR",
+    "saveBtn": "Guardar"
 }

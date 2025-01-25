@@ -198,6 +198,16 @@
     "copyBtn": "Copy",
     "@copyBtn" :{
         "description": "Button to copy the QR code"
+    },
+
+    "qrCode": "QR Code",
+    "@qrCode" :{
+        "description": "The QR code"
+    },
+
+    "saveBtn": "Save",
+    "@saveBtn" :{
+        "description": "Button to save the QR code"
     }
 
     
