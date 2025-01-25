@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
+
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:revolutionary_stuff/widgets/background_screen_widget.dart';
 
 class ShowQrScreen extends StatefulWidget {
@@ -85,13 +86,10 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                     width: 5,
                   ),
                 ),
-                child: PrettyQrView.data(
+                child: QrImageView(
                   data: "https://www.youtube.com/watch?v=Zd9g7sKvgIM",
-                  decoration: const PrettyQrDecoration(
-                    image: PrettyQrDecorationImage(
-                      image: AssetImage('images/flutter.png'),
-                    ),
-                  ),
+                  version: QrVersions.auto,
+                  size: 200.0,
                 ),
               ),
             ),
