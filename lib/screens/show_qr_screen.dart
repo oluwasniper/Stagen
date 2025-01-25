@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:revolutionary_stuff/widgets/background_screen_widget.dart';
 
 class ShowQrScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
   @override
   Widget build(BuildContext context) {
     return BackgroundScreenWidget(
-      screenTitle: "QR Code",
+      screenTitle: AppLocalizations.of(context)!.qrCode,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
@@ -128,8 +129,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                         height: 7,
                       ),
                       Text(
-                        // AppLocalizations.of(context)!.shareBtn,
-                        "Share",
+                        AppLocalizations.of(context)!.shareBtn,
                         style: TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
@@ -169,8 +169,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                         height: 7,
                       ),
                       Text(
-                        // AppLocalizations.of(context)!.copyBtn,
-                        "Save",
+                        AppLocalizations.of(context)!.saveBtn,
                         style: TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
