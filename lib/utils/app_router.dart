@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:revolutionary_stuff/screens/open_file_screen.dart';
+import 'package:revolutionary_stuff/screens/show_qr_screen.dart';
 import '../bottom_nav.dart';
 import '../screens/generate_home_screen.dart';
 import '../screens/generated_qr_screen.dart';
@@ -273,6 +274,19 @@ class AppGoRouter {
                     return getPage(child: OpenFileScreen(), state: state);
                   },
                   parentNavigatorKey: historyTabNavigatorKey,
+                ),
+
+                /// A route configuration for the show QR screen.
+                GoRoute(
+                  path: AppPath.showQR,
+                  name: PathName.showQR,
+                  parentNavigatorKey: historyTabNavigatorKey,
+                  pageBuilder: (context, state) {
+                    return getPage(
+                      child: ShowQrScreen(),
+                      state: state,
+                    );
+                  },
                 ),
               ],
             ),

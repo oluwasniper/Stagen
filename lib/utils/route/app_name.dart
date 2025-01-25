@@ -11,4 +11,5 @@ class PathName {
   static const String generatedQR = 'generatedQR';
   static const String generateCode = 'generateCode';
   static const String openFile = 'openFile';
+  static const String showQR = 'showQR';
 }
