@@ -27,7 +27,14 @@ class GenerateHomeScreen extends StatelessWidget {
             itemCount: QROptions.getOptions(context).length,
             itemBuilder: (context, index) {
               final option = QROptions.getOptions(context)[index];
-              return QROptionCard(option: option);
+              return GestureDetector(
+                  onTap: () {
+                    AppGoRouter.router.push(
+                      AppPath.generateCode,
+                      extra: option,
+                    );
+                  },
+                  child: QROptionCard(option: option));
             },
           ),
         ),
