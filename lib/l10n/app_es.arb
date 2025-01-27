@@ -53,5 +53,81 @@
     "copyBtn": "Copiar",
 
     "qrCode": "Código QR",
-    "saveBtn": "Guardar"
+    "saveBtn": "Guardar",
+
+    "generateQRCodeBtn": "Generar Código QR",
+    "textLabel": "Texto",
+    "textHint": "Ingrese el texto",
+
+    "websiteURLLabel": "URL del sitio web",
+    "websiteURLHint": "Por ejemplo: https://www.example.com",
+
+    "networkLabel": "red",
+    "networkHint": "Ingrese el nombre de la red",
+
+    "passwordLabel": "Contraseña",
+    "passwordHint": "Ingrese la contraseña",
+    
+    "eventNamelabel": "Nombre del evento",
+    "eventNameHint": "Ingrese el nombre del evento",
+
+    "startDateAndTimeLabel": "Fecha y hora de inicio",
+    "startDateAndTimeHint": "Por ejemplo: 2021-12-31 23:59:59",
+
+    "endDateAndTimeLabel": "Fecha y hora de finalización",
+    "endDateAndTimeHint": "Por ejemplo: 2021-12-31 23:59:59",
+
+    "eventLocationLabel": "Ubicación del evento",
+    "eventLocationHint": "Ingrese la ubicación del evento",
+
+    "descriptionLabel": "Descripción",
+    "descriptionHint": "Ingrese la descripción",
+
+    "firstNameLabel": "Nombre",
+    "firstNameHint": "Ingrese el nombre",
+
+    "lastNameLabel": "Apellido",
+    "lastNameHint": "Ingrese el apellido",
+
+    "companyLabel": "Empresa",
+    "companyHint": "Ingrese el nombre de la empresa",
+
+    "jobLabel": "Trabajo",
+    "jobHint": "Ingrese el trabajo",
+
+    "phoneLabel": "Teléfono",
+    "phoneHint": "Ingrese el número de teléfono",
+
+    "emailLabel": "Correo electrónico",
+    "emailHint": "Ingrese el correo electrónico",
+
+    "websiteLabel": "Sitio web",
+    "websiteHint": "Ingrese el sitio web",
+
+    "addressLabel": "Dirección",
+    "addressHint": "Ingrese la dirección",
+
+    "cityLabel": "Ciudad",
+    "cityHint": "Ingrese la ciudad",
+
+    "countryLabel": "País",
+    "countryHint": "Ingrese el país",
+
+    "companyNameLabel": "Nombre de la empresa",
+    
+    "whatsappNumberLabel": "Número de WhatsApp",
+    "whatsappNumberHint": "Ingrese el número de WhatsApp",
+
+    "twitterUsernameLabel": "Nombre de usuario de Twitter",
+    "twitterUsernameHint": "Ingrese el nombre de usuario de Twitter",
+
+    "instagramUsernameLabel": "Nombre de usuario de Instagram",
+    "instagramUsernameHint": "Ingrese el nombre de usuario de Instagram",
+
+    "phoneNumberLabel": "Número de teléfono",
+    "phoneNumberHint": "+55xxxxxxxxx"
+
+    
+
+
 }
