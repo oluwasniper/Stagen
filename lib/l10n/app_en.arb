@@ -217,7 +217,7 @@
         "description": "Button to generate the QR code"
     },
 
-    
+
 
     "textLabel": "Text",
     "@textLabel" :{
@@ -405,11 +405,6 @@
     "countryHint": "Enter country",
     "@countryHint" :{
         "description": "Hint for the country input"
-    },
-
-    "companyNameLabel": "Company Name",
-    "@companyNameLabel" :{
-        "description": "Label for the company name input"
     },
 
     "whatsappNumberLabel": "WhatsApp Number",
