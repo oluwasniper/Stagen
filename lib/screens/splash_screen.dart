@@ -2,8 +2,9 @@ import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:revolutionary_stuff/utils/route/app_path.dart';
+
 import '../utils/app_router.dart';
+import '../utils/route/app_path.dart';
 import '../widgets/splash_logo_widget.dart';
 
 class SplashScreen extends StatelessWidget {

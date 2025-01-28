@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../utils/app_asset.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../utils/app_asset.dart';
 
 class SplashLogoWidget extends StatelessWidget {
   const SplashLogoWidget({super.key});

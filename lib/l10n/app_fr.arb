@@ -53,5 +53,64 @@
     "copyBtn": "Copier",
 
     "qrCode": "Code QR",
-    "saveBtn": "Enregistrer"
+    "saveBtn": "Enregistrer",
+
+    "generateQRCodeBtn": "Générer un code QR",
+    "textLabel": "Texte",
+    "textHint": "Entrez le texte",
+    "websiteURLLabel": "URL du site Web",
+    "websiteURLHint": "Par exemple: https://www.example.com",
+    "networkLabel": "Réseau",
+    "networkHint": "Entrez le nom du réseau",
+    "passwordLabel": "Mot de passe",
+    "passwordHint": "Entrez le mot de passe",
+    "eventNamelabel": "Nom de l'événement",
+    "eventNameHint": "Entrez le nom de l'événement",
+    "startDateAndTimeLabel": "Date et heure de début",
+    "startDateAndTimeHint": "Par exemple: 2021-12-31 23:59:59",
+    "endDateAndTimeLabel": "Date et heure de fin",
+    "endDateAndTimeHint": "Par exemple: 2021-12-31 23:59:59",
+    "eventLocationLabel": "Lieu de l'événement",
+    "eventLocationHint": "Entrez le lieu de l'événement",
+    "descriptionLabel": "La description",
+    "descriptionHint": "Entrez la description",
+    "firstNameLabel": "Prénom",
+    "firstNameHint": "Entrez le prénom",
+    "lastNameLabel": "Nom de famille",
+    "lastNameHint": "Entrez le nom de famille",
+    "companyLabel": "Entreprise",
+    "companyHint": "Entrez le nom de l'entreprise",
+    "jobLabel": "Emploi",
+    "jobHint": "Entrez le nom du poste",
+
+    "phoneLabel": "Téléphone",
+    "phoneHint": "Entrez le numéro de téléphone",
+
+    "emailLabel": "Email",
+    "emailHint": "Entrez l'email",
+
+    "websiteLabel": "Site Web",
+    "websiteHint": "Entrez le site Web",
+
+    "addressLabel": "Adresse",
+    "addressHint": "Entrez l'adresse",
+
+    "cityLabel": "Ville",
+    "cityHint": "Entrez la ville",
+
+    "countryLabel": "Pays",
+    "countryHint": "Entrez le pays",
+
+    "whatsappNumberLabel": "Numéro WhatsApp",
+    "whatsappNumberHint": "Entrez le numéro WhatsApp",
+
+    "twitterUsernameLabel": "Nom d'utilisateur Twitter",
+    "twitterUsernameHint": "Entrez le nom d'utilisateur Twitter",
+
+    "instagramUsernameLabel": "Nom d'utilisateur Instagram",
+    "instagramUsernameHint": "Entrez le nom d'utilisateur Instagram",
+
+    "phoneNumberLabel": "Numéro de téléphone",
+    "phoneNumberHint": "+55xxxxxxxxx"
+
 }
