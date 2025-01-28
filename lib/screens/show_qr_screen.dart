@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:revolutionary_stuff/widgets/background_screen_widget.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+import '../widgets/background_screen_widget.dart';
 
 class ShowQrScreen extends StatefulWidget {
   const ShowQrScreen({super.key});

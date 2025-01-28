@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:revolutionary_stuff/screens/open_file_screen.dart';
-import 'package:revolutionary_stuff/screens/show_qr_screen.dart';
+import '../screens/generate_code_screen.dart';
+import '../screens/open_file_screen.dart';
+import '../screens/show_qr_screen.dart';
 import '../bottom_nav.dart';
 import '../screens/generate_home_screen.dart';
 import '../screens/generated_qr_screen.dart';
@@ -11,6 +12,7 @@ import '../screens/scan_home_screen.dart';
 import '../screens/scanned_qr_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/splash_screen.dart';
+import '../widgets/generate_qr_widget.dart';
 import 'route/app_name.dart';
 import 'route/app_path.dart';
 import 'route/error_screen.dart';
@@ -357,7 +359,12 @@ class AppGoRouter {
       GoRoute(
         path: AppPath.generateCode,
         name: PathName.generateCode,
-        builder: (context, state) => GenerateHomeScreen(),
+        builder: (context, state) {
+          final type = state.extra as QROption;
+          return GenerateCodeScreen(
+            type: type,
+          );
+        },
         parentNavigatorKey: mainNavigatorKey,
       ),
     ],
