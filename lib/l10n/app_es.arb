@@ -112,8 +112,6 @@
 
     "countryLabel": "País",
     "countryHint": "Ingrese el país",
-
-    "companyNameLabel": "Nombre de la empresa",
     
     "whatsappNumberLabel": "Número de WhatsApp",
     "whatsappNumberHint": "Ingrese el número de WhatsApp",
