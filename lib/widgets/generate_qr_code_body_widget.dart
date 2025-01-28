@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:revolutionary_stuff/widgets/generate_qr_widget.dart';
+import 'generate_qr_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:revolutionary_stuff/widgets/k_textfield_widget.dart';
+import 'k_textfield_widget.dart';
 
 class GenerateQRCodeBody extends StatelessWidget {
   final QROption type;

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../utils/app_asset.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OpenFileScreen extends StatefulWidget {
   const OpenFileScreen({super.key});

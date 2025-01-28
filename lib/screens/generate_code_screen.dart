@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:revolutionary_stuff/widgets/background_screen_widget.dart';
-import 'package:revolutionary_stuff/widgets/generate_qr_widget.dart';
-import 'package:revolutionary_stuff/widgets/generate_qr_code_body_widget.dart';
+import '../widgets/background_screen_widget.dart';
+import '../widgets/generate_qr_widget.dart';
+import '../widgets/generate_qr_code_body_widget.dart';
 
 class GenerateCodeScreen extends StatelessWidget {
   final QROption type;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:revolutionary_stuff/screens/generate_code_screen.dart';
+import '../screens/generate_code_screen.dart';
 import '../screens/open_file_screen.dart';
 import '../screens/show_qr_screen.dart';
 import '../bottom_nav.dart';
