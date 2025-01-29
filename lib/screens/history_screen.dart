@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
-import 'package:revolutionary_stuff/utils/app_router.dart';
-import 'package:revolutionary_stuff/utils/route/app_path.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:revolutionary_stuff/widgets/background_screen_widget.dart';
+
+import '../utils/app_router.dart';
+import '../utils/route/app_path.dart';
+import '../widgets/background_screen_widget.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
