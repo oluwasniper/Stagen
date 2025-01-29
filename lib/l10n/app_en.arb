@@ -208,7 +208,261 @@
     "saveBtn": "Save",
     "@saveBtn" :{
         "description": "Button to save the QR code"
+    },
+
+    
+
+    "generateQRCodeBtn": "Generate QR Code",
+    "@generateQRCodeBtn" :{
+        "description": "Button to generate the QR code"
+    },
+
+
+
+    "textLabel": "Text",
+    "@textLabel" :{
+        "description": "Label for the text input"
+    },
+    "textHint": "Enter text",
+    "@textHint" :{
+        "description": "Hint for the text input"
+    },
+
+    "websiteURLLabel": "Website URL",
+    "@websiteURLLabel" :{
+        "description": "Label for the website URL input"
+    },
+    "websiteURLHint": "Eg: https://www.example.com",
+    "@websiteURLHint" :{
+        "description": "Hint for the website URL input"
+    },
+
+    "networkLabel": "Network",
+    "@networkLabel" :{
+        "description": "Label for the network input"
+    },
+
+    "networkHint": "Enter network name",
+    "@networkHint" :{
+        "description": "Hint for the network input"
+    },
+
+    "passwordLabel": "Password",
+    "@passwordLabel" :{
+        "description": "Label for the password input"
+    },
+
+    "passwordHint": "Enter password",
+    "@passwordHint" :{
+        "description": "Hint for the password input"
+    },
+
+    "eventNamelabel": "Event Name",
+    "@eventNamelabel" :{
+        "description": "Label for the event name input"
+    },
+
+    "eventNameHint": "Enter name",
+    "@eventNameHint" :{
+        "description": "Hint for the event name input"
+    },
+
+    "startDateAndTimeLabel": "Start Date And Time",
+    "@startDateAndTimeLabel" :{
+        "description": "Label for the start date and time input"
+    },
+
+    "startDateAndTimeHint": "Eg: 12 Dec 2025 12:00 PM",
+    "@startDateAndTimeHint" :{
+        "description": "Hint for the start date and time input"
+    },
+
+    "endDateAndTimeLabel": "End Date And Time",
+    "@endDateAndTimeLabel" :{
+        "description": "Label for the end date and time input"
+    },
+
+    "endDateAndTimeHint": "Eg: 12 Dec 2025 12:00 PM",
+    "@endDateAndTimeHint" :{
+        "description": "Hint for the end date and time input"
+    },
+
+    "eventLocationLabel": "Event Location",
+    "@eventLocationLabel" :{
+        "description": "Label for the event location input"
+    },
+
+    "eventLocationHint": "Enter location",
+    "@eventLocationHint" :{
+        "description": "Hint for the event location input"
+    },
+
+    "descriptionLabel": "Description",
+    "@descriptionLabel" :{
+        "description": "Label for the description input"
+    },
+
+    "descriptionHint": "Enter description",
+    "@descriptionHint" :{
+        "description": "Hint for the description input"
+    },
+
+    "firstNameLabel": "First Name",
+    "@firstNameLabel" :{
+        "description": "Label for the first name input"
+    },
+
+    "firstNameHint": "Enter name",
+    "@firstNameHint" :{
+        "description": "Hint for the first name input"
+    },
+
+    "lastNameLabel": "Last Name",
+    "@lastNameLabel" :{
+        "description": "Label for the last name input"
+    },
+
+    "lastNameHint": "Enter name",
+    "@lastNameHint" :{
+        "description": "Hint for the last name input"
+    },
+
+    "companyLabel": "Company",
+    "@companyLabel" :{
+        "description": "Label for the company input"
+    },
+
+    "companyHint": "Enter company",
+    "@companyHint" :{
+        "description": "Hint for the company input"
+    },
+
+    "jobLabel": "Job",
+    "@jobLabel" :{
+        "description": "Label for the job input"
+    },
+
+    "jobHint": "Enter job",
+    "@jobHint" :{
+        "description": "Hint for the job input"
+    },
+
+    "phoneLabel": "Phone",
+    "@phoneLabel" :{
+        "description": "Label for the phone input"
+    },
+
+    "phoneHint": "Enter phone",
+    "@phoneHint" :{
+        "description": "Hint for the phone input"
+    },
+
+    "emailLabel": "Email",
+    "@emailLabel" :{
+        "description": "Label for the email input"
+    },
+
+    "emailHint": "Enter email",
+    "@emailHint" :{
+        "description": "Hint for the email input"
+    },
+
+    "websiteLabel": "Website",
+    "@websiteLabel" :{
+        "description": "Label for the website input"
+    },
+
+    "websiteHint": "Enter website",
+    "@websiteHint" :{
+        "description": "Hint for the website input"
+    },
+
+    "addressLabel": "Address",
+    "@addressLabel" :{
+        "description": "Label for the address input"
+    },
+
+    "addressHint": "Enter address",
+    "@addressHint" :{
+        "description": "Hint for the address input"
+    },
+
+    "cityLabel": "City",
+    "@cityLabel" :{
+        "description": "Label for the city input"
+    },
+
+    "cityHint": "Enter city",
+    "@cityHint" :{
+        "description": "Hint for the city input"
+    },
+
+    "countryLabel": "Country",
+    "@countryLabel" :{
+        "description": "Label for the country input"
+    },
+
+    "countryHint": "Enter country",
+    "@countryHint" :{
+        "description": "Hint for the country input"
+    },
+
+    "whatsappNumberLabel": "WhatsApp Number",
+    "@whatsappNumberLabel" :{
+        "description": "Label for the WhatsApp number input"
+    },
+
+    "whatsappNumberHint": "Enter number",
+    "@whatsappNumberHint" :{
+        "description": "Hint for the WhatsApp number input"
+    },
+
+    "twitterUsernameLabel": "Username",
+    "@twitterUsernameLabel" :{
+        "description": "Label for the Twitter username input"
+    },
+
+    "twitterUsernameHint": "Enter Twitter username",
+    "@twitterUsernameHint" :{
+        "description": "Hint for the Twitter username input"
+    },
+
+    "instagramUsernameLabel": "Username",
+    "@instagramUsernameLabel" :{
+        "description": "Label for the Instagram username input"
+    },
+
+    "instagramUsernameHint": "Enter Instagram username",
+    "@instagramUsernameHint" :{
+        "description": "Hint for the Instagram username input"
+    },
+
+    "phoneNumberLabel": "Phone Number",
+    "@phoneNumberLabel" :{
+        "description": "Label for the phone number input"
+    },
+
+    "phoneNumberHint": "+92xxxxxxxxxx",
+    "@phoneNumberHint" :{
+        "description": "Hint for the phone number input"
     }
+
+   
+
+
+
+
+  
+
+ 
+
+
+
+
+
+
+
+
 
     
 }

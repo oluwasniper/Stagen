@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:revolutionary_stuff/utils/app_asset.dart';
+import 'utils/app_asset.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BottomNavigationPage extends StatefulWidget {

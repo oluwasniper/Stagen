@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:revolutionary_stuff/widgets/background_screen_widget.dart';
-import 'package:revolutionary_stuff/widgets/settings_list_tile.dart';
+import '../widgets/background_screen_widget.dart';
+import '../widgets/settings_list_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {

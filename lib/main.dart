@@ -1,15 +1,15 @@
+import 'package:appwrite/appwrite.dart' as appwrite;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:appwrite/appwrite.dart' as appwrite;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'l10n/l10n.dart';
-import 'utils/app_router.dart';
-
 /// to use he l10n, you nee to import the generated file
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:revolutionary_stuff/utils/app_theme.dart';
+
+import 'l10n/l10n.dart';
+import 'utils/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
