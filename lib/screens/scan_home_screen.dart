@@ -1,5 +1,4 @@
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ScanHomeScreen extends StatefulWidget {
@@ -19,19 +18,47 @@ class _ScanHomeScreenState extends State<ScanHomeScreen> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // MobileScanner(
-        //   onDetect: (capture) {
-        //     final List<Barcode> barcodes = capture.barcodes;
-        //     for (final barcode in barcodes) {
-        //       if (barcode.rawValue != null) {
-        //         log(barcode.rawValue!);
-        //       } else {
-        //         log('Barcode value is null');
-        //       }
-        //     }
-        //   },
-        // )
-
+        Positioned(
+            top: 50,
+            left: 30,
+            right: 30,
+            child: Container(
+              height: 45,
+              width: MediaQuery.of(context).size.width - 60,
+              decoration: BoxDecoration(
+                color: Color(0xFF000000).withOpacity(0.4),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {},
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                      child: Icon(Icons.photo_library_rounded),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                      child: Icon(Icons.flash_on_rounded),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                      child: Icon(Icons.flip_camera_ios_rounded),
+                    ),
+                  ),
+                ],
+              ),
+            )),
         MobileScanner(
           controller: controller,
           onDetect: (BarcodeCapture capture) {
@@ -49,8 +76,10 @@ class _ScanHomeScreenState extends State<ScanHomeScreen> {
               MediaQuery.of(context).size.width / 2,
               MediaQuery.of(context).size.height / 2,
             ),
-            width: scanArea,
-            height: scanArea,
+            // width: scanArea,
+            width: MediaQuery.of(context).size.width - 60,
+            // height: scanArea,
+            height: MediaQuery.of(context).size.width - 60,
           ),
         ),
       ],
