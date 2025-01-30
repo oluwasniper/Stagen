@@ -49,6 +49,7 @@ dependencies:
   flutter_animate: ^4.5.2 # Animations  
   iconify_flutter: ^0.0.7 # Icons
   flutter_svg: ^2.0.16 # SVG
+  mobile_scanner: ^6.0.5 # QR code scanning
 
 
 dev_dependencies:
