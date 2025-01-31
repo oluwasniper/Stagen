@@ -31,6 +31,7 @@ class OnboardingScreen extends StatelessWidget {
       ]),
       child: AnnotatedRegion(
           value: SystemUiOverlayStyle(
+            // shorebird test
             statusBarColor: Color(0xffFDB623),
             statusBarIconBrightness: Brightness.light,
             systemNavigationBarColor: Color(0xff333333),
