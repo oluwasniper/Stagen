@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:appwrite/appwrite.dart' as appwrite;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:revolutionary_stuff/utils/app_theme.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 import 'l10n/l10n.dart';
 import 'utils/app_router.dart';
@@ -26,8 +29,43 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final updater = ShorebirdUpdater();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Get the current patch number and print it to the console.
+    // It will be `null` if no patches are installed.
+    updater.readCurrentPatch().then((currentPatch) {
+      log('The current patch number is: ${currentPatch?.number}');
+    });
+
+    /// check for updates on app start
+    _checkForUpdates();
+  }
+
+  Future<void> _checkForUpdates() async {
+    // Check whether a new update is available.
+    final status = await updater.checkForUpdate();
+
+    if (status == UpdateStatus.outdated) {
+      try {
+        // Perform the update
+        await updater.update();
+      } on UpdateException {
+        // Handle any errors that occur while updating.
+      }
+    }
+  }
 
   // This widget is the root of your application.
   @override
