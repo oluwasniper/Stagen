@@ -50,6 +50,7 @@ dependencies:
   iconify_flutter: ^0.0.7 # Icons
   flutter_svg: ^2.0.16 # SVG
   mobile_scanner: ^6.0.5 # QR code scanning
+  shorebird_code_push: ^2.0.2 # Shorebird
 
 
 dev_dependencies:
