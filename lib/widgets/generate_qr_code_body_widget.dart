@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'generate_qr_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 import 'k_textfield_widget.dart';
 
 class GenerateQRCodeBody extends StatelessWidget {
