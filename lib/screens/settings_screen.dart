@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/background_screen_widget.dart';
 import '../widgets/settings_list_tile.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
