@@ -12,7 +12,7 @@ class GenerateHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.generateQR,
+      screenTitle: AppLocalizations.of(context).generateQR,
       actionButton: () => AppGoRouter.router.push(AppPath.settings),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -28,13 +28,14 @@ class GenerateHomeScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final option = QROptions.getOptions(context)[index];
               return GestureDetector(
-                  onTap: () {
-                    AppGoRouter.router.push(
-                      AppPath.generateCode,
-                      extra: option,
-                    );
-                  },
-                  child: QROptionCard(option: option));
+                onTap: () {
+                  AppGoRouter.router.push(
+                    AppPath.generateCode,
+                    extra: option,
+                  );
+                },
+                child: QROptionCard(option: option),
+              );
             },
           ),
         ),

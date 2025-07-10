@@ -84,7 +84,7 @@ class GenerateCodeScreen extends StatelessWidget {
                           ),
                           child: Text(
                             // 'Generate QR Code',
-                            AppLocalizations.of(context)!.generateQRCodeBtn,
+                            AppLocalizations.of(context).generateQRCodeBtn,
                             style: TextStyle(
                               color: Color(0xff333333),
                               fontSize: 16,
