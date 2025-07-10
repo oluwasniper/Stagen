@@ -15,7 +15,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
   @override
   Widget build(BuildContext context) {
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.qrCode,
+      screenTitle: AppLocalizations.of(context).qrCode,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
@@ -129,7 +129,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                         height: 7,
                       ),
                       Text(
-                        AppLocalizations.of(context)!.shareBtn,
+                        AppLocalizations.of(context).shareBtn,
                         style: TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
@@ -169,7 +169,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                         height: 7,
                       ),
                       Text(
-                        AppLocalizations.of(context)!.saveBtn,
+                        AppLocalizations.of(context).saveBtn,
                         style: TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,

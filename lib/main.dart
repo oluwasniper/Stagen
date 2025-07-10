@@ -10,9 +10,7 @@ import 'l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:revolutionary_stuff/utils/app_theme.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:revolutionary_stuff/utils/storage/hive_functions.dart';
 import 'package:revolutionary_stuff/utils/storage/hive_box.dart';
 import 'package:revolutionary_stuff/models/history_items.dart';
 import 'package:revolutionary_stuff/services/history_service.dart';
@@ -99,7 +97,7 @@ class _MyAppState extends State<MyApp> {
         DefaultCupertinoLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
       ],
-      onGenerateTitle: (context) => AppLocalizations.of(context)!.appName,
+      onGenerateTitle: (context) => AppLocalizations.of(context).appName,
       supportedLocales: L10n.all,
       themeMode: ThemeMode.dark, //or ThemeMode.light
       theme: GlobalThemData.lightThemeData,

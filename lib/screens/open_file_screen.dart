@@ -17,7 +17,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
   @override
   Widget build(BuildContext context) {
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.openFileHeader,
+      screenTitle: AppLocalizations.of(context).openFileHeader,
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 30,
@@ -118,7 +118,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                                 AppGoRouter.router.go(AppPath.historyShowQR);
                               },
                               child: Text(
-                                AppLocalizations.of(context)!.showQRCode,
+                                AppLocalizations.of(context).showQRCode,
                                 style: TextStyle(
                                   color: Color(0xffFDB623),
                                   fontSize: 15,
@@ -169,7 +169,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                         height: 7,
                       ),
                       Text(
-                        AppLocalizations.of(context)!.shareBtn,
+                        AppLocalizations.of(context).shareBtn,
                         style: TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
@@ -209,7 +209,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                         height: 7,
                       ),
                       Text(
-                        AppLocalizations.of(context)!.copyBtn,
+                        AppLocalizations.of(context).copyBtn,
                         style: TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,

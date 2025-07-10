@@ -23,7 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             physics: BouncingScrollPhysics(),
             children: [
               Text(
-                AppLocalizations.of(context)!.settings,
+                AppLocalizations.of(context).settings,
                 style: TextStyle(
                     color: Color(0xffFDB623),
                     fontSize: 26,
@@ -35,8 +35,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsListTile(
                 isSwitched: false,
                 iconData: Icons.vibration_rounded,
-                title: AppLocalizations.of(context)!.vibrate,
-                subtitle: AppLocalizations.of(context)!.vibrateDesc,
+                title: AppLocalizations.of(context).vibrate,
+                subtitle: AppLocalizations.of(context).vibrateDesc,
               ),
               SizedBox(
                 height: 20,
@@ -44,14 +44,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsListTile(
                 iconData: Icons.notifications_active_outlined,
                 isSwitched: false,
-                title: AppLocalizations.of(context)!.beep,
-                subtitle: AppLocalizations.of(context)!.beepDesc,
+                title: AppLocalizations.of(context).beep,
+                subtitle: AppLocalizations.of(context).beepDesc,
               ),
               SizedBox(
                 height: 50,
               ),
               Text(
-                AppLocalizations.of(context)!.support,
+                AppLocalizations.of(context).support,
                 style: TextStyle(
                     color: Color(0xffFDB623),
                     fontSize: 26,
@@ -63,8 +63,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsListTile(
                 isSwitched: false,
                 showSwitch: false,
-                title: AppLocalizations.of(context)!.rateUs,
-                subtitle: AppLocalizations.of(context)!.rateUsDesc,
+                title: AppLocalizations.of(context).rateUs,
+                subtitle: AppLocalizations.of(context).rateUsDesc,
                 iconData: Icons.check_circle_rounded,
                 onTap: () {
                   // TODO: implement rate app
@@ -77,8 +77,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsListTile(
                 isSwitched: false,
                 showSwitch: false,
-                title: AppLocalizations.of(context)!.shareBtn,
-                subtitle: AppLocalizations.of(context)!.shareDesc,
+                title: AppLocalizations.of(context).shareBtn,
+                subtitle: AppLocalizations.of(context).shareDesc,
                 iconData: Icons.share_rounded,
                 onTap: () {
                   // TODO: implement share app
@@ -92,8 +92,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsListTile(
                 isSwitched: false,
                 showSwitch: false,
-                title: AppLocalizations.of(context)!.privacyPolicy,
-                subtitle: AppLocalizations.of(context)!.privacyPolicyDesc,
+                title: AppLocalizations.of(context).privacyPolicy,
+                subtitle: AppLocalizations.of(context).privacyPolicyDesc,
                 iconData: Icons.privacy_tip_rounded,
                 onTap: () {
                   // TODO: implement privacy policy

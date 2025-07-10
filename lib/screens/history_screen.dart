@@ -3,7 +3,6 @@ import '../l10n/app_localizations.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:intl/intl.dart';
-import 'package:hive/hive.dart';
 
 import '../models/history_items.dart';
 import '../services/history_service.dart';
@@ -129,7 +128,7 @@ class _HistoryScreenState extends State<HistoryScreen>
   @override
   Widget build(BuildContext context) {
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.history,
+      screenTitle: AppLocalizations.of(context).history,
       actionButton: () => AppGoRouter.router.push(AppPath.settings),
       body: Column(
         children: [
@@ -163,13 +162,13 @@ class _HistoryScreenState extends State<HistoryScreen>
                 SizedBox(
                   width: (MediaQuery.of(context).size.width * 7 / 4) - 12,
                   child: Tab(
-                    text: AppLocalizations.of(context)!.scan,
+                    text: AppLocalizations.of(context).scan,
                   ),
                 ),
                 SizedBox(
                   width: (MediaQuery.of(context).size.width * 8 / 4),
                   child: Tab(
-                    text: AppLocalizations.of(context)!.create,
+                    text: AppLocalizations.of(context).create,
                   ),
                 ),
               ],

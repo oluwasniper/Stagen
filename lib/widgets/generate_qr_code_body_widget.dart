@@ -52,9 +52,9 @@ class TextBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return OneTextWidget(
       //  'Text',
-      labelText: AppLocalizations.of(context)!.textLabel,
+      labelText: AppLocalizations.of(context).textLabel,
       // 'Enter text',
-      hintText: AppLocalizations.of(context)!.textHint,
+      hintText: AppLocalizations.of(context).textHint,
     );
   }
 }
@@ -65,8 +65,8 @@ class WebsiteBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.websiteLabel,
-      hintText: AppLocalizations.of(context)!.websiteHint,
+      labelText: AppLocalizations.of(context).websiteLabel,
+      hintText: AppLocalizations.of(context).websiteHint,
     );
   }
 }
@@ -77,8 +77,8 @@ class WhatsAppBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.whatsappNumberLabel,
-      hintText: AppLocalizations.of(context)!.whatsappNumberHint,
+      labelText: AppLocalizations.of(context).whatsappNumberLabel,
+      hintText: AppLocalizations.of(context).whatsappNumberHint,
     );
   }
 }
@@ -89,8 +89,8 @@ class TwitterBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.twitterUsernameLabel,
-      hintText: AppLocalizations.of(context)!.twitterUsernameHint,
+      labelText: AppLocalizations.of(context).twitterUsernameLabel,
+      hintText: AppLocalizations.of(context).twitterUsernameHint,
     );
   }
 }
@@ -101,8 +101,8 @@ class EmailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.emailLabel,
-      hintText: AppLocalizations.of(context)!.emailHint,
+      labelText: AppLocalizations.of(context).emailLabel,
+      hintText: AppLocalizations.of(context).emailHint,
     );
   }
 }
@@ -113,8 +113,8 @@ class InstagramBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.instagramUsernameLabel,
-      hintText: AppLocalizations.of(context)!.instagramUsernameHint,
+      labelText: AppLocalizations.of(context).instagramUsernameLabel,
+      hintText: AppLocalizations.of(context).instagramUsernameHint,
     );
   }
 }
@@ -125,8 +125,8 @@ class TelephoneBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.phoneNumberLabel,
-      hintText: AppLocalizations.of(context)!.phoneNumberHint,
+      labelText: AppLocalizations.of(context).phoneNumberLabel,
+      hintText: AppLocalizations.of(context).phoneNumberHint,
     );
   }
 }
@@ -166,14 +166,14 @@ class WifiBodyTextWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         KTextField(
-          labelText: AppLocalizations.of(context)!.networkLabel,
-          hintText: AppLocalizations.of(context)!.networkHint,
+          labelText: AppLocalizations.of(context).networkLabel,
+          hintText: AppLocalizations.of(context).networkHint,
           autoFocus: true,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.passwordLabel,
-          hintText: AppLocalizations.of(context)!.passwordHint,
+          labelText: AppLocalizations.of(context).passwordLabel,
+          hintText: AppLocalizations.of(context).passwordHint,
           autoFocus: true,
         ),
       ],
@@ -191,32 +191,32 @@ class EventBodyTextWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         KTextField(
-          labelText: AppLocalizations.of(context)!.eventNamelabel,
-          hintText: AppLocalizations.of(context)!.eventNameHint,
+          labelText: AppLocalizations.of(context).eventNamelabel,
+          hintText: AppLocalizations.of(context).eventNameHint,
           autoFocus: true,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.startDateAndTimeLabel,
-          hintText: AppLocalizations.of(context)!.startDateAndTimeHint,
+          labelText: AppLocalizations.of(context).startDateAndTimeLabel,
+          hintText: AppLocalizations.of(context).startDateAndTimeHint,
           autoFocus: true,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.endDateAndTimeLabel,
-          hintText: AppLocalizations.of(context)!.endDateAndTimeHint,
+          labelText: AppLocalizations.of(context).endDateAndTimeLabel,
+          hintText: AppLocalizations.of(context).endDateAndTimeHint,
           autoFocus: true,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.eventLocationLabel,
-          hintText: AppLocalizations.of(context)!.eventLocationHint,
+          labelText: AppLocalizations.of(context).eventLocationLabel,
+          hintText: AppLocalizations.of(context).eventLocationHint,
           autoFocus: true,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.descriptionLabel,
-          hintText: AppLocalizations.of(context)!.descriptionHint,
+          labelText: AppLocalizations.of(context).descriptionLabel,
+          hintText: AppLocalizations.of(context).descriptionHint,
           autoFocus: true,
           maxLines: 3,
         ),
@@ -236,46 +236,46 @@ class ContactBodyTextWidget extends StatelessWidget {
       children: [
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.firstNameLabel,
-          firstHint: AppLocalizations.of(context)!.firstNameHint,
-          secondLabel: AppLocalizations.of(context)!.lastNameLabel,
-          secondHint: AppLocalizations.of(context)!.lastNameHint,
+          firstLabel: AppLocalizations.of(context).firstNameLabel,
+          firstHint: AppLocalizations.of(context).firstNameHint,
+          secondLabel: AppLocalizations.of(context).lastNameLabel,
+          secondHint: AppLocalizations.of(context).lastNameHint,
         ),
         SizedBox(height: 20),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.companyLabel,
-          firstHint: AppLocalizations.of(context)!.companyHint,
-          secondLabel: AppLocalizations.of(context)!.jobLabel,
-          secondHint: AppLocalizations.of(context)!.jobHint,
+          firstLabel: AppLocalizations.of(context).companyLabel,
+          firstHint: AppLocalizations.of(context).companyHint,
+          secondLabel: AppLocalizations.of(context).jobLabel,
+          secondHint: AppLocalizations.of(context).jobHint,
         ),
         SizedBox(height: 20),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.phoneLabel,
-          firstHint: AppLocalizations.of(context)!.phoneHint,
-          secondLabel: AppLocalizations.of(context)!.emailLabel,
-          secondHint: AppLocalizations.of(context)!.emailHint,
+          firstLabel: AppLocalizations.of(context).phoneLabel,
+          firstHint: AppLocalizations.of(context).phoneHint,
+          secondLabel: AppLocalizations.of(context).emailLabel,
+          secondHint: AppLocalizations.of(context).emailHint,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.websiteLabel,
-          hintText: AppLocalizations.of(context)!.websiteHint,
+          labelText: AppLocalizations.of(context).websiteLabel,
+          hintText: AppLocalizations.of(context).websiteHint,
           autoFocus: true,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.addressLabel,
-          hintText: AppLocalizations.of(context)!.addressHint,
+          labelText: AppLocalizations.of(context).addressLabel,
+          hintText: AppLocalizations.of(context).addressHint,
           autoFocus: true,
         ),
         SizedBox(height: 20),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.cityLabel,
-          firstHint: AppLocalizations.of(context)!.cityHint,
-          secondLabel: AppLocalizations.of(context)!.countryLabel,
-          secondHint: AppLocalizations.of(context)!.countryHint,
+          firstLabel: AppLocalizations.of(context).cityLabel,
+          firstHint: AppLocalizations.of(context).cityHint,
+          secondLabel: AppLocalizations.of(context).countryLabel,
+          secondHint: AppLocalizations.of(context).countryHint,
         ),
       ],
     );
@@ -292,37 +292,37 @@ class BusinessBodyTextWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         KTextField(
-          labelText: AppLocalizations.of(context)!.companyLabel,
-          hintText: AppLocalizations.of(context)!.companyHint,
+          labelText: AppLocalizations.of(context).companyLabel,
+          hintText: AppLocalizations.of(context).companyHint,
           autoFocus: true,
         ),
         SizedBox(height: 20),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.phoneLabel,
-          firstHint: AppLocalizations.of(context)!.phoneHint,
-          secondLabel: AppLocalizations.of(context)!.emailLabel,
-          secondHint: AppLocalizations.of(context)!.emailHint,
+          firstLabel: AppLocalizations.of(context).phoneLabel,
+          firstHint: AppLocalizations.of(context).phoneHint,
+          secondLabel: AppLocalizations.of(context).emailLabel,
+          secondHint: AppLocalizations.of(context).emailHint,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.websiteLabel,
-          hintText: AppLocalizations.of(context)!.websiteHint,
+          labelText: AppLocalizations.of(context).websiteLabel,
+          hintText: AppLocalizations.of(context).websiteHint,
           autoFocus: true,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.addressLabel,
-          hintText: AppLocalizations.of(context)!.addressHint,
+          labelText: AppLocalizations.of(context).addressLabel,
+          hintText: AppLocalizations.of(context).addressHint,
           autoFocus: true,
         ),
         SizedBox(height: 20),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.cityLabel,
-          firstHint: AppLocalizations.of(context)!.cityHint,
-          secondLabel: AppLocalizations.of(context)!.companyLabel,
-          secondHint: AppLocalizations.of(context)!.companyHint,
+          firstLabel: AppLocalizations.of(context).cityLabel,
+          firstHint: AppLocalizations.of(context).cityHint,
+          secondLabel: AppLocalizations.of(context).companyLabel,
+          secondHint: AppLocalizations.of(context).companyHint,
         ),
       ],
     );
