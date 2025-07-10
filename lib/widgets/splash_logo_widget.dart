@@ -23,7 +23,7 @@ class SplashLogoWidget extends StatelessWidget {
             height: iconSize,
             width: iconSize,
             filterQuality: FilterQuality.high,
-            semanticLabel: '${AppLocalizations.of(context)!.appName} App Icon',
+            semanticLabel: '${AppLocalizations.of(context).appName} App Icon',
           ),
         ),
       ],

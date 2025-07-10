@@ -1,0 +1,2 @@
+/Users/sonofnos/StudioProjects/Stagen/android/app/.cxx/Debug/5g49196n/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/sonofnos/StudioProjects/Stagen/android/app/.cxx/Debug/5g49196n/armeabi-v7a/CMakeFiles/rebuild_cache.dir

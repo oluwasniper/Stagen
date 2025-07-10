@@ -3,7 +3,8 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  flutter_secure_storage
+  desktop_webview_window
+  flutter_secure_storage_linux
   url_launcher_linux
   window_to_front
 )
