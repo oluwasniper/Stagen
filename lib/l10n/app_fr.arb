@@ -138,6 +138,14 @@
     "authSwitchToSignIn": "Déjà un compte ? Se connecter",
     "authOr": "OU",
     "authContinueAnonymous": "Continuer sans compte",
+    "@authContinueAnonymous": {
+        "description": "Bouton pour continuer en mode anonyme",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
     "authLogout": "Déconnexion",
     "authLogoutDesc": "Se déconnecter de votre compte",
     "authAccount": "Compte",
@@ -145,6 +153,14 @@
     "snackbarLocationPermissionDenied": "Autorisation de localisation refusée",
     "snackbarLocationPermissionPermanentlyDenied": "Les autorisations de localisation sont définitivement refusées. Veuillez les activer dans les paramètres.",
     "snackbarFailedToGetLocation": "Impossible d'obtenir la localisation : {error}",
+    "@snackbarFailedToGetLocation": {
+        "description": "Message quand la récupération de la localisation échoue",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
     "snackbarFillRequiredFields": "Veuillez remplir les champs obligatoires",
     "snackbarCopiedToClipboard": "Copié dans le presse-papiers",
 

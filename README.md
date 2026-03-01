@@ -23,31 +23,32 @@ complete these steps in Xcode for `ios/Runner.xcworkspace`:
 1. Open `Runner` target → **Signing & Capabilities**.
 2. Add capability: **Access WiFi Information**.
 3. Ensure location permission text exists in `ios/Runner/Info.plist`:
-	- `NSLocationWhenInUseUsageDescription`
+   - `NSLocationWhenInUseUsageDescription`
 4. On device, allow **Location While Using App** and keep Location Services on.
 
 Notes:
+
 - iOS may return no nearby scan results depending on OS/device restrictions.
 - In that case, the app falls back to the current connected SSID when available.
 
 ## Troubleshooting (iOS Wi-Fi SSID)
 
 - **No network appears in picker**
-	- Confirm app has Location permission (**While Using App**).
-	- Confirm Location Services are enabled on the device.
-	- Confirm **Access WiFi Information** capability is enabled in Xcode.
+  - Confirm app has Location permission (**While Using App**).
+  - Confirm Location Services are enabled on the device.
+  - Confirm **Access WiFi Information** capability is enabled in Xcode.
 
 - **Only connected network is shown**
-	- Expected on some iOS versions/devices.
-	- The app uses connected-SSID fallback when full scan results are unavailable.
+  - Expected on some iOS versions/devices.
+  - The app uses connected-SSID fallback when full scan results are unavailable.
 
 - **SSID shows as unknown / empty**
-	- Toggle Wi-Fi off/on and reconnect to a known network.
-	- Re-check Location permission after reconnecting.
+  - Toggle Wi-Fi off/on and reconnect to a known network.
+  - Re-check Location permission after reconnecting.
 
 - **Works in debug but not release/TestFlight**
-	- Verify the same capabilities and entitlements are present in the release signing profile.
+  - Verify the same capabilities and entitlements are present in the release signing profile.
 
 - **Simulator behavior differs from real device**
-	- Test SSID features on a physical iPhone; simulator network APIs can be limited.
-# Revolutionary-stuff
+  - Test SSID features on a physical iPhone; simulator network APIs can be limited.
+

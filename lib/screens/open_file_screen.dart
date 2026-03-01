@@ -29,7 +29,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
         : '';
 
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.openFileHeader,
+      screenTitle: AppLocalizations.of(context).openFileHeader,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
@@ -128,7 +128,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                                 );
                               },
                               child: Text(
-                                AppLocalizations.of(context)!.showQRCode,
+                                AppLocalizations.of(context).showQRCode,
                                 style: const TextStyle(
                                   color: Color(0xffFDB623),
                                   fontSize: 15,
@@ -186,7 +186,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context)!.shareBtn,
+                        AppLocalizations.of(context).shareBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
@@ -203,7 +203,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                           Clipboard.setData(ClipboardData(text: data));
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(AppLocalizations.of(context)!
+                                content: Text(AppLocalizations.of(context)
                                     .snackbarCopiedToClipboard)),
                           );
                         },
@@ -230,7 +230,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context)!.copyBtn,
+                        AppLocalizations.of(context).copyBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,

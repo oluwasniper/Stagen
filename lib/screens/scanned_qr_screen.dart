@@ -17,7 +17,7 @@ class ScannedQRScreen extends ConsumerWidget {
     final qrData = ref.watch(scannedQRDataProvider) ?? '';
 
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.scan,
+      screenTitle: AppLocalizations.of(context).scan,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
@@ -130,7 +130,7 @@ class ScannedQRScreen extends ConsumerWidget {
                           Clipboard.setData(ClipboardData(text: qrData));
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(AppLocalizations.of(context)!
+                                content: Text(AppLocalizations.of(context)
                                     .snackbarCopiedToClipboard)),
                           );
                         },
@@ -243,7 +243,7 @@ class ScannedQRScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context)!.shareBtn,
+                        AppLocalizations.of(context).shareBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,

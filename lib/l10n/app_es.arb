@@ -150,6 +150,14 @@
     "authSwitchToSignIn": "¿Ya tienes cuenta? Inicia sesión",
     "authOr": "O",
     "authContinueAnonymous": "Continuar sin cuenta",
+    "@authContinueAnonymous": {
+        "description": "Botón para continuar como usuario anónimo",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
     "authLogout": "Cerrar sesión",
     "authLogoutDesc": "Cerrar sesión de tu cuenta",
     "authAccount": "Cuenta",
@@ -157,6 +165,14 @@
     "snackbarLocationPermissionDenied": "Permiso de ubicación denegado",
     "snackbarLocationPermissionPermanentlyDenied": "Los permisos de ubicación están permanentemente denegados. Por favor, habilítelos en la configuración.",
     "snackbarFailedToGetLocation": "No se pudo obtener la ubicación: {error}",
+    "@snackbarFailedToGetLocation": {
+        "description": "Mensaje cuando falla la obtención de ubicación",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
     "snackbarFillRequiredFields": "Por favor, complete los campos obligatorios",
     "snackbarCopiedToClipboard": "Copiado al portapapeles",
 
