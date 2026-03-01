@@ -5,12 +5,14 @@ class KTextField extends StatelessWidget {
   final String hintText;
   final bool? autoFocus;
   final int? maxLines;
+  final TextEditingController? controller;
   const KTextField({
     super.key,
     required this.labelText,
     required this.hintText,
     this.autoFocus,
     this.maxLines,
+    this.controller,
   });
 
   @override
@@ -27,6 +29,7 @@ class KTextField extends StatelessWidget {
             )),
         SizedBox(height: 10),
         TextField(
+          controller: controller,
           decoration: InputDecoration(
             hintText: hintText,
             fillColor: Color(0xFF333333).withOpacity(0.80),
