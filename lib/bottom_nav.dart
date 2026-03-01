@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../l10n/app_localizations.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 import 'utils/app_asset.dart';
@@ -79,13 +79,13 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     _navItems = [
       CustomNavBarItem(
           svgData: AppAsset.generateIconSvg,
-          label: AppLocalizations.of(context)!.generate),
+          label: AppLocalizations.of(context).generate),
       CustomNavBarItem(
           svgData: AppAsset.scanIconSvg,
-          label: AppLocalizations.of(context)!.scan),
+          label: AppLocalizations.of(context).scan),
       CustomNavBarItem(
           svgData: AppAsset.historyIconSvg,
-          label: AppLocalizations.of(context)!.history),
+          label: AppLocalizations.of(context).history),
     ];
   }
 

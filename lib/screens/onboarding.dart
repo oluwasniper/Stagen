@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
@@ -71,7 +71,7 @@ class OnboardingScreen extends StatelessWidget {
                           Text(
                             /// Returns the onboarding header text string from the localized resources
                             /// based on the current context's locale.
-                            AppLocalizations.of(context)!.onboardingHeader,
+                            AppLocalizations.of(context).onboardingHeader,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 42,
@@ -81,7 +81,7 @@ class OnboardingScreen extends StatelessWidget {
                           SizedBox(
                             width: 350,
                             child: Text(
-                              AppLocalizations.of(context)!.onboardingSubHeader,
+                              AppLocalizations.of(context).onboardingSubHeader,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -131,7 +131,7 @@ class OnboardingScreen extends StatelessWidget {
                                   color: Color(0xffFDB623),
                                 ),
                                 Text(
-                                    AppLocalizations.of(context)!
+                                    AppLocalizations.of(context)
                                         .onboardingSkipButton,
                                     style: TextStyle(
                                       color: Colors.black,
