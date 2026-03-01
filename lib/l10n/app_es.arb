@@ -130,7 +130,7 @@
     "instagramUsernameHint": "Ingrese el nombre de usuario de Instagram",
 
     "phoneNumberLabel": "Número de teléfono",
-    "phoneNumberHint": "+55xxxxxxxxx",
+    "phoneNumberHint": "+[código de país] xxxxxxxxx",
 
     "changeLanguage": "Idioma",
     "changeLanguageDesc": "Cambiar el idioma de la aplicación",
