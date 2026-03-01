@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
+import '../models/qr_record.dart';
 import '../utils/app_asset.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
 
 class OpenFileScreen extends StatefulWidget {
-  const OpenFileScreen({super.key});
+  final QRRecord? record;
+  const OpenFileScreen({super.key, this.record});
 
   @override
   State<OpenFileScreen> createState() => _OpenFileScreenState();
@@ -16,25 +21,30 @@ class OpenFileScreen extends StatefulWidget {
 class _OpenFileScreenState extends State<OpenFileScreen> {
   @override
   Widget build(BuildContext context) {
+    final record = widget.record;
+    final data = record?.data ?? 'No data';
+    final qrType = record?.qrType ?? 'Unknown';
+    final dateStr = record != null
+        ? DateFormat('dd MMM yyyy, h:mm a').format(record.createdAt)
+        : '';
+
     return BackgroundScreenWidget(
       screenTitle: AppLocalizations.of(context)!.openFileHeader,
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 30,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           children: [
             Container(
               height: 180,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Color(0xff3C3C3C),
+                color: const Color(0xff3C3C3C),
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0xff000000).withOpacity(0.25),
-                    offset: Offset(0, 4),
+                    color: const Color(0xff000000).withOpacity(0.25),
+                    offset: const Offset(0, 4),
                     blurRadius: 4,
                   ),
                 ],
@@ -47,30 +57,28 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                         vertical: 15, horizontal: 20),
                     child: Row(
                       children: [
-                        // add icon as png
                         Image.asset(
                           AppAsset.iconNoBGPNG,
                           height: 50,
                           width: 50,
                           filterQuality: FilterQuality.high,
                         ),
-
                         Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Data type",
-                                style: TextStyle(
+                                qrType[0].toUpperCase() + qrType.substring(1),
+                                style: const TextStyle(
                                   color: Color(0xffD9D9D9),
                                   fontSize: 22,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
                               Text(
-                                "16 Dec 2022, 9:30 pm",
-                                style: TextStyle(
+                                dateStr,
+                                style: const TextStyle(
                                   color: Color(0xffA4A4A4),
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
@@ -83,11 +91,9 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Divider(
-                      color: Color(0xff858585),
+                      color: const Color(0xff858585),
                       height: 0.3,
                     ),
                   ),
@@ -98,13 +104,14 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "https://www.youtube.com/watch?v=Zd9g7sKvgIM",
-                          style: TextStyle(
+                          data,
+                          style: const TextStyle(
                             color: Color(0xffD9D9D9),
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
                           maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -115,11 +122,14 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
                               onPressed: () {
-                                AppGoRouter.router.go(AppPath.historyShowQR);
+                                AppGoRouter.router.push(
+                                  AppPath.historyShowQR,
+                                  extra: record,
+                                );
                               },
                               child: Text(
                                 AppLocalizations.of(context)!.showQRCode,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Color(0xffFDB623),
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
@@ -133,10 +143,16 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              height: 60,
-            ),
+            )
+                .animate()
+                .fadeIn(duration: const Duration(milliseconds: 400))
+                .slideY(
+                  begin: -0.1,
+                  end: 0,
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeOut,
+                ),
+            const SizedBox(height: 60),
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -144,33 +160,34 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          // TODO: implement share
+                        },
                         child: Container(
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(
-                            color: Color(0xffFDB623),
+                            color: const Color(0xffFDB623),
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xff000000).withOpacity(0.25),
-                                offset: Offset(0, 4),
+                                color:
+                                    const Color(0xff000000).withOpacity(0.25),
+                                offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
                             ],
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.share,
                             color: Color(0xff3C3C3C),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 7,
-                      ),
+                      const SizedBox(height: 7),
                       Text(
                         AppLocalizations.of(context)!.shareBtn,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -178,39 +195,43 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    width: 40,
-                  ),
+                  const SizedBox(width: 40),
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(text: data));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(AppLocalizations.of(context)!
+                                    .snackbarCopiedToClipboard)),
+                          );
+                        },
                         child: Container(
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(
-                            color: Color(0xffFDB623),
+                            color: const Color(0xffFDB623),
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
                               BoxShadow(
-                                color: Color(0xff000000).withOpacity(0.25),
-                                offset: Offset(0, 4),
+                                color:
+                                    const Color(0xff000000).withOpacity(0.25),
+                                offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
                             ],
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.content_copy_rounded,
                             color: Color(0xff3C3C3C),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 7,
-                      ),
+                      const SizedBox(height: 7),
                       Text(
                         AppLocalizations.of(context)!.copyBtn,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
@@ -220,7 +241,19 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                   )
                 ],
               ),
-            ),
+            )
+                .animate()
+                .fadeIn(
+                  delay: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 400),
+                )
+                .slideY(
+                  begin: 0.2,
+                  end: 0,
+                  delay: const Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeOut,
+                ),
           ],
         ),
       ),

@@ -16,6 +16,8 @@ class OnboardingScreen extends StatelessWidget {
     ///Use it to calculate the size of the icon
     final iconSize = MediaQuery.sizeOf(context).width * 0.6;
 
+    int sampleNumber = 11;
+
     /// Creates an [AnnotatedRegion] widget that applies system UI overlay styles
     /// to its descendant widgets.
     ///
@@ -119,7 +121,7 @@ class OnboardingScreen extends StatelessWidget {
                               /// ```
                               /// go(path, extra: yourData)
                               /// ```
-                              AppGoRouter.router.go(AppPath.home);
+                              AppGoRouter.router.go(AppPath.auth);
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

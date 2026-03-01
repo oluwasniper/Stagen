@@ -33,6 +33,10 @@
 
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>QR code scanner needs photos access to get QR code from photo library</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs location access to generate a QR code for your current location</string>
+	<key>NSContactsUsageDescription</key>
+	<string>This app needs access to your contacts to import contact details for QR code generation</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
