@@ -1,6 +1,6 @@
-# revolutionary_stuff
+# Revolutionary-stuff
 
-A new Flutter project for qr-code scanning and generation
+A Flutter application for QR code scanning and generation.
 
 ## Getting Started
 
