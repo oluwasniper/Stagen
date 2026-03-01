@@ -1,6 +1,7 @@
 class AppPath {
   static const String splash = '/';
   static const String onboarding = '/onboarding';
+  static const String auth = '/auth';
   static const String home = '/home';
   static const String generateHome = '/generateHome';
   // static const String nestedGenerateHomeSettings = '$generateHome$settings';
@@ -16,4 +17,6 @@ class AppPath {
   static const String historyOpenFile = '$history$openFile';
   static const String showQR = '/showQR';
   static const String historyShowQR = '$history$showQR';
+  static const String generatedQRResult = '/generatedQRResult';
+  static const String scannedQRResult = '/scannedQRResult';
 }

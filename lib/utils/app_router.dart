@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../models/qr_record.dart';
+import '../screens/auth_screen.dart';
 import '../screens/generate_code_screen.dart';
 import '../screens/open_file_screen.dart';
 import '../screens/show_qr_screen.dart';
@@ -271,9 +273,10 @@ class AppGoRouter {
                 GoRoute(
                   path: AppPath.openFile,
                   name: PathName.openFile,
-                  // builder: (context, state) => OpenFileScreen(),
                   pageBuilder: (context, state) {
-                    return getPage(child: OpenFileScreen(), state: state);
+                    final record = state.extra as QRRecord?;
+                    return getPage(
+                        child: OpenFileScreen(record: record), state: state);
                   },
                   parentNavigatorKey: historyTabNavigatorKey,
                 ),
@@ -284,8 +287,9 @@ class AppGoRouter {
                   name: PathName.showQR,
                   parentNavigatorKey: historyTabNavigatorKey,
                   pageBuilder: (context, state) {
+                    final record = state.extra as QRRecord?;
                     return getPage(
-                      child: ShowQrScreen(),
+                      child: ShowQrScreen(record: record),
                       state: state,
                     );
                   },
@@ -334,6 +338,13 @@ class AppGoRouter {
           name: PathName.onboarding,
           builder: (context, state) => OnboardingScreen(),
           parentNavigatorKey: mainNavigatorKey),
+
+      /// A route configuration for the auth screen.
+      GoRoute(
+          path: AppPath.auth,
+          name: PathName.auth,
+          builder: (context, state) => const AuthScreen(),
+          parentNavigatorKey: mainNavigatorKey),
       // GoRoute(
       //   path: AppPath.nestedGenerateHomeSettings,
       //   name: PathName.nestedGenerateHomeSettings,
@@ -367,6 +378,22 @@ class AppGoRouter {
         },
         parentNavigatorKey: mainNavigatorKey,
       ),
+
+      /// A route configuration for the generated QR result screen.
+      GoRoute(
+        path: AppPath.generatedQRResult,
+        name: PathName.generatedQRResult,
+        builder: (context, state) => GeneratedQRScreen(),
+        parentNavigatorKey: mainNavigatorKey,
+      ),
+
+      /// A route configuration for the scanned QR result screen.
+      GoRoute(
+        path: AppPath.scannedQRResult,
+        name: PathName.scannedQRResult,
+        builder: (context, state) => ScannedQRScreen(),
+        parentNavigatorKey: mainNavigatorKey,
+      ),
     ],
   );
 
@@ -381,9 +408,27 @@ class AppGoRouter {
     required Widget child,
     required GoRouterState state,
   }) {
-    return MaterialPage(
+    return CustomTransitionPage(
       key: state.pageKey,
       child: child,
+      transitionDuration: const Duration(milliseconds: 300),
+      reverseTransitionDuration: const Duration(milliseconds: 250),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeInOut,
+        );
+        return FadeTransition(
+          opacity: curved,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0.04, 0),
+              end: Offset.zero,
+            ).animate(curved),
+            child: child,
+          ),
+        );
+      },
     );
   }
 }
