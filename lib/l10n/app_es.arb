@@ -64,6 +64,13 @@
 
     "networkLabel": "red",
     "networkHint": "Ingrese el nombre de la red",
+    "wifiChooseFromDevice": "Elegir del Wi‑Fi del dispositivo",
+    "wifiLoadingNetworks": "Cargando redes Wi‑Fi...",
+    "wifiPickerTitle": "Seleccionar red Wi‑Fi",
+    "wifiNoNetworksFound": "No se encontraron redes Wi‑Fi",
+    "wifiScanPermissionRequired": "Se requiere permiso y servicio de ubicación para escanear Wi‑Fi",
+    "wifiUseConnectedNetwork": "Red conectada actual",
+    "wifiUsingConnectedNetwork": "Usando la red Wi‑Fi conectada actualmente",
 
     "passwordLabel": "Contraseña",
     "passwordHint": "Ingrese la contraseña",
@@ -123,9 +130,50 @@
     "instagramUsernameHint": "Ingrese el nombre de usuario de Instagram",
 
     "phoneNumberLabel": "Número de teléfono",
-    "phoneNumberHint": "+55xxxxxxxxx"
+    "phoneNumberHint": "+55xxxxxxxxx",
 
-    
+    "changeLanguage": "Idioma",
+    "changeLanguageDesc": "Cambiar el idioma de la aplicación",
+    "importFromContacts": "Importar desde contactos",
+    "contactPermissionDenied": "Permiso de contactos denegado. Por favor, permita el acceso en la configuración.",
 
+    "authSignIn": "Iniciar sesión",
+    "authSignUp": "Registrarse",
+    "authEmail": "Correo electrónico",
+    "authPassword": "Contraseña",
+    "authName": "Nombre (opcional)",
+    "authEmailRequired": "El correo electrónico es obligatorio",
+    "authEmailInvalid": "Ingrese un correo electrónico válido",
+    "authPasswordRequired": "La contraseña es obligatoria",
+    "authPasswordTooShort": "La contraseña debe tener al menos 8 caracteres",
+    "authSwitchToSignUp": "¿No tienes cuenta? Regístrate",
+    "authSwitchToSignIn": "¿Ya tienes cuenta? Inicia sesión",
+    "authOr": "O",
+    "authContinueAnonymous": "Continuar sin cuenta",
+    "authLogout": "Cerrar sesión",
+    "authLogoutDesc": "Cerrar sesión de tu cuenta",
+    "authAccount": "Cuenta",
 
+    "snackbarLocationPermissionDenied": "Permiso de ubicación denegado",
+    "snackbarLocationPermissionPermanentlyDenied": "Los permisos de ubicación están permanentemente denegados. Por favor, habilítelos en la configuración.",
+    "snackbarFailedToGetLocation": "No se pudo obtener la ubicación: {error}",
+    "snackbarFillRequiredFields": "Por favor, complete los campos obligatorios",
+    "snackbarCopiedToClipboard": "Copiado al portapapeles",
+
+    "apiErrorUserAlreadyExists": "Ya existe una cuenta con este correo electrónico.",
+    "apiErrorInvalidCredentials": "Correo electrónico o contraseña incorrectos.",
+    "apiErrorUserBlocked": "Esta cuenta ha sido bloqueada. Contacte con soporte.",
+    "apiErrorUserNotFound": "No se encontró una cuenta con este correo electrónico.",
+    "apiErrorEmailAlreadyExists": "Este correo electrónico ya está en uso.",
+    "apiErrorPasswordMismatch": "La contraseña ingresada es incorrecta.",
+    "apiErrorSessionAlreadyExists": "Ya hay una sesión activa. Cierre sesión primero.",
+    "apiErrorUnauthorized": "No tiene autorización para realizar esta acción.",
+    "apiErrorPasswordRecentlyUsed": "Esta contraseña fue usada recientemente. Elija otra.",
+    "apiErrorRateLimitExceeded": "Demasiadas solicitudes. Intente de nuevo más tarde.",
+    "apiErrorServerError": "Ocurrió un error en el servidor. Intente de nuevo más tarde.",
+    "apiErrorUnknown": "Ocurrió un error inesperado. Intente de nuevo.",
+
+    "historyLoadFailed": "Error al cargar el historial",
+    "historyRetry": "Reintentar",
+    "historyEmpty": "Aún no hay historial"
 }
