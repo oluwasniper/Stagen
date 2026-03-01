@@ -151,12 +151,7 @@
     "authOr": "O",
     "authContinueAnonymous": "Continuar sin cuenta",
     "@authContinueAnonymous": {
-        "description": "Botón para continuar como usuario anónimo",
-        "placeholders": {
-            "error": {
-                "type": "String"
-            }
-        }
+        "description": "Botón para continuar como usuario anónimo"
     },
     "authLogout": "Cerrar sesión",
     "authLogoutDesc": "Cerrar sesión de tu cuenta",
