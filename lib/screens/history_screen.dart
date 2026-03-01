@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
+import 'package:intl/intl.dart';
 
+import '../models/qr_record.dart';
+import '../providers/qr_providers.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
 
-class HistoryScreen extends StatefulWidget {
+class HistoryScreen extends ConsumerStatefulWidget {
   const HistoryScreen({super.key});
 
   @override
-  State<HistoryScreen> createState() => _HistoryScreenState();
+  ConsumerState<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen>
+class _HistoryScreenState extends ConsumerState<HistoryScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -37,59 +42,40 @@ class _HistoryScreenState extends State<HistoryScreen>
       actionButton: () => AppGoRouter.router.push(AppPath.settings),
       body: Column(
         children: [
-          // give the tab bar a height [can change hheight to preferred height]
           Container(
             height: 60,
-            margin: EdgeInsets.symmetric(horizontal: 20),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: Color(0xff333333).withOpacity(0.84),
-              borderRadius: BorderRadius.circular(
-                6.0,
-              ),
+              color: const Color(0xff333333).withOpacity(0.84),
+              borderRadius: BorderRadius.circular(6.0),
             ),
             child: TabBar(
               enableFeedback: true,
-
-              padding: EdgeInsets.only(
-                top: 6,
-                bottom: 6,
-              ),
+              padding: const EdgeInsets.only(top: 6, bottom: 6),
               controller: _tabController,
-              // give the indicator a decoration (color and border radius)
               indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  6.0,
-                ),
-                color: Color(0xffFDB623),
+                borderRadius: BorderRadius.circular(6.0),
+                color: const Color(0xffFDB623),
               ),
-
-              labelStyle: TextStyle(
+              labelStyle: const TextStyle(
                 fontSize: 17,
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
               ),
-
-              unselectedLabelStyle: TextStyle(
+              unselectedLabelStyle: const TextStyle(
                 fontSize: 19,
                 color: Colors.white,
                 fontWeight: FontWeight.w400,
               ),
-
               dividerColor: Colors.transparent,
-
               tabs: [
-                // first tab [you can add an icon using the icon property]
                 SizedBox(
                   width: (MediaQuery.of(context).size.width * 7 / 4) - 12,
                   child: Tab(
                     text: AppLocalizations.of(context)!.scan,
                   ),
                 ),
-
-                // second tab [you can add an icon using the icon property]
-
                 SizedBox(
-                  // width: (MediaQuery.of(context).size.width * 7 / 4) - 12,
                   width: (MediaQuery.of(context).size.width * 8 / 4),
                   child: Tab(
                     text: AppLocalizations.of(context)!.create,
@@ -98,16 +84,18 @@ class _HistoryScreenState extends State<HistoryScreen>
               ],
             ),
           ),
-          // tab bar view here
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
-                // first tab bar view widget
-                _scanCreateMock(),
-
-                // second tab bar view widget
-                _scanCreateMock(),
+                // Scanned history tab
+                _HistoryListView(
+                  provider: scannedHistoryProvider,
+                ),
+                // Generated history tab
+                _HistoryListView(
+                  provider: generatedHistoryProvider,
+                ),
               ],
             ),
           ),
@@ -115,103 +103,188 @@ class _HistoryScreenState extends State<HistoryScreen>
       ),
     );
   }
+}
 
-  Padding _scanCreateMock() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30.0),
-      child: ListView.separated(
-          physics: BouncingScrollPhysics(),
-          separatorBuilder: (context, index) {
-            return SizedBox(
-              height: 19,
-            );
-          },
-          itemCount: 15,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                // AppGoRouter.router.push("/history/openFile");
-                // AppGoRouter.router.push(AppPath.openFile);
-                AppGoRouter.router.push(AppPath.historyOpenFile);
-              },
-              child: Container(
-                height: 60,
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Color(0xff333333).withOpacity(0.84),
-                  borderRadius: BorderRadius.circular(
-                    6.0,
+class _HistoryListView extends ConsumerWidget {
+  final StateNotifierProvider<QRRecordListNotifier, AsyncValue<List<QRRecord>>>
+      provider;
+
+  const _HistoryListView({required this.provider});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final historyAsync = ref.watch(provider);
+
+    return historyAsync.when(
+      loading: () => const Center(
+        child: CircularProgressIndicator(color: Color(0xffFDB623)),
+      ),
+      error: (error, _) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, color: Color(0xffFDB623), size: 48),
+            const SizedBox(height: 16),
+            Text(
+              AppLocalizations.of(context)!.historyLoadFailed,
+              style: const TextStyle(color: Color(0xffD9D9D9), fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () => ref.read(provider.notifier).fetchRecords(),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xffFDB623)),
+              child: Text(AppLocalizations.of(context)!.historyRetry,
+                  style: const TextStyle(color: Color(0xff333333))),
+            ),
+          ],
+        ),
+      ),
+      data: (records) {
+        if (records.isEmpty) {
+          return RefreshIndicator(
+            color: const Color(0xffFDB623),
+            backgroundColor: const Color(0xff333333),
+            onRefresh: () => ref.read(provider.notifier).fetchRecords(),
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              children: [
+                const SizedBox(height: 200),
+                Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.historyEmpty,
+                    style:
+                        const TextStyle(color: Color(0xffA4A4A4), fontSize: 16),
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xff000000).withOpacity(0.25),
-                      spreadRadius: 0,
-                      blurRadius: 4,
-                      offset: Offset(0, 4), // changes position of shadow
-                    ),
-                  ],
                 ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Iconify(
-                        Ri.qr_code_line,
-                        size: 50,
-                        color: Color(0xffFDB623),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 7.0, bottom: 7.0, right: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            // add the url and the delete button
+              ],
+            ),
+          );
+        }
 
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width *
-                                        (2 / 3) -
-                                    14,
-                                child: Text(
-                                  'https://itunes.com',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
+        return RefreshIndicator(
+          color: const Color(0xffFDB623),
+          backgroundColor: const Color(0xff333333),
+          onRefresh: () => ref.read(provider.notifier).fetchRecords(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30.0),
+            child: ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
+              separatorBuilder: (context, index) => const SizedBox(height: 19),
+              itemCount: records.length,
+              itemBuilder: (context, index) {
+                final record = records[index];
+                final dateStr =
+                    DateFormat('dd MMM yyyy, h:mm a').format(record.createdAt);
+
+                return GestureDetector(
+                  onTap: () {
+                    AppGoRouter.router.push(
+                      AppPath.historyOpenFile,
+                      extra: record,
+                    );
+                  },
+                  child: Container(
+                    height: 60,
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff333333).withOpacity(0.84),
+                      borderRadius: BorderRadius.circular(6.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xff000000).withOpacity(0.25),
+                          spreadRadius: 0,
+                          blurRadius: 4,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Iconify(
+                            Ri.qr_code_line,
+                            size: 50,
+                            color: const Color(0xffFDB623),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 7.0, bottom: 7.0, right: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        record.data,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (record.id != null) {
+                                          ref
+                                              .read(provider.notifier)
+                                              .deleteRecord(record.id!);
+                                        }
+                                      },
+                                      child: Iconify(
+                                        Ri.delete_bin_5_fill,
+                                        size: 24,
+                                        color: const Color(0xffFDB623),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  dateStr,
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xffA4A4A4),
                                   ),
                                 ),
-                              ),
-                              Iconify(
-                                Ri.delete_bin_5_fill,
-                                size: 30,
-                                color: Color(0xffFDB623),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                '16 Dec 2022, 9:30 pm',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xffA4A4A4),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            );
-          }),
+                  ),
+                )
+                    .animate()
+                    .fadeIn(
+                      delay: Duration(milliseconds: 50 * index),
+                      duration: const Duration(milliseconds: 350),
+                    )
+                    .slideX(
+                      begin: 0.1,
+                      end: 0,
+                      delay: Duration(milliseconds: 50 * index),
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeOut,
+                    );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }
