@@ -17,8 +17,11 @@ export
 DART_DEFINES := \
 	--dart-define=APPWRITE_ENDPOINT=$(APPWRITE_ENDPOINT) \
 	--dart-define=APPWRITE_PROJECT_ID=$(APPWRITE_PROJECT_ID) \
-	--dart-define=POSTHOG_API_KEY=$(POSTHOG_API_KEY) \
-	--dart-define=POSTHOG_HOST=$(POSTHOG_HOST)
+	--dart-define=POSTHOG_API_KEY=$(POSTHOG_API_KEY)
+
+ifneq ($(strip $(POSTHOG_HOST)),)
+DART_DEFINES += --dart-define=POSTHOG_HOST=$(POSTHOG_HOST)
+endif
 
 .PHONY: run build-android build-ios clean
 
