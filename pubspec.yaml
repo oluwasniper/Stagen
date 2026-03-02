@@ -44,7 +44,7 @@ dependencies:
   flutter_web_auth_2: ^4.1.0 # Web authentication
   flutter_localizations:
     sdk: flutter 
-  intl: ^0.20.2 # Internationalization
+  intl: ">=0.19.0 <0.21.0" # Internationalization (compatible with Flutter SDK pinning across versions)
   another_flutter_splash_screen: ^1.2.1 # Splash screen
   flutter_animate: ^4.5.2 # Animations
   iconify_flutter: ^0.0.7 # Icons
