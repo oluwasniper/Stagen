@@ -13,6 +13,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:revolutionary_stuff/utils/storage/hive_box.dart';
 import 'package:revolutionary_stuff/models/history_items.dart';
 import 'package:revolutionary_stuff/services/history_service.dart';
+import 'package:revolutionary_stuff/services/telemetry_service.dart';
 
 import 'l10n/l10n.dart';
 import 'providers/settings_provider.dart';
@@ -21,6 +22,7 @@ import 'utils/app_router.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await initPostHog();
   await Hive.initFlutter();
 
   // Register Hive adapters
