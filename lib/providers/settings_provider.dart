@@ -9,19 +9,26 @@ class _Keys {
   static const vibrate = 'setting_vibrate';
   static const beep = 'setting_beep';
   static const locale = 'setting_locale';
+  static const analytics = 'setting_analytics';
 }
 
 /// Holds the app settings state.
 class SettingsState {
   final bool vibrate;
   final bool beep;
+  final bool analyticsEnabled;
 
-  const SettingsState({this.vibrate = false, this.beep = false});
+  const SettingsState({
+    this.vibrate = false,
+    this.beep = false,
+    this.analyticsEnabled = true,
+  });
 
-  SettingsState copyWith({bool? vibrate, bool? beep}) {
+  SettingsState copyWith({bool? vibrate, bool? beep, bool? analyticsEnabled}) {
     return SettingsState(
       vibrate: vibrate ?? this.vibrate,
       beep: beep ?? this.beep,
+      analyticsEnabled: analyticsEnabled ?? this.analyticsEnabled,
     );
   }
 }
@@ -37,9 +44,12 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<void> _load() async {
     final vibrate = await _storage.read(key: _Keys.vibrate);
     final beep = await _storage.read(key: _Keys.beep);
+    final analytics = await _storage.read(key: _Keys.analytics);
     state = SettingsState(
       vibrate: vibrate == 'true',
       beep: beep == 'true',
+      // Default true (opt-in); only explicitly stored 'false' disables it.
+      analyticsEnabled: analytics != 'false',
     );
   }
 
@@ -51,6 +61,11 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<void> toggleBeep(bool value) async {
     state = state.copyWith(beep: value);
     await _storage.write(key: _Keys.beep, value: value.toString());
+  }
+
+  Future<void> toggleAnalytics(bool value) async {
+    state = state.copyWith(analyticsEnabled: value);
+    await _storage.write(key: _Keys.analytics, value: value.toString());
   }
 }
 

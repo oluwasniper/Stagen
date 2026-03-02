@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/app_localizations.dart';
 import '../providers/qr_providers.dart';
+import '../services/telemetry_service.dart';
 import '../widgets/background_screen_widget.dart';
 
 class ScannedQRScreen extends ConsumerWidget {
@@ -128,6 +129,10 @@ class ScannedQRScreen extends ConsumerWidget {
                       InkWell(
                         onTap: () {
                           Clipboard.setData(ClipboardData(text: qrData));
+                          ref.read(telemetryServiceProvider).track(
+                            TelemetryEvents.qrCopied,
+                            properties: {'source': 'scanned'},
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text(AppLocalizations.of(context)
@@ -177,6 +182,7 @@ class ScannedQRScreen extends ConsumerWidget {
                             if (await canLaunchUrl(uri)) {
                               await launchUrl(uri,
                                   mode: LaunchMode.externalApplication);
+                              ref.read(telemetryServiceProvider).track(TelemetryEvents.qrUrlOpened);
                             }
                           },
                           child: Container(
@@ -219,6 +225,10 @@ class ScannedQRScreen extends ConsumerWidget {
                       InkWell(
                         onTap: () {
                           // TODO: implement share
+                          ref.read(telemetryServiceProvider).track(
+                            TelemetryEvents.qrShared,
+                            properties: {'source': 'scanned'},
+                          );
                         },
                         child: Container(
                           height: 50,
