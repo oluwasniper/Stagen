@@ -163,6 +163,29 @@ class AppLocalizationsPt extends AppLocalizations {
   String get networkHint => 'Digite o nome da rede';
 
   @override
+  String get wifiChooseFromDevice => 'Escolher do Wi‑Fi do dispositivo';
+
+  @override
+  String get wifiLoadingNetworks => 'Carregando redes Wi‑Fi...';
+
+  @override
+  String get wifiPickerTitle => 'Selecionar rede Wi‑Fi';
+
+  @override
+  String get wifiNoNetworksFound => 'Nenhuma rede Wi‑Fi encontrada';
+
+  @override
+  String get wifiScanPermissionRequired =>
+      'Serviço e permissão de localização são necessários para escanear Wi‑Fi';
+
+  @override
+  String get wifiUseConnectedNetwork => 'Rede conectada atual';
+
+  @override
+  String get wifiUsingConnectedNetwork =>
+      'Usando a rede Wi‑Fi conectada no momento';
+
+  @override
   String get passwordLabel => 'Senha';
 
   @override
@@ -281,4 +304,139 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get phoneNumberHint => '+55xxxxxxxxx';
+
+  @override
+  String get changeLanguage => 'Idioma';
+
+  @override
+  String get changeLanguageDesc => 'Alterar o idioma do aplicativo';
+
+  @override
+  String get importFromContacts => 'Importar dos contatos';
+
+  @override
+  String get contactPermissionDenied =>
+      'Permissão de contatos negada. Por favor, permita o acesso nas configurações.';
+
+  @override
+  String get authSignIn => 'Entrar';
+
+  @override
+  String get authSignUp => 'Criar conta';
+
+  @override
+  String get authEmail => 'E-mail';
+
+  @override
+  String get authPassword => 'Senha';
+
+  @override
+  String get authName => 'Nome (opcional)';
+
+  @override
+  String get authEmailRequired => 'O e-mail é obrigatório';
+
+  @override
+  String get authEmailInvalid => 'Digite um e-mail válido';
+
+  @override
+  String get authPasswordRequired => 'A senha é obrigatória';
+
+  @override
+  String get authPasswordTooShort => 'A senha deve ter pelo menos 8 caracteres';
+
+  @override
+  String get authSwitchToSignUp => 'Não tem conta? Criar conta';
+
+  @override
+  String get authSwitchToSignIn => 'Já tem conta? Entrar';
+
+  @override
+  String get authOr => 'OU';
+
+  @override
+  String get authContinueAnonymous => 'Continuar sem conta';
+
+  @override
+  String get authLogout => 'Sair';
+
+  @override
+  String get authLogoutDesc => 'Sair da sua conta';
+
+  @override
+  String get authAccount => 'Conta';
+
+  @override
+  String get snackbarLocationPermissionDenied =>
+      'Permissão de localização negada';
+
+  @override
+  String get snackbarLocationPermissionPermanentlyDenied =>
+      'As permissões de localização foram negadas permanentemente. Por favor, habilite-as nas configurações.';
+
+  @override
+  String snackbarFailedToGetLocation(String error) {
+    return 'Falha ao obter localização: $error';
+  }
+
+  @override
+  String get snackbarFillRequiredFields =>
+      'Por favor, preencha os campos obrigatórios';
+
+  @override
+  String get snackbarCopiedToClipboard =>
+      'Copiado para a área de transferência';
+
+  @override
+  String get apiErrorUserAlreadyExists =>
+      'Já existe uma conta com este e-mail.';
+
+  @override
+  String get apiErrorInvalidCredentials => 'E-mail ou senha inválidos.';
+
+  @override
+  String get apiErrorUserBlocked =>
+      'Esta conta foi bloqueada. Entre em contato com o suporte.';
+
+  @override
+  String get apiErrorUserNotFound =>
+      'Nenhuma conta encontrada com este e-mail.';
+
+  @override
+  String get apiErrorEmailAlreadyExists => 'Este e-mail já está em uso.';
+
+  @override
+  String get apiErrorPasswordMismatch => 'A senha digitada está incorreta.';
+
+  @override
+  String get apiErrorSessionAlreadyExists =>
+      'Já existe uma sessão ativa. Saia primeiro.';
+
+  @override
+  String get apiErrorUnauthorized =>
+      'Você não tem autorização para realizar esta ação.';
+
+  @override
+  String get apiErrorPasswordRecentlyUsed =>
+      'Esta senha foi usada recentemente. Escolha outra.';
+
+  @override
+  String get apiErrorRateLimitExceeded =>
+      'Muitas solicitações. Tente novamente mais tarde.';
+
+  @override
+  String get apiErrorServerError =>
+      'Algo deu errado. Tente novamente mais tarde.';
+
+  @override
+  String get apiErrorUnknown => 'Ocorreu um erro inesperado. Tente novamente.';
+
+  @override
+  String get historyLoadFailed => 'Falha ao carregar o histórico';
+
+  @override
+  String get historyRetry => 'Tentar novamente';
+
+  @override
+  String get historyEmpty => 'Nenhum histórico ainda';
 }

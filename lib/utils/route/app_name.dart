@@ -1,6 +1,7 @@
 class PathName {
   static const String splash = 'splash';
   static const String onboarding = 'onboarding';
+  static const String auth = 'auth';
   static const String home = 'home';
   static const String generateHome = 'generateHome';
   static const String history = 'history';
@@ -12,4 +13,6 @@ class PathName {
   static const String generateCode = 'generateCode';
   static const String openFile = 'openFile';
   static const String showQR = 'showQR';
+  static const String generatedQRResult = 'generatedQRResult';
+  static const String scannedQRResult = 'scannedQRResult';
 }

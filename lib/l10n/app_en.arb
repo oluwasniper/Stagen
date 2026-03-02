@@ -1,4 +1,3 @@
-
 {
     "@@locale" : "en",
     "language": "English",
@@ -246,6 +245,34 @@
     "@networkHint" :{
         "description": "Hint for the network input"
     },
+    "wifiChooseFromDevice": "Choose from device Wi-Fi",
+    "@wifiChooseFromDevice" :{
+        "description": "Button text to choose an SSID from nearby device Wi-Fi networks"
+    },
+    "wifiLoadingNetworks": "Loading Wi-Fi networks...",
+    "@wifiLoadingNetworks" :{
+        "description": "Button text while Wi-Fi networks are being scanned"
+    },
+    "wifiPickerTitle": "Select Wi-Fi network",
+    "@wifiPickerTitle" :{
+        "description": "Title for Wi-Fi network picker sheet"
+    },
+    "wifiNoNetworksFound": "No Wi-Fi networks found",
+    "@wifiNoNetworksFound" :{
+        "description": "Message when no Wi-Fi SSIDs are found"
+    },
+    "wifiScanPermissionRequired": "Location service and permission are required to scan Wi-Fi",
+    "@wifiScanPermissionRequired" :{
+        "description": "Message when app cannot scan Wi-Fi due to missing permission or service"
+    },
+    "wifiUseConnectedNetwork": "Current connected network",
+    "@wifiUseConnectedNetwork" :{
+        "description": "Label shown for the current connected Wi-Fi network in picker"
+    },
+    "wifiUsingConnectedNetwork": "Using current connected Wi-Fi network",
+    "@wifiUsingConnectedNetwork" :{
+        "description": "Message shown when app auto-fills SSID using current connected network"
+    },
 
     "passwordLabel": "Password",
     "@passwordLabel" :{
@@ -445,25 +472,175 @@
     "phoneNumberHint": "+92xxxxxxxxxx",
     "@phoneNumberHint" :{
         "description": "Hint for the phone number input"
+    },
+
+    "changeLanguage": "Language",
+    "@changeLanguage" :{
+        "description": "Label for the language setting"
+    },
+    "changeLanguageDesc": "Change app language",
+    "@changeLanguageDesc" :{
+        "description": "Description for the language setting"
+    },
+    "importFromContacts": "Import from Phone Contacts",
+    "@importFromContacts" :{
+        "description": "Button label to import a contact from the phone address book"
+    },
+    "contactPermissionDenied": "Contact permission denied. Please allow access in settings.",
+    "@contactPermissionDenied" :{
+        "description": "Message shown when the user denies contacts permission"
+    },
+
+    "authSignIn": "Sign In",
+    "@authSignIn" :{
+        "description": "Sign in button label"
+    },
+    "authSignUp": "Sign Up",
+    "@authSignUp" :{
+        "description": "Sign up button label"
+    },
+    "authEmail": "Email",
+    "@authEmail" :{
+        "description": "Email input hint"
+    },
+    "authPassword": "Password",
+    "@authPassword" :{
+        "description": "Password input hint"
+    },
+    "authName": "Name (optional)",
+    "@authName" :{
+        "description": "Name input hint"
+    },
+    "authEmailRequired": "Email is required",
+    "@authEmailRequired" :{
+        "description": "Validation message when email is empty"
+    },
+    "authEmailInvalid": "Enter a valid email",
+    "@authEmailInvalid" :{
+        "description": "Validation message for invalid email format"
+    },
+    "authPasswordRequired": "Password is required",
+    "@authPasswordRequired" :{
+        "description": "Validation message when password is empty"
+    },
+    "authPasswordTooShort": "Password must be at least 8 characters",
+    "@authPasswordTooShort" :{
+        "description": "Validation message when password is too short"
+    },
+    "authSwitchToSignUp": "Don't have an account? Sign Up",
+    "@authSwitchToSignUp" :{
+        "description": "Link to switch to sign up mode"
+    },
+    "authSwitchToSignIn": "Already have an account? Sign In",
+    "@authSwitchToSignIn" :{
+        "description": "Link to switch to sign in mode"
+    },
+    "authOr": "OR",
+    "@authOr" :{
+        "description": "Divider text between auth options"
+    },
+    "authContinueAnonymous": "Continue without account",
+    "@authContinueAnonymous" :{
+        "description": "Button to continue as anonymous user"
+    },
+    "authLogout": "Log Out",
+    "@authLogout" :{
+        "description": "Log out button label"
+    },
+    "authLogoutDesc": "Sign out of your account",
+    "@authLogoutDesc" :{
+        "description": "Log out description"
+    },
+    "authAccount": "Account",
+    "@authAccount" :{
+        "description": "Account section header"
+    },
+
+    "snackbarLocationPermissionDenied": "Location permission denied",
+    "@snackbarLocationPermissionDenied" :{
+        "description": "Snackbar message when location permission is denied"
+    },
+    "snackbarLocationPermissionPermanentlyDenied": "Location permissions are permanently denied. Please enable them in settings.",
+    "@snackbarLocationPermissionPermanentlyDenied" :{
+        "description": "Snackbar message when location permission is permanently denied"
+    },
+    "snackbarFailedToGetLocation": "Failed to get location: {error}",
+    "@snackbarFailedToGetLocation" :{
+        "description": "Snackbar message when getting location fails",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "snackbarFillRequiredFields": "Please fill in the required fields",
+    "@snackbarFillRequiredFields" :{
+        "description": "Snackbar message when required fields are empty"
+    },
+    "snackbarCopiedToClipboard": "Copied to clipboard",
+    "@snackbarCopiedToClipboard" :{
+        "description": "Snackbar message when text is copied to clipboard"
+    },
+
+    "apiErrorUserAlreadyExists": "An account with this email already exists.",
+    "@apiErrorUserAlreadyExists" :{
+        "description": "Error when user tries to register with an existing email"
+    },
+    "apiErrorInvalidCredentials": "Invalid email or password.",
+    "@apiErrorInvalidCredentials" :{
+        "description": "Error when login credentials are wrong"
+    },
+    "apiErrorUserBlocked": "This account has been blocked. Please contact support.",
+    "@apiErrorUserBlocked" :{
+        "description": "Error when user account is blocked"
+    },
+    "apiErrorUserNotFound": "No account found with this email.",
+    "@apiErrorUserNotFound" :{
+        "description": "Error when user account is not found"
+    },
+    "apiErrorEmailAlreadyExists": "This email is already in use.",
+    "@apiErrorEmailAlreadyExists" :{
+        "description": "Error when email is already taken"
+    },
+    "apiErrorPasswordMismatch": "The password you entered is incorrect.",
+    "@apiErrorPasswordMismatch" :{
+        "description": "Error when password does not match"
+    },
+    "apiErrorSessionAlreadyExists": "A session is already active. Please sign out first.",
+    "@apiErrorSessionAlreadyExists" :{
+        "description": "Error when trying to create a session while one exists"
+    },
+    "apiErrorUnauthorized": "You are not authorised to perform this action.",
+    "@apiErrorUnauthorized" :{
+        "description": "Error when user is not authorised"
+    },
+    "apiErrorPasswordRecentlyUsed": "This password was recently used. Please choose a different one.",
+    "@apiErrorPasswordRecentlyUsed" :{
+        "description": "Error when password was recently used"
+    },
+    "apiErrorRateLimitExceeded": "Too many requests. Please try again later.",
+    "@apiErrorRateLimitExceeded" :{
+        "description": "Error when rate limit is exceeded"
+    },
+    "apiErrorServerError": "Something went wrong on our end. Please try again later.",
+    "@apiErrorServerError" :{
+        "description": "Error when server encounters an internal error"
+    },
+    "apiErrorUnknown": "An unexpected error occurred. Please try again.",
+    "@apiErrorUnknown" :{
+        "description": "Fallback error message for unrecognised errors"
+    },
+
+    "historyLoadFailed": "Failed to load history",
+    "@historyLoadFailed" :{
+        "description": "Message when history fails to load"
+    },
+    "historyRetry": "Retry",
+    "@historyRetry" :{
+        "description": "Button to retry loading history"
+    },
+    "historyEmpty": "No history yet",
+    "@historyEmpty" :{
+        "description": "Message when there is no history"
     }
-
-   
-
-
-
-
-  
-
- 
-
-
-
-
-
-
-
-
-
-    
 }
-

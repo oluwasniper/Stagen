@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../l10n/app_localizations.dart';
 
+import '../l10n/app_localizations.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/splash_logo_widget.dart';
@@ -119,7 +119,7 @@ class OnboardingScreen extends StatelessWidget {
                               /// ```
                               /// go(path, extra: yourData)
                               /// ```
-                              AppGoRouter.router.go(AppPath.home);
+                              AppGoRouter.router.go(AppPath.auth);
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

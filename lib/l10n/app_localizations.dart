@@ -408,6 +408,48 @@ abstract class AppLocalizations {
   /// **'Enter network name'**
   String get networkHint;
 
+  /// Button text to choose an SSID from nearby device Wi-Fi networks
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from device Wi-Fi'**
+  String get wifiChooseFromDevice;
+
+  /// Button text while Wi-Fi networks are being scanned
+  ///
+  /// In en, this message translates to:
+  /// **'Loading Wi-Fi networks...'**
+  String get wifiLoadingNetworks;
+
+  /// Title for Wi-Fi network picker sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Select Wi-Fi network'**
+  String get wifiPickerTitle;
+
+  /// Message when no Wi-Fi SSIDs are found
+  ///
+  /// In en, this message translates to:
+  /// **'No Wi-Fi networks found'**
+  String get wifiNoNetworksFound;
+
+  /// Message when app cannot scan Wi-Fi due to missing permission or service
+  ///
+  /// In en, this message translates to:
+  /// **'Location service and permission are required to scan Wi-Fi'**
+  String get wifiScanPermissionRequired;
+
+  /// Label shown for the current connected Wi-Fi network in picker
+  ///
+  /// In en, this message translates to:
+  /// **'Current connected network'**
+  String get wifiUseConnectedNetwork;
+
+  /// Message shown when app auto-fills SSID using current connected network
+  ///
+  /// In en, this message translates to:
+  /// **'Using current connected Wi-Fi network'**
+  String get wifiUsingConnectedNetwork;
+
   /// Label for the password input
   ///
   /// In en, this message translates to:
@@ -647,6 +689,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'+92xxxxxxxxxx'**
   String get phoneNumberHint;
+
+  /// Label for the language setting
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get changeLanguage;
+
+  /// Description for the language setting
+  ///
+  /// In en, this message translates to:
+  /// **'Change app language'**
+  String get changeLanguageDesc;
+
+  /// Button label to import a contact from the phone address book
+  ///
+  /// In en, this message translates to:
+  /// **'Import from Phone Contacts'**
+  String get importFromContacts;
+
+  /// Message shown when the user denies contacts permission
+  ///
+  /// In en, this message translates to:
+  /// **'Contact permission denied. Please allow access in settings.'**
+  String get contactPermissionDenied;
+
+  /// Sign in button label
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get authSignIn;
+
+  /// Sign up button label
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get authSignUp;
+
+  /// Email input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get authEmail;
+
+  /// Password input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPassword;
+
+  /// Name input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Name (optional)'**
+  String get authName;
+
+  /// Validation message when email is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get authEmailRequired;
+
+  /// Validation message for invalid email format
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email'**
+  String get authEmailInvalid;
+
+  /// Validation message when password is empty
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get authPasswordRequired;
+
+  /// Validation message when password is too short
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get authPasswordTooShort;
+
+  /// Link to switch to sign up mode
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? Sign Up'**
+  String get authSwitchToSignUp;
+
+  /// Link to switch to sign in mode
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Sign In'**
+  String get authSwitchToSignIn;
+
+  /// Divider text between auth options
+  ///
+  /// In en, this message translates to:
+  /// **'OR'**
+  String get authOr;
+
+  /// Button to continue as anonymous user
+  ///
+  /// In en, this message translates to:
+  /// **'Continue without account'**
+  String get authContinueAnonymous;
+
+  /// Log out button label
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get authLogout;
+
+  /// Log out description
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of your account'**
+  String get authLogoutDesc;
+
+  /// Account section header
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get authAccount;
+
+  /// Snackbar message when location permission is denied
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission denied'**
+  String get snackbarLocationPermissionDenied;
+
+  /// Snackbar message when location permission is permanently denied
+  ///
+  /// In en, this message translates to:
+  /// **'Location permissions are permanently denied. Please enable them in settings.'**
+  String get snackbarLocationPermissionPermanentlyDenied;
+
+  /// Snackbar message when getting location fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to get location: {error}'**
+  String snackbarFailedToGetLocation(String error);
+
+  /// Snackbar message when required fields are empty
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in the required fields'**
+  String get snackbarFillRequiredFields;
+
+  /// Snackbar message when text is copied to clipboard
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get snackbarCopiedToClipboard;
+
+  /// Error when user tries to register with an existing email
+  ///
+  /// In en, this message translates to:
+  /// **'An account with this email already exists.'**
+  String get apiErrorUserAlreadyExists;
+
+  /// Error when login credentials are wrong
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password.'**
+  String get apiErrorInvalidCredentials;
+
+  /// Error when user account is blocked
+  ///
+  /// In en, this message translates to:
+  /// **'This account has been blocked. Please contact support.'**
+  String get apiErrorUserBlocked;
+
+  /// Error when user account is not found
+  ///
+  /// In en, this message translates to:
+  /// **'No account found with this email.'**
+  String get apiErrorUserNotFound;
+
+  /// Error when email is already taken
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already in use.'**
+  String get apiErrorEmailAlreadyExists;
+
+  /// Error when password does not match
+  ///
+  /// In en, this message translates to:
+  /// **'The password you entered is incorrect.'**
+  String get apiErrorPasswordMismatch;
+
+  /// Error when trying to create a session while one exists
+  ///
+  /// In en, this message translates to:
+  /// **'A session is already active. Please sign out first.'**
+  String get apiErrorSessionAlreadyExists;
+
+  /// Error when user is not authorised
+  ///
+  /// In en, this message translates to:
+  /// **'You are not authorised to perform this action.'**
+  String get apiErrorUnauthorized;
+
+  /// Error when password was recently used
+  ///
+  /// In en, this message translates to:
+  /// **'This password was recently used. Please choose a different one.'**
+  String get apiErrorPasswordRecentlyUsed;
+
+  /// Error when rate limit is exceeded
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please try again later.'**
+  String get apiErrorRateLimitExceeded;
+
+  /// Error when server encounters an internal error
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong on our end. Please try again later.'**
+  String get apiErrorServerError;
+
+  /// Fallback error message for unrecognised errors
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred. Please try again.'**
+  String get apiErrorUnknown;
+
+  /// Message when history fails to load
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load history'**
+  String get historyLoadFailed;
+
+  /// Button to retry loading history
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get historyRetry;
+
+  /// Message when there is no history
+  ///
+  /// In en, this message translates to:
+  /// **'No history yet'**
+  String get historyEmpty;
 }
 
 class _AppLocalizationsDelegate

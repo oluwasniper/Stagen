@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../l10n/app_localizations.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import 'l10n/app_localizations.dart';
 import 'utils/app_asset.dart';
 
 class BottomNavigationPage extends StatefulWidget {
@@ -217,35 +217,40 @@ class CustomFloatingNavBar extends StatelessWidget {
                 right: 0,
                 bottom: 35,
                 child: Center(
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(35),
-                    onTap: () => onItemSelected(1),
-                    child: Container(
-                      height: 70,
-                      width: 70,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: selectedIndex == 1
-                            ? Color(0xffFDB623)
-                            // : Theme.of(context).primaryColor,
-                            : Color(0xff333333),
-                        borderRadius: BorderRadius.circular(35),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: SvgPicture.asset(
-                        items[1].svgData,
-                        colorFilter: selectedIndex != 1
-                            ? const ColorFilter.mode(
-                                Colors.white70, BlendMode.srcIn)
-                            : null,
-                        width: 30,
+                  child: AnimatedScale(
+                    scale: selectedIndex == 1 ? 1.1 : 1.0,
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeOutBack,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(35),
+                      onTap: () => onItemSelected(1),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        height: 70,
+                        width: 70,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: selectedIndex == 1
+                              ? Color(0xffFDB623)
+                              : Color(0xff333333),
+                          borderRadius: BorderRadius.circular(35),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: SvgPicture.asset(
+                          items[1].svgData,
+                          colorFilter: selectedIndex != 1
+                              ? const ColorFilter.mode(
+                                  Colors.white70, BlendMode.srcIn)
+                              : null,
+                          width: 30,
+                        ),
                       ),
                     ),
                   ),
@@ -288,27 +293,33 @@ class CustomFloatingNavBar extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(
-              item.svgData,
-
-              colorFilter: isSelected
-                  ? const ColorFilter.mode(Color(0xffFDB623), BlendMode.srcIn)
-                  : const ColorFilter.mode(Colors.white70, BlendMode.srcIn),
-              width: 30,
-              // size: 24,
-            ),
-            Text(
-              item.label,
-              style: TextStyle(
-                color: isSelected ? Color(0xffFDB623) : Colors.white70,
-                fontSize: 17,
-                fontWeight: FontWeight.w500,
+            AnimatedScale(
+              scale: isSelected ? 1.15 : 1.0,
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOutBack,
+              child: SvgPicture.asset(
+                item.svgData,
+                colorFilter: isSelected
+                    ? const ColorFilter.mode(Color(0xffFDB623), BlendMode.srcIn)
+                    : const ColorFilter.mode(Colors.white70, BlendMode.srcIn),
+                width: 30,
               ),
             ),
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 250),
+              style: TextStyle(
+                color: isSelected ? Color(0xffFDB623) : Colors.white70,
+                fontSize: isSelected ? 17 : 16,
+                fontWeight: FontWeight.w500,
+              ),
+              child: Text(item.label),
+            ),
             Spacer(),
-            Container(
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
               height: 4,
-              width: 60,
+              width: isSelected ? 60 : 0,
               decoration: BoxDecoration(
                 color: isSelected ? Color(0xffFDB623) : Colors.transparent,
                 borderRadius: BorderRadius.circular(4),

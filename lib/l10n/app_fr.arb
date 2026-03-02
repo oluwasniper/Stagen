@@ -62,6 +62,13 @@
     "websiteURLHint": "Par exemple: https://www.example.com",
     "networkLabel": "Réseau",
     "networkHint": "Entrez le nom du réseau",
+    "wifiChooseFromDevice": "Choisir depuis le Wi‑Fi de l’appareil",
+    "wifiLoadingNetworks": "Chargement des réseaux Wi‑Fi...",
+    "wifiPickerTitle": "Sélectionner un réseau Wi‑Fi",
+    "wifiNoNetworksFound": "Aucun réseau Wi‑Fi trouvé",
+    "wifiScanPermissionRequired": "Le service de localisation et l’autorisation sont requis pour scanner le Wi‑Fi",
+    "wifiUseConnectedNetwork": "Réseau connecté actuel",
+    "wifiUsingConnectedNetwork": "Utilisation du réseau Wi‑Fi actuellement connecté",
     "passwordLabel": "Mot de passe",
     "passwordHint": "Entrez le mot de passe",
     "eventNamelabel": "Nom de l'événement",
@@ -111,6 +118,66 @@
     "instagramUsernameHint": "Entrez le nom d'utilisateur Instagram",
 
     "phoneNumberLabel": "Numéro de téléphone",
-    "phoneNumberHint": "+55xxxxxxxxx"
+    "phoneNumberHint": "+55xxxxxxxxx",
 
+    "changeLanguage": "Langue",
+    "changeLanguageDesc": "Changer la langue de l'application",
+    "importFromContacts": "Importer depuis les contacts",
+    "contactPermissionDenied": "Permission de contact refusée. Veuillez autoriser l'accès dans les paramètres.",
+
+    "authSignIn": "Se connecter",
+    "authSignUp": "Créer un compte",
+    "authEmail": "E-mail",
+    "authPassword": "Mot de passe",
+    "authName": "Nom (facultatif)",
+    "authEmailRequired": "L'e-mail est requis",
+    "authEmailInvalid": "Entrez un e-mail valide",
+    "authPasswordRequired": "Le mot de passe est requis",
+    "authPasswordTooShort": "Le mot de passe doit contenir au moins 8 caractères",
+    "authSwitchToSignUp": "Pas de compte ? Créer un compte",
+    "authSwitchToSignIn": "Déjà un compte ? Se connecter",
+    "authOr": "OU",
+    "authContinueAnonymous": "Continuer sans compte",
+    "@authContinueAnonymous": {
+        "description": "Bouton pour continuer en mode anonyme",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "authLogout": "Déconnexion",
+    "authLogoutDesc": "Se déconnecter de votre compte",
+    "authAccount": "Compte",
+
+    "snackbarLocationPermissionDenied": "Autorisation de localisation refusée",
+    "snackbarLocationPermissionPermanentlyDenied": "Les autorisations de localisation sont définitivement refusées. Veuillez les activer dans les paramètres.",
+    "snackbarFailedToGetLocation": "Impossible d'obtenir la localisation : {error}",
+    "@snackbarFailedToGetLocation": {
+        "description": "Message quand la récupération de la localisation échoue",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "snackbarFillRequiredFields": "Veuillez remplir les champs obligatoires",
+    "snackbarCopiedToClipboard": "Copié dans le presse-papiers",
+
+    "apiErrorUserAlreadyExists": "Un compte avec cet e-mail existe déjà.",
+    "apiErrorInvalidCredentials": "E-mail ou mot de passe invalide.",
+    "apiErrorUserBlocked": "Ce compte a été bloqué. Veuillez contacter le support.",
+    "apiErrorUserNotFound": "Aucun compte trouvé avec cet e-mail.",
+    "apiErrorEmailAlreadyExists": "Cet e-mail est déjà utilisé.",
+    "apiErrorPasswordMismatch": "Le mot de passe saisi est incorrect.",
+    "apiErrorSessionAlreadyExists": "Une session est déjà active. Veuillez d'abord vous déconnecter.",
+    "apiErrorUnauthorized": "Vous n'êtes pas autorisé à effectuer cette action.",
+    "apiErrorPasswordRecentlyUsed": "Ce mot de passe a été utilisé récemment. Veuillez en choisir un autre.",
+    "apiErrorRateLimitExceeded": "Trop de requêtes. Veuillez réessayer plus tard.",
+    "apiErrorServerError": "Une erreur est survenue. Veuillez réessayer plus tard.",
+    "apiErrorUnknown": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+
+    "historyLoadFailed": "Impossible de charger l'historique",
+    "historyRetry": "Réessayer",
+    "historyEmpty": "Pas encore d'historique"
 }

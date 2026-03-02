@@ -2,16 +2,18 @@ import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../providers/auth_provider.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/splash_logo_widget.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends ConsumerWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     /// AnnotatedRegion is used to set the system UI overlay style
 
     return AnnotatedRegion(
@@ -53,9 +55,17 @@ class SplashScreen extends StatelessWidget {
           duration: Duration(seconds: 3),
 
           /// onEnd is used to navigate to the next screen after the splash screen ends
-          onEnd: () {
-            /// AppGoRouter.router.go is used to navigate to the next screen
-            AppGoRouter.router.go(AppPath.onboarding);
+          onEnd: () async {
+            // Wait for auth initialization to finish
+            await ref.read(authProvider.notifier).initComplete;
+            final auth = ref.read(authProvider);
+            if (auth.isAuthenticated) {
+              // Existing session → go straight to home
+              AppGoRouter.router.go(AppPath.home);
+            } else {
+              // No session → onboarding → auth
+              AppGoRouter.router.go(AppPath.onboarding);
+            }
           },
         ),
       ),

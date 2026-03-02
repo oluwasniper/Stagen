@@ -63,6 +63,13 @@
     "websiteURLHint": "Por exemplo: https://www.example.com",
     "networkLabel": "Rede",
     "networkHint": "Digite o nome da rede",
+    "wifiChooseFromDevice": "Escolher do Wi‑Fi do dispositivo",
+    "wifiLoadingNetworks": "Carregando redes Wi‑Fi...",
+    "wifiPickerTitle": "Selecionar rede Wi‑Fi",
+    "wifiNoNetworksFound": "Nenhuma rede Wi‑Fi encontrada",
+    "wifiScanPermissionRequired": "Serviço e permissão de localização são necessários para escanear Wi‑Fi",
+    "wifiUseConnectedNetwork": "Rede conectada atual",
+    "wifiUsingConnectedNetwork": "Usando a rede Wi‑Fi conectada no momento",
 
     "passwordLabel": "Senha",
     "passwordHint": "Digite a senha",
@@ -107,10 +114,66 @@
     "instagramUsernameLabel": "Nome de usuário do Instagram",
     "instagramUsernameHint": "Digite o nome de usuário do Instagram",
     "phoneNumberLabel": "Número de telefone",
-    "phoneNumberHint": "+55xxxxxxxxx"
+    "phoneNumberHint": "+55xxxxxxxxx",
 
+    "changeLanguage": "Idioma",
+    "changeLanguageDesc": "Alterar o idioma do aplicativo",
+    "importFromContacts": "Importar dos contatos",
+    "contactPermissionDenied": "Permissão de contatos negada. Por favor, permita o acesso nas configurações.",
 
+    "authSignIn": "Entrar",
+    "authSignUp": "Criar conta",
+    "authEmail": "E-mail",
+    "authPassword": "Senha",
+    "authName": "Nome (opcional)",
+    "authEmailRequired": "O e-mail é obrigatório",
+    "authEmailInvalid": "Digite um e-mail válido",
+    "authPasswordRequired": "A senha é obrigatória",
+    "authPasswordTooShort": "A senha deve ter pelo menos 8 caracteres",
+    "authSwitchToSignUp": "Não tem conta? Criar conta",
+    "authSwitchToSignIn": "Já tem conta? Entrar",
+    "authOr": "OU",
+    "authContinueAnonymous": "Continuar sem conta",
+    "@authContinueAnonymous": {
+        "description": "Botão para continuar sem conta",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "authLogout": "Sair",
+    "authLogoutDesc": "Sair da sua conta",
+    "authAccount": "Conta",
 
+    "snackbarLocationPermissionDenied": "Permissão de localização negada",
+    "snackbarLocationPermissionPermanentlyDenied": "As permissões de localização foram negadas permanentemente. Por favor, habilite-as nas configurações.",
+    "snackbarFailedToGetLocation": "Falha ao obter localização: {error}",
+    "@snackbarFailedToGetLocation": {
+        "description": "Mensagem quando falha ao obter localização",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "snackbarFillRequiredFields": "Por favor, preencha os campos obrigatórios",
+    "snackbarCopiedToClipboard": "Copiado para a área de transferência",
 
+    "apiErrorUserAlreadyExists": "Já existe uma conta com este e-mail.",
+    "apiErrorInvalidCredentials": "E-mail ou senha inválidos.",
+    "apiErrorUserBlocked": "Esta conta foi bloqueada. Entre em contato com o suporte.",
+    "apiErrorUserNotFound": "Nenhuma conta encontrada com este e-mail.",
+    "apiErrorEmailAlreadyExists": "Este e-mail já está em uso.",
+    "apiErrorPasswordMismatch": "A senha digitada está incorreta.",
+    "apiErrorSessionAlreadyExists": "Já existe uma sessão ativa. Saia primeiro.",
+    "apiErrorUnauthorized": "Você não tem autorização para realizar esta ação.",
+    "apiErrorPasswordRecentlyUsed": "Esta senha foi usada recentemente. Escolha outra.",
+    "apiErrorRateLimitExceeded": "Muitas solicitações. Tente novamente mais tarde.",
+    "apiErrorServerError": "Algo deu errado. Tente novamente mais tarde.",
+    "apiErrorUnknown": "Ocorreu um erro inesperado. Tente novamente.",
 
+    "historyLoadFailed": "Falha ao carregar o histórico",
+    "historyRetry": "Tentar novamente",
+    "historyEmpty": "Nenhum histórico ainda"
 }

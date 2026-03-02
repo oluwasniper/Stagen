@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
@@ -28,14 +29,25 @@ class GenerateHomeScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final option = QROptions.getOptions(context)[index];
               return GestureDetector(
-                onTap: () {
-                  AppGoRouter.router.push(
-                    AppPath.generateCode,
-                    extra: option,
+                      onTap: () {
+                        AppGoRouter.router.push(
+                          AppPath.generateCode,
+                          extra: option,
+                        );
+                      },
+                      child: QROptionCard(option: option))
+                  .animate()
+                  .fadeIn(
+                    delay: Duration(milliseconds: 60 * index),
+                    duration: const Duration(milliseconds: 400),
+                  )
+                  .scale(
+                    begin: const Offset(0.8, 0.8),
+                    end: const Offset(1, 1),
+                    delay: Duration(milliseconds: 60 * index),
+                    duration: const Duration(milliseconds: 400),
+                    curve: Curves.easeOutBack,
                   );
-                },
-                child: QROptionCard(option: option),
-              );
             },
           ),
         ),
