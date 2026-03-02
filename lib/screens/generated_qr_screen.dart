@@ -6,6 +6,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 import '../l10n/app_localizations.dart';
 import '../providers/qr_providers.dart';
+import '../services/telemetry_service.dart';
 import '../widgets/background_screen_widget.dart';
 
 class GeneratedQRScreen extends ConsumerWidget {
@@ -134,6 +135,10 @@ class GeneratedQRScreen extends ConsumerWidget {
                       InkWell(
                         onTap: () {
                           Clipboard.setData(ClipboardData(text: qrData));
+                          ref.read(telemetryServiceProvider).track(
+                            TelemetryEvents.qrCopied,
+                            properties: {'source': 'generated'},
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text(AppLocalizations.of(context)
@@ -179,6 +184,10 @@ class GeneratedQRScreen extends ConsumerWidget {
                       InkWell(
                         onTap: () {
                           // TODO: implement share
+                          ref.read(telemetryServiceProvider).track(
+                            TelemetryEvents.qrShared,
+                            properties: {'source': 'generated'},
+                          );
                         },
                         child: Container(
                           height: 50,

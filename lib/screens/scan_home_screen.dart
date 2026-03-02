@@ -4,6 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../models/qr_record.dart';
 import '../providers/qr_providers.dart';
+import '../services/telemetry_service.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 
@@ -19,6 +20,17 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
   String? qrScan;
   bool _hasNavigated = false;
 
+  String _classifyContent(String data) {
+    if (data.startsWith('http://') || data.startsWith('https://')) return 'url';
+    if (data.startsWith('mailto:')) return 'email';
+    if (data.startsWith('tel:')) return 'phone';
+    if (data.startsWith('WIFI:')) return 'wifi';
+    if (data.startsWith('BEGIN:VCARD')) return 'contact';
+    if (data.startsWith('BEGIN:VEVENT')) return 'event';
+    if (data.startsWith('geo:')) return 'location';
+    return 'text';
+  }
+
   void _onDetect(BarcodeCapture capture) {
     if (_hasNavigated) return;
     final List<Barcode> barcodes = capture.barcodes;
@@ -28,6 +40,11 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
         qrScan = data;
         _hasNavigated = true;
       });
+
+      ref.read(telemetryServiceProvider).track(
+        TelemetryEvents.qrScanned,
+        properties: {'content_type': _classifyContent(data)},
+      );
 
       // Store scanned data in provider
       ref.read(scannedQRDataProvider.notifier).state = data;
@@ -96,6 +113,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
                   GestureDetector(
                     onTap: () {
                       controller.toggleTorch();
+                      ref.read(telemetryServiceProvider).track(TelemetryEvents.scannerTorchToggled);
                     },
                     child: const Padding(
                       padding:
@@ -106,6 +124,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
                   GestureDetector(
                     onTap: () {
                       controller.switchCamera();
+                      ref.read(telemetryServiceProvider).track(TelemetryEvents.scannerCameraSwitched);
                     },
                     child: const Padding(
                       padding:

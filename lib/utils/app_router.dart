@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import '../models/qr_record.dart';
 import '../screens/auth_screen.dart';
 import '../screens/generate_code_screen.dart';
@@ -102,6 +103,8 @@ class AppGoRouter {
   static final GoRouter _router = GoRouter(
     /// debugLogDiagnostics: true, will print the diagnostics in the console
     debugLogDiagnostics: true,
+
+    observers: [PosthogObserver()],
 
     /// The global navigation key for the app's main navigator.
     /// This key allows navigation actions to be performed from anywhere in the app

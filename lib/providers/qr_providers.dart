@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../config/app_config.dart';
 import '../models/qr_record.dart';
 import '../services/appwrite_service.dart';
 import 'auth_provider.dart';
@@ -9,8 +10,8 @@ import 'auth_provider.dart';
 final appwriteClientProvider = Provider<Client>((ref) {
   final client = Client();
   client
-      .setEndpoint('https://fra.cloud.appwrite.io/v1')
-      .setProject('6742d23d00333f806b41');
+      .setEndpoint(AppConfig.appwriteEndpoint)
+      .setProject(AppConfig.appwriteProjectId);
   return client;
 });
 

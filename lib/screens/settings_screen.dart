@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/l10n.dart';
 import '../providers/auth_provider.dart';
+import '../services/telemetry_service.dart';
 import '../providers/settings_provider.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
@@ -127,6 +128,10 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   onTap: () {
                     ref.read(localeProvider.notifier).setLocale(locale);
+                    ref.read(telemetryServiceProvider).track(
+                      TelemetryEvents.languageChanged,
+                      properties: {'locale': locale.languageCode},
+                    );
                     Navigator.pop(ctx);
                   },
                 )
@@ -196,6 +201,10 @@ class SettingsScreen extends ConsumerWidget {
         subtitle: AppLocalizations.of(context).vibrateDesc,
         onSwitchChanged: (value) {
           ref.read(settingsProvider.notifier).toggleVibrate(value);
+          ref.read(telemetryServiceProvider).track(
+            TelemetryEvents.settingVibrationToggled,
+            properties: {'enabled': value},
+          );
         },
       ),
       const SizedBox(height: 20),
@@ -206,6 +215,10 @@ class SettingsScreen extends ConsumerWidget {
         subtitle: AppLocalizations.of(context).beepDesc,
         onSwitchChanged: (value) {
           ref.read(settingsProvider.notifier).toggleBeep(value);
+          ref.read(telemetryServiceProvider).track(
+            TelemetryEvents.settingBeepToggled,
+            properties: {'enabled': value},
+          );
         },
       ),
       const SizedBox(height: 20),
@@ -228,6 +241,28 @@ class SettingsScreen extends ConsumerWidget {
           onTap: showLinkDialog,
         ),
       ],
+      const SizedBox(height: 50),
+      const Text(
+        'Privacy',
+        style: TextStyle(
+            color: Color(0xffFDB623),
+            fontSize: 26,
+            fontWeight: FontWeight.w400),
+      ),
+      const SizedBox(height: 20),
+      SettingsListTile(
+        isSwitched: settings.analyticsEnabled,
+        iconData: Icons.analytics_outlined,
+        title: 'Share Analytics',
+        subtitle: 'Help improve Scagen by sharing anonymous usage data',
+        onSwitchChanged: (value) {
+          // Track before toggling — if opting out, this is the last event sent.
+          ref.read(telemetryServiceProvider).track(
+            value ? TelemetryEvents.telemetryOptedIn : TelemetryEvents.telemetryOptedOut,
+          );
+          ref.read(settingsProvider.notifier).toggleAnalytics(value);
+        },
+      ),
       const SizedBox(height: 50),
       Text(
         AppLocalizations.of(context).support,
