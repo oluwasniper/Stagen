@@ -62,7 +62,7 @@ class _BackgroundScreenWidgetState extends State<BackgroundScreenWidget> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xffD9D9D9).withValues(alpha: 0.25),
+                        color: Color(0xffD9D9D9).withOpacity(0.25),
                         spreadRadius: 0,
                         blurRadius: 4,
                         offset: Offset(1, 1), // changes position of shadow
@@ -87,7 +87,7 @@ class _BackgroundScreenWidgetState extends State<BackgroundScreenWidget> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xffD9D9D9).withValues(alpha: 0.25),
+                        color: Color(0xffD9D9D9).withOpacity(0.25),
                         spreadRadius: 0,
                         blurRadius: 4,
                         offset: Offset(1, 1), // changes position of shadow
