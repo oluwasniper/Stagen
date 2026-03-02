@@ -43,7 +43,7 @@ workflows:
         - stagen_secrets
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.example.revolutionary_stuff
+        bundle_identifier: com.example.revolutionaryStuff
     scripts:
       - name: Get dependencies
         script: flutter pub get
