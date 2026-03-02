@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../l10n/app_localizations.dart';
 
 /// Extracts the Appwrite error `type` string from an exception, or `null` if
 /// the exception is not an [AppwriteException].

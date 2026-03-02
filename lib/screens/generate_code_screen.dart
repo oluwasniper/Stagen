@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../providers/qr_providers.dart';
 import '../utils/app_router.dart';
@@ -205,7 +205,7 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: const Color(0xff3B3B3B).withOpacity(0.78),
+                    color: const Color(0xff3B3B3B).withValues(alpha: 0.78),
                     borderRadius: BorderRadius.circular(6),
                     border: const Border.symmetric(
                       horizontal: BorderSide(
@@ -215,7 +215,7 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xff000000).withOpacity(0.25),
+                        color: const Color(0xff000000).withValues(alpha: 0.25),
                         offset: const Offset(0, 4),
                         blurRadius: 4,
                       ),

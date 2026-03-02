@@ -163,6 +163,29 @@ class AppLocalizationsFr extends AppLocalizations {
   String get networkHint => 'Entrez le nom du réseau';
 
   @override
+  String get wifiChooseFromDevice => 'Choisir depuis le Wi‑Fi de l’appareil';
+
+  @override
+  String get wifiLoadingNetworks => 'Chargement des réseaux Wi‑Fi...';
+
+  @override
+  String get wifiPickerTitle => 'Sélectionner un réseau Wi‑Fi';
+
+  @override
+  String get wifiNoNetworksFound => 'Aucun réseau Wi‑Fi trouvé';
+
+  @override
+  String get wifiScanPermissionRequired =>
+      'Le service de localisation et l’autorisation sont requis pour scanner le Wi‑Fi';
+
+  @override
+  String get wifiUseConnectedNetwork => 'Réseau connecté actuel';
+
+  @override
+  String get wifiUsingConnectedNetwork =>
+      'Utilisation du réseau Wi‑Fi actuellement connecté';
+
+  @override
   String get passwordLabel => 'Mot de passe';
 
   @override
@@ -281,4 +304,139 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get phoneNumberHint => '+55xxxxxxxxx';
+
+  @override
+  String get changeLanguage => 'Langue';
+
+  @override
+  String get changeLanguageDesc => 'Changer la langue de l\'application';
+
+  @override
+  String get importFromContacts => 'Importer depuis les contacts';
+
+  @override
+  String get contactPermissionDenied =>
+      'Permission de contact refusée. Veuillez autoriser l\'accès dans les paramètres.';
+
+  @override
+  String get authSignIn => 'Se connecter';
+
+  @override
+  String get authSignUp => 'Créer un compte';
+
+  @override
+  String get authEmail => 'E-mail';
+
+  @override
+  String get authPassword => 'Mot de passe';
+
+  @override
+  String get authName => 'Nom (facultatif)';
+
+  @override
+  String get authEmailRequired => 'L\'e-mail est requis';
+
+  @override
+  String get authEmailInvalid => 'Entrez un e-mail valide';
+
+  @override
+  String get authPasswordRequired => 'Le mot de passe est requis';
+
+  @override
+  String get authPasswordTooShort =>
+      'Le mot de passe doit contenir au moins 8 caractères';
+
+  @override
+  String get authSwitchToSignUp => 'Pas de compte ? Créer un compte';
+
+  @override
+  String get authSwitchToSignIn => 'Déjà un compte ? Se connecter';
+
+  @override
+  String get authOr => 'OU';
+
+  @override
+  String get authContinueAnonymous => 'Continuer sans compte';
+
+  @override
+  String get authLogout => 'Déconnexion';
+
+  @override
+  String get authLogoutDesc => 'Se déconnecter de votre compte';
+
+  @override
+  String get authAccount => 'Compte';
+
+  @override
+  String get snackbarLocationPermissionDenied =>
+      'Autorisation de localisation refusée';
+
+  @override
+  String get snackbarLocationPermissionPermanentlyDenied =>
+      'Les autorisations de localisation sont définitivement refusées. Veuillez les activer dans les paramètres.';
+
+  @override
+  String snackbarFailedToGetLocation(String error) {
+    return 'Impossible d\'obtenir la localisation : $error';
+  }
+
+  @override
+  String get snackbarFillRequiredFields =>
+      'Veuillez remplir les champs obligatoires';
+
+  @override
+  String get snackbarCopiedToClipboard => 'Copié dans le presse-papiers';
+
+  @override
+  String get apiErrorUserAlreadyExists =>
+      'Un compte avec cet e-mail existe déjà.';
+
+  @override
+  String get apiErrorInvalidCredentials => 'E-mail ou mot de passe invalide.';
+
+  @override
+  String get apiErrorUserBlocked =>
+      'Ce compte a été bloqué. Veuillez contacter le support.';
+
+  @override
+  String get apiErrorUserNotFound => 'Aucun compte trouvé avec cet e-mail.';
+
+  @override
+  String get apiErrorEmailAlreadyExists => 'Cet e-mail est déjà utilisé.';
+
+  @override
+  String get apiErrorPasswordMismatch => 'Le mot de passe saisi est incorrect.';
+
+  @override
+  String get apiErrorSessionAlreadyExists =>
+      'Une session est déjà active. Veuillez d\'abord vous déconnecter.';
+
+  @override
+  String get apiErrorUnauthorized =>
+      'Vous n\'êtes pas autorisé à effectuer cette action.';
+
+  @override
+  String get apiErrorPasswordRecentlyUsed =>
+      'Ce mot de passe a été utilisé récemment. Veuillez en choisir un autre.';
+
+  @override
+  String get apiErrorRateLimitExceeded =>
+      'Trop de requêtes. Veuillez réessayer plus tard.';
+
+  @override
+  String get apiErrorServerError =>
+      'Une erreur est survenue. Veuillez réessayer plus tard.';
+
+  @override
+  String get apiErrorUnknown =>
+      'Une erreur inattendue s\'est produite. Veuillez réessayer.';
+
+  @override
+  String get historyLoadFailed => 'Impossible de charger l\'historique';
+
+  @override
+  String get historyRetry => 'Réessayer';
+
+  @override
+  String get historyEmpty => 'Pas encore d\'historique';
 }

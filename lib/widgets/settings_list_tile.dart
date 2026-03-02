@@ -50,7 +50,7 @@ class SettingsListTile extends StatelessWidget {
                     // no-op if no callback provided
                   },
               inactiveThumbColor: const Color(0xff333333),
-              inactiveTrackColor: const Color(0xffffffff).withOpacity(0.19),
+              inactiveTrackColor: const Color(0xffffffff).withValues(alpha: 0.19),
               trackOutlineColor:
                   WidgetStateProperty.all(const Color(0xffFDB623)),
               activeColor: const Color(0xffFDB623),
