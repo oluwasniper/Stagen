@@ -77,7 +77,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
               height: 45,
               width: MediaQuery.of(context).size.width - 60,
               decoration: BoxDecoration(
-                color: const Color(0xFF000000).withValues(alpha: 0.4),
+                color: const Color(0xFF000000).withOpacity(0.4),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Row(

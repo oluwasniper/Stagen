@@ -46,7 +46,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
             height: 60,
             margin: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: const Color(0xff333333).withValues(alpha: 0.84),
+              color: const Color(0xff333333).withOpacity(0.84),
               borderRadius: BorderRadius.circular(6.0),
             ),
             child: TabBar(
@@ -192,11 +192,11 @@ class _HistoryListView extends ConsumerWidget {
                     height: 60,
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
-                      color: const Color(0xff333333).withValues(alpha: 0.84),
+                      color: const Color(0xff333333).withOpacity(0.84),
                       borderRadius: BorderRadius.circular(6.0),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xff000000).withValues(alpha: 0.25),
+                          color: const Color(0xff000000).withOpacity(0.25),
                           spreadRadius: 0,
                           blurRadius: 4,
                           offset: const Offset(0, 4),

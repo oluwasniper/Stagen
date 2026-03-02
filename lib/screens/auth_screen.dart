@@ -183,7 +183,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                 _obscurePassword
                                     ? Icons.visibility_off_rounded
                                     : Icons.visibility_rounded,
-                                color: const Color(0xffFDB623).withValues(alpha: 0.7),
+                                color: const Color(0xffFDB623).withOpacity(0.7),
                               ),
                               onPressed: () {
                                 setState(
@@ -336,8 +336,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       validator: validator,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4)),
-        prefixIcon: Icon(icon, color: const Color(0xffFDB623).withValues(alpha: 0.7)),
+        hintStyle: TextStyle(color: Colors.white.withOpacity(0.4)),
+        prefixIcon: Icon(icon, color: const Color(0xffFDB623).withOpacity(0.7)),
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: const Color(0xff444444),
@@ -479,7 +479,7 @@ class _LanguageChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
             border: Border.all(
-                color: const Color(0xffFDB623).withValues(alpha: 0.6)),
+                color: const Color(0xffFDB623).withOpacity(0.6)),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(

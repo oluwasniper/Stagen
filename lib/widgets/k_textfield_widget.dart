@@ -32,10 +32,10 @@ class KTextField extends StatelessWidget {
           controller: controller,
           decoration: InputDecoration(
             hintText: hintText,
-            fillColor: Color(0xFF333333).withValues(alpha: 0.80),
+            fillColor: Color(0xFF333333).withOpacity(0.80),
             filled: true,
             hintStyle: TextStyle(
-              color: Color(0xffD9D9D9).withValues(alpha: 0.34),
+              color: Color(0xffD9D9D9).withOpacity(0.34),
               fontSize: 12,
               fontWeight: FontWeight.w400,
             ),
