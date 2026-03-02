@@ -13,7 +13,7 @@ class GenerateHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.generateQR,
+      screenTitle: AppLocalizations.of(context).generateQR,
       actionButton: () => AppGoRouter.router.push(AppPath.settings),
       body: Padding(
         padding: EdgeInsets.symmetric(

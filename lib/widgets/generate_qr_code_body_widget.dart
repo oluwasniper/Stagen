@@ -92,8 +92,8 @@ class TextBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.textLabel,
-      hintText: AppLocalizations.of(context)!.textHint,
+      labelText: AppLocalizations.of(context).textLabel,
+      hintText: AppLocalizations.of(context).textHint,
       controller: controller,
     );
   }
@@ -106,8 +106,8 @@ class WebsiteBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.websiteLabel,
-      hintText: AppLocalizations.of(context)!.websiteHint,
+      labelText: AppLocalizations.of(context).websiteLabel,
+      hintText: AppLocalizations.of(context).websiteHint,
       controller: controller,
     );
   }
@@ -120,8 +120,8 @@ class WhatsAppBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.whatsappNumberLabel,
-      hintText: AppLocalizations.of(context)!.whatsappNumberHint,
+      labelText: AppLocalizations.of(context).whatsappNumberLabel,
+      hintText: AppLocalizations.of(context).whatsappNumberHint,
       controller: controller,
     );
   }
@@ -134,8 +134,8 @@ class TwitterBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.twitterUsernameLabel,
-      hintText: AppLocalizations.of(context)!.twitterUsernameHint,
+      labelText: AppLocalizations.of(context).twitterUsernameLabel,
+      hintText: AppLocalizations.of(context).twitterUsernameHint,
       controller: controller,
     );
   }
@@ -148,8 +148,8 @@ class EmailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.emailLabel,
-      hintText: AppLocalizations.of(context)!.emailHint,
+      labelText: AppLocalizations.of(context).emailLabel,
+      hintText: AppLocalizations.of(context).emailHint,
       controller: controller,
     );
   }
@@ -162,8 +162,8 @@ class InstagramBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.instagramUsernameLabel,
-      hintText: AppLocalizations.of(context)!.instagramUsernameHint,
+      labelText: AppLocalizations.of(context).instagramUsernameLabel,
+      hintText: AppLocalizations.of(context).instagramUsernameHint,
       controller: controller,
     );
   }
@@ -176,8 +176,8 @@ class TelephoneBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OneTextWidget(
-      labelText: AppLocalizations.of(context)!.phoneNumberLabel,
-      hintText: AppLocalizations.of(context)!.phoneNumberHint,
+      labelText: AppLocalizations.of(context).phoneNumberLabel,
+      hintText: AppLocalizations.of(context).phoneNumberHint,
       controller: controller,
     );
   }
@@ -309,7 +309,7 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                AppLocalizations.of(context)!.wifiUsingConnectedNetwork,
+                AppLocalizations.of(context).wifiUsingConnectedNetwork,
               ),
             ),
           );
@@ -318,7 +318,7 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.wifiNoNetworksFound),
+            content: Text(AppLocalizations.of(context).wifiNoNetworksFound),
           ),
         );
         return;
@@ -336,7 +336,7 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
               children: [
                 const SizedBox(height: 12),
                 Text(
-                  AppLocalizations.of(context)!.wifiPickerTitle,
+                  AppLocalizations.of(context).wifiPickerTitle,
                   style: const TextStyle(
                     color: Color(0xffFDB623),
                     fontSize: 18,
@@ -356,7 +356,11 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
                         title: Text(ssid),
                         subtitle: connectedSsid == ssid
                             ? Text(
+<<<<<<< HEAD
                                 AppLocalizations.of(context)!
+=======
+                                AppLocalizations.of(context)
+>>>>>>> origin/dev
                                     .wifiUseConnectedNetwork,
                               )
                             : null,
@@ -378,7 +382,7 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content:
-              Text(AppLocalizations.of(context)!.wifiScanPermissionRequired),
+              Text(AppLocalizations.of(context).wifiScanPermissionRequired),
         ),
       );
     } finally {
@@ -395,8 +399,8 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         KTextField(
-          labelText: AppLocalizations.of(context)!.networkLabel,
-          hintText: AppLocalizations.of(context)!.networkHint,
+          labelText: AppLocalizations.of(context).networkLabel,
+          hintText: AppLocalizations.of(context).networkHint,
           autoFocus: true,
           controller: widget.networkController,
         ),
@@ -412,8 +416,8 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
               : const Icon(Icons.wifi_find_rounded),
           label: Text(
             _isLoadingNetworks
-                ? AppLocalizations.of(context)!.wifiLoadingNetworks
-                : AppLocalizations.of(context)!.wifiChooseFromDevice,
+                ? AppLocalizations.of(context).wifiLoadingNetworks
+                : AppLocalizations.of(context).wifiChooseFromDevice,
           ),
           style: TextButton.styleFrom(
             foregroundColor: const Color(0xffFDB623),
@@ -422,8 +426,8 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.passwordLabel,
-          hintText: AppLocalizations.of(context)!.passwordHint,
+          labelText: AppLocalizations.of(context).passwordLabel,
+          hintText: AppLocalizations.of(context).passwordHint,
           autoFocus: true,
           controller: widget.passwordController,
         ),
@@ -454,36 +458,36 @@ class EventBodyTextWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         KTextField(
-          labelText: AppLocalizations.of(context)!.eventNamelabel,
-          hintText: AppLocalizations.of(context)!.eventNameHint,
+          labelText: AppLocalizations.of(context).eventNamelabel,
+          hintText: AppLocalizations.of(context).eventNameHint,
           autoFocus: true,
           controller: eventNameController,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.startDateAndTimeLabel,
-          hintText: AppLocalizations.of(context)!.startDateAndTimeHint,
+          labelText: AppLocalizations.of(context).startDateAndTimeLabel,
+          hintText: AppLocalizations.of(context).startDateAndTimeHint,
           autoFocus: true,
           controller: startDateController,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.endDateAndTimeLabel,
-          hintText: AppLocalizations.of(context)!.endDateAndTimeHint,
+          labelText: AppLocalizations.of(context).endDateAndTimeLabel,
+          hintText: AppLocalizations.of(context).endDateAndTimeHint,
           autoFocus: true,
           controller: endDateController,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.eventLocationLabel,
-          hintText: AppLocalizations.of(context)!.eventLocationHint,
+          labelText: AppLocalizations.of(context).eventLocationLabel,
+          hintText: AppLocalizations.of(context).eventLocationHint,
           autoFocus: true,
           controller: eventLocationController,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.descriptionLabel,
-          hintText: AppLocalizations.of(context)!.descriptionHint,
+          labelText: AppLocalizations.of(context).descriptionLabel,
+          hintText: AppLocalizations.of(context).descriptionHint,
           autoFocus: true,
           maxLines: 3,
           controller: descriptionController,
@@ -539,7 +543,7 @@ class ContactBodyTextWidget extends StatelessWidget {
                   size: 20,
                 ),
                 label: Text(
-                  AppLocalizations.of(context)!.importFromContacts,
+                  AppLocalizations.of(context).importFromContacts,
                   style: const TextStyle(
                     color: Color(0xffFDB623),
                     fontSize: 14,
@@ -561,54 +565,54 @@ class ContactBodyTextWidget extends StatelessWidget {
           ),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.firstNameLabel,
-          firstHint: AppLocalizations.of(context)!.firstNameHint,
-          secondLabel: AppLocalizations.of(context)!.lastNameLabel,
-          secondHint: AppLocalizations.of(context)!.lastNameHint,
+          firstLabel: AppLocalizations.of(context).firstNameLabel,
+          firstHint: AppLocalizations.of(context).firstNameHint,
+          secondLabel: AppLocalizations.of(context).lastNameLabel,
+          secondHint: AppLocalizations.of(context).lastNameHint,
           firstController: firstNameController,
           secondController: lastNameController,
         ),
         SizedBox(height: 20),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.companyLabel,
-          firstHint: AppLocalizations.of(context)!.companyHint,
-          secondLabel: AppLocalizations.of(context)!.jobLabel,
-          secondHint: AppLocalizations.of(context)!.jobHint,
+          firstLabel: AppLocalizations.of(context).companyLabel,
+          firstHint: AppLocalizations.of(context).companyHint,
+          secondLabel: AppLocalizations.of(context).jobLabel,
+          secondHint: AppLocalizations.of(context).jobHint,
           firstController: companyController,
           secondController: jobController,
         ),
         SizedBox(height: 20),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.phoneLabel,
-          firstHint: AppLocalizations.of(context)!.phoneHint,
-          secondLabel: AppLocalizations.of(context)!.emailLabel,
-          secondHint: AppLocalizations.of(context)!.emailHint,
+          firstLabel: AppLocalizations.of(context).phoneLabel,
+          firstHint: AppLocalizations.of(context).phoneHint,
+          secondLabel: AppLocalizations.of(context).emailLabel,
+          secondHint: AppLocalizations.of(context).emailHint,
           firstController: phoneController,
           secondController: emailController,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.websiteLabel,
-          hintText: AppLocalizations.of(context)!.websiteHint,
+          labelText: AppLocalizations.of(context).websiteLabel,
+          hintText: AppLocalizations.of(context).websiteHint,
           autoFocus: true,
           controller: websiteController,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.addressLabel,
-          hintText: AppLocalizations.of(context)!.addressHint,
+          labelText: AppLocalizations.of(context).addressLabel,
+          hintText: AppLocalizations.of(context).addressHint,
           autoFocus: true,
           controller: addressController,
         ),
         SizedBox(height: 20),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.cityLabel,
-          firstHint: AppLocalizations.of(context)!.cityHint,
-          secondLabel: AppLocalizations.of(context)!.countryLabel,
-          secondHint: AppLocalizations.of(context)!.countryHint,
+          firstLabel: AppLocalizations.of(context).cityLabel,
+          firstHint: AppLocalizations.of(context).cityHint,
+          secondLabel: AppLocalizations.of(context).countryLabel,
+          secondHint: AppLocalizations.of(context).countryHint,
           firstController: cityController,
           secondController: countryController,
         ),
@@ -643,42 +647,42 @@ class BusinessBodyTextWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         KTextField(
-          labelText: AppLocalizations.of(context)!.companyLabel,
-          hintText: AppLocalizations.of(context)!.companyHint,
+          labelText: AppLocalizations.of(context).companyLabel,
+          hintText: AppLocalizations.of(context).companyHint,
           autoFocus: true,
           controller: companyController,
         ),
         SizedBox(height: 20),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.phoneLabel,
-          firstHint: AppLocalizations.of(context)!.phoneHint,
-          secondLabel: AppLocalizations.of(context)!.emailLabel,
-          secondHint: AppLocalizations.of(context)!.emailHint,
+          firstLabel: AppLocalizations.of(context).phoneLabel,
+          firstHint: AppLocalizations.of(context).phoneHint,
+          secondLabel: AppLocalizations.of(context).emailLabel,
+          secondHint: AppLocalizations.of(context).emailHint,
           firstController: phoneController,
           secondController: emailController,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.websiteLabel,
-          hintText: AppLocalizations.of(context)!.websiteHint,
+          labelText: AppLocalizations.of(context).websiteLabel,
+          hintText: AppLocalizations.of(context).websiteHint,
           autoFocus: true,
           controller: websiteController,
         ),
         SizedBox(height: 20),
         KTextField(
-          labelText: AppLocalizations.of(context)!.addressLabel,
-          hintText: AppLocalizations.of(context)!.addressHint,
+          labelText: AppLocalizations.of(context).addressLabel,
+          hintText: AppLocalizations.of(context).addressHint,
           autoFocus: true,
           controller: addressController,
         ),
         SizedBox(height: 20),
         RowDoubleTextField(
           context: context,
-          firstLabel: AppLocalizations.of(context)!.cityLabel,
-          firstHint: AppLocalizations.of(context)!.cityHint,
-          secondLabel: AppLocalizations.of(context)!.companyLabel,
-          secondHint: AppLocalizations.of(context)!.companyHint,
+          firstLabel: AppLocalizations.of(context).cityLabel,
+          firstHint: AppLocalizations.of(context).cityHint,
+          secondLabel: AppLocalizations.of(context).companyLabel,
+          secondHint: AppLocalizations.of(context).companyHint,
           firstController: cityController,
           secondController: countryController,
         ),
@@ -761,7 +765,7 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                  content: Text(AppLocalizations.of(context)!
+                  content: Text(AppLocalizations.of(context)
                       .snackbarLocationPermissionDenied)),
             );
           }
@@ -773,7 +777,7 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                AppLocalizations.of(context)!
+                AppLocalizations.of(context)
                     .snackbarLocationPermissionPermanentlyDenied,
               ),
             ),
@@ -789,7 +793,7 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(AppLocalizations.of(context)!
+              content: Text(AppLocalizations.of(context)
                   .snackbarFailedToGetLocation(e.toString()))),
         );
       }

@@ -64,13 +64,13 @@
 
     "networkLabel": "red",
     "networkHint": "Ingrese el nombre de la red",
-    "wifiChooseFromDevice": "Elegir del Wi‑Fi del dispositivo",
-    "wifiLoadingNetworks": "Cargando redes Wi‑Fi...",
-    "wifiPickerTitle": "Seleccionar red Wi‑Fi",
-    "wifiNoNetworksFound": "No se encontraron redes Wi‑Fi",
-    "wifiScanPermissionRequired": "Se requiere permiso y servicio de ubicación para escanear Wi‑Fi",
+    "wifiChooseFromDevice": "Elegir del Wi-Fi del dispositivo",
+    "wifiLoadingNetworks": "Cargando redes Wi-Fi...",
+    "wifiPickerTitle": "Seleccionar red Wi-Fi",
+    "wifiNoNetworksFound": "No se encontraron redes Wi-Fi",
+    "wifiScanPermissionRequired": "Se requiere permiso y servicio de ubicación para escanear Wi-Fi",
     "wifiUseConnectedNetwork": "Red conectada actual",
-    "wifiUsingConnectedNetwork": "Usando la red Wi‑Fi conectada actualmente",
+    "wifiUsingConnectedNetwork": "Usando la red Wi-Fi conectada actualmente",
 
     "passwordLabel": "Contraseña",
     "passwordHint": "Ingrese la contraseña",
@@ -130,7 +130,7 @@
     "instagramUsernameHint": "Ingrese el nombre de usuario de Instagram",
 
     "phoneNumberLabel": "Número de teléfono",
-    "phoneNumberHint": "+55xxxxxxxxx",
+    "phoneNumberHint": "+[código de país] xxxxxxxxx",
 
     "changeLanguage": "Idioma",
     "changeLanguageDesc": "Cambiar el idioma de la aplicación",
@@ -150,6 +150,9 @@
     "authSwitchToSignIn": "¿Ya tienes cuenta? Inicia sesión",
     "authOr": "O",
     "authContinueAnonymous": "Continuar sin cuenta",
+    "@authContinueAnonymous": {
+        "description": "Botón para continuar como usuario anónimo"
+    },
     "authLogout": "Cerrar sesión",
     "authLogoutDesc": "Cerrar sesión de tu cuenta",
     "authAccount": "Cuenta",
@@ -157,6 +160,14 @@
     "snackbarLocationPermissionDenied": "Permiso de ubicación denegado",
     "snackbarLocationPermissionPermanentlyDenied": "Los permisos de ubicación están permanentemente denegados. Por favor, habilítelos en la configuración.",
     "snackbarFailedToGetLocation": "No se pudo obtener la ubicación: {error}",
+    "@snackbarFailedToGetLocation": {
+        "description": "Mensaje cuando falla la obtención de ubicación",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
     "snackbarFillRequiredFields": "Por favor, complete los campos obligatorios",
     "snackbarCopiedToClipboard": "Copiado al portapapeles",
 

@@ -5,10 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 /// to use he l10n, you nee to import the generated file
-import 'package:revolutionary_stuff/l10n/app_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:revolutionary_stuff/utils/app_theme.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:revolutionary_stuff/utils/storage/hive_box.dart';
+import 'package:revolutionary_stuff/models/history_items.dart';
+import 'package:revolutionary_stuff/services/history_service.dart';
 
 import 'l10n/l10n.dart';
 import 'providers/settings_provider.dart';
@@ -17,6 +21,21 @@ import 'utils/app_router.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await Hive.initFlutter();
+
+  // Register Hive adapters
+  if (!Hive.isAdapterRegistered(0)) {
+    Hive.registerAdapter(HistoryItemTypeAdapter());
+  }
+  if (!Hive.isAdapterRegistered(1)) {
+    Hive.registerAdapter(HistoryItemAdapter());
+  }
+
+  await Hive.openBox(userHiveBox);
+
+  // Initialize history service
+  final historyService = HistoryService();
+  await historyService.init();
 
   runApp(
     const ProviderScope(
@@ -68,7 +87,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      onGenerateTitle: (context) => AppLocalizations.of(context)!.appName,
+      onGenerateTitle: (context) => AppLocalizations.of(context).appName,
       supportedLocales: L10n.all,
       themeMode: ThemeMode.dark,
       theme: GlobalThemData.lightThemeData,

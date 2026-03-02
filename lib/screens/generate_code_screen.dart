@@ -106,7 +106,7 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              AppLocalizations.of(context)!.contactPermissionDenied,
+              AppLocalizations.of(context).contactPermissionDenied,
             ),
           ),
         );
@@ -163,7 +163,7 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content:
-                Text(AppLocalizations.of(context)!.snackbarFillRequiredFields)),
+                Text(AppLocalizations.of(context).snackbarFillRequiredFields)),
       );
       return;
     }
@@ -261,8 +261,9 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
                             ),
                           ),
                           child: Text(
-                            AppLocalizations.of(context)!.generateQRCodeBtn,
-                            style: const TextStyle(
+                            // 'Generate QR Code',
+                            AppLocalizations.of(context).generateQRCodeBtn,
+                            style: TextStyle(
                               color: Color(0xff333333),
                               fontSize: 16,
                               fontWeight: FontWeight.w500,

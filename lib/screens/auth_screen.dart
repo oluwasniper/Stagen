@@ -75,7 +75,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   }
 
   void _showError(String message, [String? errorType]) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     // Strip Appwrite exception wrapper for a fallback message
     String fallback = message;
@@ -99,7 +99,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final isLoading = auth.status == AuthStatus.loading;
 
     return Scaffold(

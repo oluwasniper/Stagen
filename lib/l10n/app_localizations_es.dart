@@ -164,27 +164,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get networkHint => 'Ingrese el nombre de la red';
 
   @override
-  String get wifiChooseFromDevice => 'Elegir del Wi‑Fi del dispositivo';
+  String get wifiChooseFromDevice => 'Elegir del Wi-Fi del dispositivo';
 
   @override
-  String get wifiLoadingNetworks => 'Cargando redes Wi‑Fi...';
+  String get wifiLoadingNetworks => 'Cargando redes Wi-Fi...';
 
   @override
-  String get wifiPickerTitle => 'Seleccionar red Wi‑Fi';
+  String get wifiPickerTitle => 'Seleccionar red Wi-Fi';
 
   @override
-  String get wifiNoNetworksFound => 'No se encontraron redes Wi‑Fi';
+  String get wifiNoNetworksFound => 'No se encontraron redes Wi-Fi';
 
   @override
   String get wifiScanPermissionRequired =>
-      'Se requiere permiso y servicio de ubicación para escanear Wi‑Fi';
+      'Se requiere permiso y servicio de ubicación para escanear Wi-Fi';
 
   @override
   String get wifiUseConnectedNetwork => 'Red conectada actual';
 
   @override
   String get wifiUsingConnectedNetwork =>
-      'Usando la red Wi‑Fi conectada actualmente';
+      'Usando la red Wi-Fi conectada actualmente';
 
   @override
   String get passwordLabel => 'Contraseña';
@@ -305,7 +305,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get phoneNumberLabel => 'Número de teléfono';
 
   @override
-  String get phoneNumberHint => '+55xxxxxxxxx';
+  String get phoneNumberHint => '+[código de país] xxxxxxxxx';
 
   @override
   String get changeLanguage => 'Idioma';

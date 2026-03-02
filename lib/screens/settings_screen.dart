@@ -78,7 +78,7 @@ class SettingsScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
-                  AppLocalizations.of(context)!.changeLanguage,
+                  AppLocalizations.of(context).changeLanguage,
                   style: const TextStyle(
                     color: Color(0xffFDB623),
                     fontSize: 20,
@@ -182,7 +182,7 @@ class SettingsScreen extends ConsumerWidget {
 
     final tiles = <Widget>[
       Text(
-        AppLocalizations.of(context)!.settings,
+        AppLocalizations.of(context).settings,
         style: const TextStyle(
             color: Color(0xffFDB623),
             fontSize: 26,
@@ -192,8 +192,8 @@ class SettingsScreen extends ConsumerWidget {
       SettingsListTile(
         isSwitched: settings.vibrate,
         iconData: Icons.vibration_rounded,
-        title: AppLocalizations.of(context)!.vibrate,
-        subtitle: AppLocalizations.of(context)!.vibrateDesc,
+        title: AppLocalizations.of(context).vibrate,
+        subtitle: AppLocalizations.of(context).vibrateDesc,
         onSwitchChanged: (value) {
           ref.read(settingsProvider.notifier).toggleVibrate(value);
         },
@@ -202,8 +202,8 @@ class SettingsScreen extends ConsumerWidget {
       SettingsListTile(
         iconData: Icons.notifications_active_outlined,
         isSwitched: settings.beep,
-        title: AppLocalizations.of(context)!.beep,
-        subtitle: AppLocalizations.of(context)!.beepDesc,
+        title: AppLocalizations.of(context).beep,
+        subtitle: AppLocalizations.of(context).beepDesc,
         onSwitchChanged: (value) {
           ref.read(settingsProvider.notifier).toggleBeep(value);
         },
@@ -212,7 +212,7 @@ class SettingsScreen extends ConsumerWidget {
       SettingsListTile(
         isSwitched: false,
         showSwitch: false,
-        title: AppLocalizations.of(context)!.changeLanguage,
+        title: AppLocalizations.of(context).changeLanguage,
         subtitle: langName,
         iconData: Icons.language_rounded,
         onTap: () => _showLanguagePicker(context, ref),
@@ -230,7 +230,7 @@ class SettingsScreen extends ConsumerWidget {
       ],
       const SizedBox(height: 50),
       Text(
-        AppLocalizations.of(context)!.support,
+        AppLocalizations.of(context).support,
         style: const TextStyle(
             color: Color(0xffFDB623),
             fontSize: 26,
@@ -240,8 +240,8 @@ class SettingsScreen extends ConsumerWidget {
       SettingsListTile(
         isSwitched: false,
         showSwitch: false,
-        title: AppLocalizations.of(context)!.rateUs,
-        subtitle: AppLocalizations.of(context)!.rateUsDesc,
+        title: AppLocalizations.of(context).rateUs,
+        subtitle: AppLocalizations.of(context).rateUsDesc,
         iconData: Icons.check_circle_rounded,
         onTap: _rateApp,
       ),
@@ -249,8 +249,8 @@ class SettingsScreen extends ConsumerWidget {
       SettingsListTile(
         isSwitched: false,
         showSwitch: false,
-        title: AppLocalizations.of(context)!.shareBtn,
-        subtitle: AppLocalizations.of(context)!.shareDesc,
+        title: AppLocalizations.of(context).shareBtn,
+        subtitle: AppLocalizations.of(context).shareDesc,
         iconData: Icons.share_rounded,
         onTap: _shareApp,
       ),
@@ -258,14 +258,14 @@ class SettingsScreen extends ConsumerWidget {
       SettingsListTile(
         isSwitched: false,
         showSwitch: false,
-        title: AppLocalizations.of(context)!.privacyPolicy,
-        subtitle: AppLocalizations.of(context)!.privacyPolicyDesc,
+        title: AppLocalizations.of(context).privacyPolicy,
+        subtitle: AppLocalizations.of(context).privacyPolicyDesc,
         iconData: Icons.privacy_tip_rounded,
         onTap: _openPrivacyPolicy,
       ),
       const SizedBox(height: 50),
       Text(
-        AppLocalizations.of(context)!.authAccount,
+        AppLocalizations.of(context).authAccount,
         style: const TextStyle(
             color: Color(0xffFDB623),
             fontSize: 26,
@@ -275,8 +275,8 @@ class SettingsScreen extends ConsumerWidget {
       SettingsListTile(
         isSwitched: false,
         showSwitch: false,
-        title: AppLocalizations.of(context)!.authLogout,
-        subtitle: AppLocalizations.of(context)!.authLogoutDesc,
+        title: AppLocalizations.of(context).authLogout,
+        subtitle: AppLocalizations.of(context).authLogoutDesc,
         iconData: Icons.logout_rounded,
         onTap: () async {
           await ref.read(authProvider.notifier).signOut();

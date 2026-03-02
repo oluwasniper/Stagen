@@ -23,7 +23,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
     final qrType = record?.qrType ?? 'Unknown';
 
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.qrCode,
+      screenTitle: AppLocalizations.of(context).qrCode,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
@@ -158,7 +158,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context)!.shareBtn,
+                        AppLocalizations.of(context).shareBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
@@ -175,7 +175,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                           Clipboard.setData(ClipboardData(text: data));
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(AppLocalizations.of(context)!
+                                content: Text(AppLocalizations.of(context)
                                     .snackbarCopiedToClipboard)),
                           );
                         },
@@ -202,7 +202,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context)!.saveBtn,
+                        AppLocalizations.of(context).saveBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,

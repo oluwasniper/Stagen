@@ -79,13 +79,13 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     _navItems = [
       CustomNavBarItem(
           svgData: AppAsset.generateIconSvg,
-          label: AppLocalizations.of(context)!.generate),
+          label: AppLocalizations.of(context).generate),
       CustomNavBarItem(
           svgData: AppAsset.scanIconSvg,
-          label: AppLocalizations.of(context)!.scan),
+          label: AppLocalizations.of(context).scan),
       CustomNavBarItem(
           svgData: AppAsset.historyIconSvg,
-          label: AppLocalizations.of(context)!.history),
+          label: AppLocalizations.of(context).history),
     ];
   }
 

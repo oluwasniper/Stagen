@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
+=======
+import '../../l10n/app_localizations.dart';
+>>>>>>> origin/dev
 
 import '../../l10n/app_localizations.dart';
 import '../app_router.dart';
@@ -14,19 +18,19 @@ class ErrorScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(AppLocalizations.of(context)!.errorText),
+            Text(AppLocalizations.of(context).errorText),
             ElevatedButton(
               onPressed: () {
                 AppGoRouter.router.go(AppPath.splash);
               },
-              child: Text(AppLocalizations.of(context)!.onboardingHeader),
+              child: Text(AppLocalizations.of(context).onboardingHeader),
             ),
-            Text(AppLocalizations.of(context)!.errorOR),
+            Text(AppLocalizations.of(context).errorOR),
             ElevatedButton(
               onPressed: () {
                 AppGoRouter.router.pop();
               },
-              child: Text(AppLocalizations.of(context)!.errorGoBack),
+              child: Text(AppLocalizations.of(context).errorGoBack),
             ),
           ],
         ),
