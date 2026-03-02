@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../utils/app_asset.dart';
 import '../utils/app_router.dart';
@@ -29,7 +29,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
         : '';
 
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.openFileHeader,
+      screenTitle: AppLocalizations.of(context).openFileHeader,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
@@ -43,7 +43,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff000000).withOpacity(0.25),
+                    color: const Color(0xff000000).withValues(alpha: 0.25),
                     offset: const Offset(0, 4),
                     blurRadius: 4,
                   ),
@@ -128,7 +128,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                                 );
                               },
                               child: Text(
-                                AppLocalizations.of(context)!.showQRCode,
+                                AppLocalizations.of(context).showQRCode,
                                 style: const TextStyle(
                                   color: Color(0xffFDB623),
                                   fontSize: 15,
@@ -172,7 +172,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withOpacity(0.25),
+                                    const Color(0xff000000).withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -186,7 +186,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context)!.shareBtn,
+                        AppLocalizations.of(context).shareBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
@@ -203,7 +203,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                           Clipboard.setData(ClipboardData(text: data));
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(AppLocalizations.of(context)!
+                                content: Text(AppLocalizations.of(context)
                                     .snackbarCopiedToClipboard)),
                           );
                         },
@@ -216,7 +216,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withOpacity(0.25),
+                                    const Color(0xff000000).withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -230,7 +230,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context)!.copyBtn,
+                        AppLocalizations.of(context).copyBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import 'l10n/app_localizations.dart';
 import 'utils/app_asset.dart';
 
 class BottomNavigationPage extends StatefulWidget {
@@ -79,13 +79,13 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
     _navItems = [
       CustomNavBarItem(
           svgData: AppAsset.generateIconSvg,
-          label: AppLocalizations.of(context)!.generate),
+          label: AppLocalizations.of(context).generate),
       CustomNavBarItem(
           svgData: AppAsset.scanIconSvg,
-          label: AppLocalizations.of(context)!.scan),
+          label: AppLocalizations.of(context).scan),
       CustomNavBarItem(
           svgData: AppAsset.historyIconSvg,
-          label: AppLocalizations.of(context)!.history),
+          label: AppLocalizations.of(context).history),
     ];
   }
 
@@ -162,7 +162,7 @@ class CustomFloatingNavBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: 0.2),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
@@ -237,7 +237,7 @@ class CustomFloatingNavBar extends StatelessWidget {
                           borderRadius: BorderRadius.circular(35),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),

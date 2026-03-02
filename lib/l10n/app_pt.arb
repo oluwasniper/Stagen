@@ -134,6 +134,14 @@
     "authSwitchToSignIn": "Já tem conta? Entrar",
     "authOr": "OU",
     "authContinueAnonymous": "Continuar sem conta",
+    "@authContinueAnonymous": {
+        "description": "Botão para continuar sem conta",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
     "authLogout": "Sair",
     "authLogoutDesc": "Sair da sua conta",
     "authAccount": "Conta",
@@ -141,6 +149,14 @@
     "snackbarLocationPermissionDenied": "Permissão de localização negada",
     "snackbarLocationPermissionPermanentlyDenied": "As permissões de localização foram negadas permanentemente. Por favor, habilite-as nas configurações.",
     "snackbarFailedToGetLocation": "Falha ao obter localização: {error}",
+    "@snackbarFailedToGetLocation": {
+        "description": "Mensagem quando falha ao obter localização",
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
     "snackbarFillRequiredFields": "Por favor, preencha os campos obrigatórios",
     "snackbarCopiedToClipboard": "Copiado para a área de transferência",
 

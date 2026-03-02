@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:intl/intl.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../providers/qr_providers.dart';
 import '../utils/app_router.dart';
@@ -38,7 +38,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
   @override
   Widget build(BuildContext context) {
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.history,
+      screenTitle: AppLocalizations.of(context).history,
       actionButton: () => AppGoRouter.router.push(AppPath.settings),
       body: Column(
         children: [
@@ -46,7 +46,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
             height: 60,
             margin: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: const Color(0xff333333).withOpacity(0.84),
+              color: const Color(0xff333333).withValues(alpha: 0.84),
               borderRadius: BorderRadius.circular(6.0),
             ),
             child: TabBar(
@@ -72,13 +72,13 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
                 SizedBox(
                   width: (MediaQuery.of(context).size.width * 7 / 4) - 12,
                   child: Tab(
-                    text: AppLocalizations.of(context)!.scan,
+                    text: AppLocalizations.of(context).scan,
                   ),
                 ),
                 SizedBox(
                   width: (MediaQuery.of(context).size.width * 8 / 4),
                   child: Tab(
-                    text: AppLocalizations.of(context)!.create,
+                    text: AppLocalizations.of(context).create,
                   ),
                 ),
               ],
@@ -126,7 +126,7 @@ class _HistoryListView extends ConsumerWidget {
             const Icon(Icons.error_outline, color: Color(0xffFDB623), size: 48),
             const SizedBox(height: 16),
             Text(
-              AppLocalizations.of(context)!.historyLoadFailed,
+              AppLocalizations.of(context).historyLoadFailed,
               style: const TextStyle(color: Color(0xffD9D9D9), fontSize: 16),
             ),
             const SizedBox(height: 8),
@@ -134,7 +134,7 @@ class _HistoryListView extends ConsumerWidget {
               onPressed: () => ref.read(provider.notifier).fetchRecords(),
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xffFDB623)),
-              child: Text(AppLocalizations.of(context)!.historyRetry,
+              child: Text(AppLocalizations.of(context).historyRetry,
                   style: const TextStyle(color: Color(0xff333333))),
             ),
           ],
@@ -154,7 +154,7 @@ class _HistoryListView extends ConsumerWidget {
                 const SizedBox(height: 200),
                 Center(
                   child: Text(
-                    AppLocalizations.of(context)!.historyEmpty,
+                    AppLocalizations.of(context).historyEmpty,
                     style:
                         const TextStyle(color: Color(0xffA4A4A4), fontSize: 16),
                   ),
@@ -192,11 +192,11 @@ class _HistoryListView extends ConsumerWidget {
                     height: 60,
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
-                      color: const Color(0xff333333).withOpacity(0.84),
+                      color: const Color(0xff333333).withValues(alpha: 0.84),
                       borderRadius: BorderRadius.circular(6.0),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xff000000).withOpacity(0.25),
+                          color: const Color(0xff000000).withValues(alpha: 0.25),
                           spreadRadius: 0,
                           blurRadius: 4,
                           offset: const Offset(0, 4),

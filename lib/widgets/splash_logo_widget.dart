@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../l10n/app_localizations.dart';
 import '../utils/app_asset.dart';
 
 class SplashLogoWidget extends StatelessWidget {
@@ -23,7 +23,7 @@ class SplashLogoWidget extends StatelessWidget {
             height: iconSize,
             width: iconSize,
             filterQuality: FilterQuality.high,
-            semanticLabel: '${AppLocalizations.of(context)!.appName} App Icon',
+            semanticLabel: '${AppLocalizations.of(context).appName} App Icon',
           ),
         ),
       ],

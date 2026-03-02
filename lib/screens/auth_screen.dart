@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/app_localizations.dart';
 import '../l10n/l10n.dart';
 import '../providers/auth_provider.dart';
 import '../providers/settings_provider.dart';
@@ -75,7 +75,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   }
 
   void _showError(String message, [String? errorType]) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     // Strip Appwrite exception wrapper for a fallback message
     String fallback = message;
@@ -99,7 +99,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final isLoading = auth.status == AuthStatus.loading;
 
     return Scaffold(
@@ -183,7 +183,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                 _obscurePassword
                                     ? Icons.visibility_off_rounded
                                     : Icons.visibility_rounded,
-                                color: const Color(0xffFDB623).withOpacity(0.7),
+                                color: const Color(0xffFDB623).withValues(alpha: 0.7),
                               ),
                               onPressed: () {
                                 setState(
@@ -336,8 +336,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       validator: validator,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.white.withOpacity(0.4)),
-        prefixIcon: Icon(icon, color: const Color(0xffFDB623).withOpacity(0.7)),
+        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4)),
+        prefixIcon: Icon(icon, color: const Color(0xffFDB623).withValues(alpha: 0.7)),
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: const Color(0xff444444),

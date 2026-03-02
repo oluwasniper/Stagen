@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../widgets/background_screen_widget.dart';
 
@@ -23,7 +23,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
     final qrType = record?.qrType ?? 'Unknown';
 
     return BackgroundScreenWidget(
-      screenTitle: AppLocalizations.of(context)!.qrCode,
+      screenTitle: AppLocalizations.of(context).qrCode,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
@@ -35,7 +35,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff000000).withOpacity(0.25),
+                    color: const Color(0xff000000).withValues(alpha: 0.25),
                     offset: const Offset(0, 4),
                     blurRadius: 4,
                   ),
@@ -89,11 +89,11 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                 width: 225,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xffF5F5F5).withOpacity(0.85),
+                  color: const Color(0xffF5F5F5).withValues(alpha: 0.85),
                   borderRadius: BorderRadius.circular(6),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xff000000).withOpacity(0.25),
+                      color: const Color(0xff000000).withValues(alpha: 0.25),
                       offset: const Offset(0, 4),
                       blurRadius: 4,
                     ),
@@ -144,7 +144,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withOpacity(0.25),
+                                    const Color(0xff000000).withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -158,7 +158,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context)!.shareBtn,
+                        AppLocalizations.of(context).shareBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
@@ -175,7 +175,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                           Clipboard.setData(ClipboardData(text: data));
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(AppLocalizations.of(context)!
+                                content: Text(AppLocalizations.of(context)
                                     .snackbarCopiedToClipboard)),
                           );
                         },
@@ -188,7 +188,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withOpacity(0.25),
+                                    const Color(0xff000000).withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -202,7 +202,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context)!.saveBtn,
+                        AppLocalizations.of(context).saveBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
