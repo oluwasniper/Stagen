@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/app_localizations.dart';
@@ -223,12 +224,16 @@ class ScannedQRScreen extends ConsumerWidget {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {
-                          // TODO: implement share
-                          ref.read(telemetryServiceProvider).track(
-                            TelemetryEvents.qrShared,
-                            properties: {'source': 'scanned'},
-                          );
+                        onTap: () async {
+                          try {
+                            await Share.share(qrData);
+                            ref.read(telemetryServiceProvider).track(
+                              TelemetryEvents.qrShared,
+                              properties: {'source': 'scanned'},
+                            );
+                          } catch (e) {
+                            debugPrint('Failed to share QR data: $e');
+                          }
                         },
                         child: Container(
                           height: 50,
