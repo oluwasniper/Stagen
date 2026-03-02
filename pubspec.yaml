@@ -52,6 +52,7 @@ dependencies:
   mobile_scanner: ^6.0.5 # QR code scanning
   shorebird_code_push: ^2.0.2 # Shorebird
   url_launcher: ^6.2.5 # URL launcher
+  share_plus: ^9.0.0 # Sharing content
   flutter_contacts: ^1.1.9+2 # Contact picker
   geolocator: ^13.0.2
   wifi_scan: ^0.4.1+2

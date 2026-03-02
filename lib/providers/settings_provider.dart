@@ -48,12 +48,21 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     final vibrate = await _storage.read(key: _Keys.vibrate);
     final beep = await _storage.read(key: _Keys.beep);
     final analytics = await _storage.read(key: _Keys.analytics);
+    // Default true (opt-in); only explicitly stored 'false' disables it.
+    final analyticsEnabled = analytics != 'false';
     state = SettingsState(
       vibrate: vibrate == 'true',
       beep: beep == 'true',
       // Default false (opt-out); only explicitly stored 'true' enables it.
       analyticsEnabled: analytics == 'true',
     );
+    // Apply persisted consent state to the PostHog SDK on startup so the
+    // PosthogObserver respects the user's previous choice immediately.
+    if (analyticsEnabled) {
+      await Posthog().enable();
+    } else {
+      await Posthog().disable();
+    }
   }
 
   Future<void> toggleVibrate(bool value) async {

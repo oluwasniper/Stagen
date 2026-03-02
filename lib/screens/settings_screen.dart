@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/l10n.dart';
@@ -254,12 +255,25 @@ class SettingsScreen extends ConsumerWidget {
         isSwitched: settings.analyticsEnabled,
         iconData: Icons.analytics_outlined,
         title: AppLocalizations.of(context).shareAnalytics,
-        subtitle: AppLocalizations.of(context).shareAnalyticsSubtitle,
+        subtitle: AppLocalizations.of(context).shareAnalyticsDesc,
         onSwitchChanged: (value) {
+          if (!value) {
+            // Track opt-out before disabling — last event while analytics is on.
+            ref.read(telemetryServiceProvider).track(TelemetryEvents.telemetryOptedOut);
+          }
           ref.read(settingsProvider.notifier).toggleAnalytics(value);
-          ref.read(telemetryServiceProvider).track(
-            value ? TelemetryEvents.telemetryOptedIn : TelemetryEvents.telemetryOptedOut,
-          );
+          if (value) {
+            // Re-enable the PostHog SDK before updating settings so the
+            // opt-in event is captured correctly.
+            Posthog().enable();
+            settingsNotifier.toggleAnalytics(value);
+            telemetry.track(TelemetryEvents.telemetryOptedIn);
+          } else {
+            // Track before disabling — this opt-out event should be the last one sent.
+            telemetry.track(TelemetryEvents.telemetryOptedOut);
+            settingsNotifier.toggleAnalytics(value);
+            Posthog().disable();
+          }
         },
       ),
       const SizedBox(height: 50),
