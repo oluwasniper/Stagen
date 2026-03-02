@@ -133,5 +133,13 @@ Future<void> initPostHog() async {
     ..debug = false
     ..captureApplicationLifecycleEvents = false;
 
-  await Posthog().setup(config);
+  try {
+    await Posthog().setup(config);
+  } catch (e, st) {
+    dev.log(
+      '[TelemetryService] PostHog setup failed: $e',
+      stackTrace: st,
+      name: 'TelemetryService',
+    );
+  }
 }
