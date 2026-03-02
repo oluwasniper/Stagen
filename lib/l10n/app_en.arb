@@ -642,5 +642,18 @@
     "historyEmpty": "No history yet",
     "@historyEmpty" :{
         "description": "Message when there is no history"
+    },
+
+    "privacy": "Privacy",
+    "@privacy": {
+        "description": "Privacy section header in settings"
+    },
+    "shareAnalytics": "Share Analytics",
+    "@shareAnalytics": {
+        "description": "Toggle title to share anonymous analytics"
+    },
+    "shareAnalyticsSubtitle": "Help improve Scagen by sharing anonymous usage data",
+    "@shareAnalyticsSubtitle": {
+        "description": "Toggle subtitle explaining anonymous analytics sharing"
     }
 }

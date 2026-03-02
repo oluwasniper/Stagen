@@ -242,9 +242,9 @@ class SettingsScreen extends ConsumerWidget {
         ),
       ],
       const SizedBox(height: 50),
-      const Text(
-        'Privacy',
-        style: TextStyle(
+      Text(
+        AppLocalizations.of(context).privacy,
+        style: const TextStyle(
             color: Color(0xffFDB623),
             fontSize: 26,
             fontWeight: FontWeight.w400),
@@ -253,14 +253,13 @@ class SettingsScreen extends ConsumerWidget {
       SettingsListTile(
         isSwitched: settings.analyticsEnabled,
         iconData: Icons.analytics_outlined,
-        title: 'Share Analytics',
-        subtitle: 'Help improve Scagen by sharing anonymous usage data',
+        title: AppLocalizations.of(context).shareAnalytics,
+        subtitle: AppLocalizations.of(context).shareAnalyticsSubtitle,
         onSwitchChanged: (value) {
-          // Track before toggling — if opting out, this is the last event sent.
+          ref.read(settingsProvider.notifier).toggleAnalytics(value);
           ref.read(telemetryServiceProvider).track(
             value ? TelemetryEvents.telemetryOptedIn : TelemetryEvents.telemetryOptedOut,
           );
-          ref.read(settingsProvider.notifier).toggleAnalytics(value);
         },
       ),
       const SizedBox(height: 50),

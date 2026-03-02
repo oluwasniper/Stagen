@@ -21,13 +21,14 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
   bool _hasNavigated = false;
 
   String _classifyContent(String data) {
-    if (data.startsWith('http://') || data.startsWith('https://')) return 'url';
-    if (data.startsWith('mailto:')) return 'email';
-    if (data.startsWith('tel:')) return 'phone';
-    if (data.startsWith('WIFI:')) return 'wifi';
-    if (data.startsWith('BEGIN:VCARD')) return 'contact';
-    if (data.startsWith('BEGIN:VEVENT')) return 'event';
-    if (data.startsWith('geo:')) return 'location';
+    final lower = data.toLowerCase();
+    if (lower.startsWith('http://') || lower.startsWith('https://')) return 'url';
+    if (lower.startsWith('mailto:')) return 'email';
+    if (lower.startsWith('tel:')) return 'phone';
+    if (lower.startsWith('wifi:')) return 'wifi';
+    if (lower.startsWith('begin:vcard')) return 'contact';
+    if (lower.startsWith('begin:vevent')) return 'event';
+    if (lower.startsWith('geo:')) return 'location';
     return 'text';
   }
 
