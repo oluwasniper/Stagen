@@ -256,17 +256,14 @@ class SettingsScreen extends ConsumerWidget {
         title: 'Share Analytics',
         subtitle: 'Help improve Scagen by sharing anonymous usage data',
         onSwitchChanged: (value) {
-          final telemetry = ref.read(telemetryServiceProvider);
-          final settingsNotifier = ref.read(settingsProvider.notifier);
-
+          if (!value) {
+            // Track opt-out before disabling — last event while analytics is on.
+            ref.read(telemetryServiceProvider).track(TelemetryEvents.telemetryOptedOut);
+          }
+          ref.read(settingsProvider.notifier).toggleAnalytics(value);
           if (value) {
-            // Enable analytics first so this opt-in event is not dropped.
-            settingsNotifier.toggleAnalytics(value);
-            telemetry.track(TelemetryEvents.telemetryOptedIn);
-          } else {
-            // Track before disabling — this opt-out event should be the last one sent.
-            telemetry.track(TelemetryEvents.telemetryOptedOut);
-            settingsNotifier.toggleAnalytics(value);
+            // Track opt-in after enabling — first event with analytics now on.
+            ref.read(telemetryServiceProvider).track(TelemetryEvents.telemetryOptedIn);
           }
         },
       ),
