@@ -104,8 +104,6 @@ class AppGoRouter {
     /// debugLogDiagnostics: true, will print the diagnostics in the console
     debugLogDiagnostics: true,
 
-    observers: [PosthogObserver()],
-
     /// The global navigation key for the app's main navigator.
     /// This key allows navigation actions to be performed from anywhere in the app
     /// without requiring a BuildContext.

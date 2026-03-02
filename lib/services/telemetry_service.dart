@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
 
 import '../config/app_config.dart';
@@ -125,6 +126,11 @@ final telemetryServiceProvider = Provider<TelemetryService>((ref) {
 /// Uses [AppConfig] values injected at build time via --dart-define.
 /// If the API key is empty (defines not passed), PostHog silently no-ops
 /// rather than crashing.
+///
+/// Reads the persisted analytics preference from [FlutterSecureStorage] and
+/// calls [Posthog().disable()] immediately after setup when the user has
+/// previously opted out, so no events are captured before [ProviderScope]
+/// or [SettingsNotifier] are initialised.
 Future<void> initPostHog() async {
   if (AppConfig.posthogApiKey.isEmpty) return;
 
@@ -134,4 +140,19 @@ Future<void> initPostHog() async {
     ..captureApplicationLifecycleEvents = false;
 
   await Posthog().setup(config);
+
+  // Respect persisted opt-out before any capture can occur.
+  try {
+    const storage = FlutterSecureStorage();
+    final analyticsValue = await storage.read(key: 'setting_analytics');
+    if (analyticsValue == 'false') {
+      await Posthog().disable();
+    }
+  } catch (e, st) {
+    dev.log(
+      '[TelemetryService] failed to read analytics preference: $e',
+      stackTrace: st,
+      name: 'TelemetryService',
+    );
+  }
 }

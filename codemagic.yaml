@@ -1,3 +1,20 @@
+definitions:
+  scripts:
+    - &validate_env_vars
+      name: Validate required environment variables
+      script: |
+        missing=""
+        for var in APPWRITE_ENDPOINT APPWRITE_PROJECT_ID POSTHOG_API_KEY POSTHOG_HOST; do
+          eval "val=\$$var"
+          if [ -z "$val" ]; then
+            missing="$missing $var"
+          fi
+        done
+        if [ -n "$missing" ]; then
+          echo "ERROR: The following required environment variables are unset or empty:$missing"
+          exit 1
+        fi
+
 workflows:
   android-release:
     name: Android Release
@@ -17,6 +34,19 @@ workflows:
     scripts:
       - name: Get dependencies
         script: flutter pub get
+      - name: Validate required environment variables
+        script: |
+          missing=""
+          for var in APPWRITE_ENDPOINT APPWRITE_PROJECT_ID POSTHOG_API_KEY POSTHOG_HOST; do
+            eval val=\$$var
+            if [ -z "$val" ]; then
+              missing="$missing $var"
+            fi
+          done
+          if [ -n "$missing" ]; then
+            echo "ERROR: The following required variables are unset or empty:$missing"
+            exit 1
+          fi
       - name: Build AAB
         script: |
           flutter build appbundle --release \
@@ -43,10 +73,23 @@ workflows:
         - stagen_secrets
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.example.revolutionary_stuff
+        bundle_identifier: com.example.revolutionaryStuff
     scripts:
       - name: Get dependencies
         script: flutter pub get
+      - name: Validate required environment variables
+        script: |
+          missing=""
+          for var in APPWRITE_ENDPOINT APPWRITE_PROJECT_ID POSTHOG_API_KEY POSTHOG_HOST; do
+            eval val=\$$var
+            if [ -z "$val" ]; then
+              missing="$missing $var"
+            fi
+          done
+          if [ -n "$missing" ]; then
+            echo "ERROR: The following required variables are unset or empty:$missing"
+            exit 1
+          fi
       - name: Build IPA
         script: |
           flutter build ipa --release \

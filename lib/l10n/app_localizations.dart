@@ -929,6 +929,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No history yet'**
   String get historyEmpty;
+
+  /// Privacy section header in settings
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get privacy;
+
+  /// Toggle title to share anonymous analytics
+  ///
+  /// In en, this message translates to:
+  /// **'Share Analytics'**
+  String get shareAnalytics;
+
+  /// Toggle subtitle explaining anonymous analytics sharing
+  ///
+  /// In en, this message translates to:
+  /// **'Help improve Scagen by sharing anonymous usage data'**
+  String get shareAnalyticsSubtitle;
 }
 
 class _AppLocalizationsDelegate

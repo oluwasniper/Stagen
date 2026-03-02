@@ -1,3 +1,5 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -190,8 +192,12 @@ class GeneratedQRScreen extends ConsumerWidget {
                               TelemetryEvents.qrShared,
                               properties: {'source': 'generated'},
                             );
-                          } catch (e) {
-                            debugPrint('Share failed: $e');
+                          } catch (e, st) {
+                            dev.log(
+                              '[GeneratedQRScreen] share failed: $e',
+                              stackTrace: st,
+                              name: 'GeneratedQRScreen',
+                            );
                           }
                         },
                         child: Container(
