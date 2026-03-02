@@ -186,5 +186,9 @@
 
     "historyLoadFailed": "Error al cargar el historial",
     "historyRetry": "Reintentar",
-    "historyEmpty": "Aún no hay historial"
+    "historyEmpty": "Aún no hay historial",
+
+    "privacy": "Privacidad",
+    "shareAnalytics": "Compartir análisis",
+    "shareAnalyticsDesc": "Ayuda a mejorar Scagen compartiendo datos de uso anónimos"
 }
