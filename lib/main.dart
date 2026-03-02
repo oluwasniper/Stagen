@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 /// to use he l10n, you nee to import the generated file
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:revolutionary_stuff/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:revolutionary_stuff/utils/app_theme.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';

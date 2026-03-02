@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:wifi_scan/wifi_scan.dart';
+import '../l10n/app_localizations.dart';
 import 'generate_qr_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'k_textfield_widget.dart';
 
 /// Callback type for lazily creating/retrieving text controllers by key.
@@ -274,7 +274,8 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
         .where((ssid) => ssid.isNotEmpty)
         .toSet()
         .toList()
-      ..sort((left, right) => left.toLowerCase().compareTo(right.toLowerCase()));
+      ..sort(
+          (left, right) => left.toLowerCase().compareTo(right.toLowerCase()));
 
     return ssids;
   }
@@ -350,11 +351,13 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
                     itemBuilder: (itemContext, index) {
                       final ssid = ssids[index];
                       return ListTile(
-                        leading: const Icon(Icons.wifi, color: Color(0xffFDB623)),
+                        leading:
+                            const Icon(Icons.wifi, color: Color(0xffFDB623)),
                         title: Text(ssid),
                         subtitle: connectedSsid == ssid
                             ? Text(
-                                AppLocalizations.of(context)!.wifiUseConnectedNetwork,
+                                AppLocalizations.of(context)!
+                                    .wifiUseConnectedNetwork,
                               )
                             : null,
                         onTap: () {
