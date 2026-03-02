@@ -10,15 +10,13 @@ import 'auth_provider.dart';
 final appwriteClientProvider = Provider<Client>((ref) {
   if (AppConfig.appwriteEndpoint.isEmpty) {
     throw StateError(
-      'Missing required config: APPWRITE_ENDPOINT is not set. '
-      'Pass it via --dart-define=APPWRITE_ENDPOINT=<url>.',
-    );
+        'AppConfig.appwriteEndpoint is not configured. '
+        'Pass --dart-define=APPWRITE_ENDPOINT=<value> at build time.');
   }
   if (AppConfig.appwriteProjectId.isEmpty) {
     throw StateError(
-      'Missing required config: APPWRITE_PROJECT_ID is not set. '
-      'Pass it via --dart-define=APPWRITE_PROJECT_ID=<id>.',
-    );
+        'AppConfig.appwriteProjectId is not configured. '
+        'Pass --dart-define=APPWRITE_PROJECT_ID=<value> at build time.');
   }
   final client = Client();
   client

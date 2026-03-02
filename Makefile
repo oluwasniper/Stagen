@@ -1,7 +1,7 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Scagen Makefile
 #
-# Reads dart-define secrets from .env (gitignored).
+# Reads dart-define build-time configuration values from .env (gitignored).
 # Copy .env.example → .env and fill in your values before running.
 #
 # Usage:
@@ -23,15 +23,26 @@ ifneq ($(strip $(POSTHOG_HOST)),)
 DART_DEFINES += --dart-define=POSTHOG_HOST=$(POSTHOG_HOST)
 endif
 
-.PHONY: run build-android build-ios clean
+.PHONY: run build-android build-ios clean check-appwrite-defines
 
-run:
+check-appwrite-defines:
+	@missing=""; \
+	for var in APPWRITE_ENDPOINT APPWRITE_PROJECT_ID; do \
+		val=$$(eval echo \$${$$var}); \
+		if [ -z "$$val" ]; then missing="$$missing $$var"; fi; \
+	done; \
+	if [ -n "$$missing" ]; then \
+		echo "ERROR: The following required Appwrite variables are unset or empty:$$missing"; \
+		exit 1; \
+	fi
+
+run: check-appwrite-defines
 	flutter run $(DART_DEFINES)
 
-build-android:
+build-android: check-appwrite-defines
 	flutter build apk $(DART_DEFINES) --release
 
-build-ios:
+build-ios: check-appwrite-defines
 	flutter build ios $(DART_DEFINES) --release
 
 clean:

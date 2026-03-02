@@ -66,10 +66,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // After linking, fetch the updated user
       final user = await _authService.getCurrentUser();
       state = AuthState(status: AuthStatus.authenticated, user: user);
-      _telemetry.track(TelemetryEvents.authAccountLinked);
+      try {
+        _telemetry.track(TelemetryEvents.authAccountLinked);
+      } catch (_) {}
     } catch (e) {
-      _telemetry.track(TelemetryEvents.authError,
-          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
+      try {
+        _telemetry.track(TelemetryEvents.authError,
+            properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
+      } catch (_) {}
       state = state.copyWith(
         status: AuthStatus.authenticated, // Still authenticated, but show error
         error: e.toString(),
@@ -110,11 +114,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await _authService.createAnonymousSession();
       final user = await _authService.getCurrentUser();
       state = AuthState(status: AuthStatus.authenticated, user: user);
-      if (user != null) _telemetry.identify(user.$id);
-      _telemetry.track(TelemetryEvents.authSigninAnonymous);
+      try {
+        if (user != null) _telemetry.identify(user.$id);
+        _telemetry.track(TelemetryEvents.authSigninAnonymous);
+      } catch (_) {}
     } catch (e) {
-      _telemetry.track(TelemetryEvents.authError,
-          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
+      try {
+        _telemetry.track(TelemetryEvents.authError,
+            properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
+      } catch (_) {}
       state = AuthState(
         status: AuthStatus.unauthenticated,
         error: e.toString(),
@@ -142,11 +150,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       final user = await _authService.getCurrentUser();
       state = AuthState(status: AuthStatus.authenticated, user: user);
-      if (user != null) _telemetry.identify(user.$id);
-      _telemetry.track(TelemetryEvents.authSignupEmail);
+      try {
+        if (user != null) _telemetry.identify(user.$id);
+        _telemetry.track(TelemetryEvents.authSignupEmail);
+      } catch (_) {}
     } catch (e) {
-      _telemetry.track(TelemetryEvents.authError,
-          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
+      try {
+        _telemetry.track(TelemetryEvents.authError,
+            properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
+      } catch (_) {}
       state = AuthState(
         status: AuthStatus.unauthenticated,
         error: e.toString(),
@@ -168,11 +180,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       final user = await _authService.getCurrentUser();
       state = AuthState(status: AuthStatus.authenticated, user: user);
-      if (user != null) _telemetry.identify(user.$id);
-      _telemetry.track(TelemetryEvents.authSigninEmail);
+      try {
+        if (user != null) _telemetry.identify(user.$id);
+        _telemetry.track(TelemetryEvents.authSigninEmail);
+      } catch (_) {}
     } catch (e) {
-      _telemetry.track(TelemetryEvents.authError,
-          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
+      try {
+        _telemetry.track(TelemetryEvents.authError,
+            properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
+      } catch (_) {}
       state = AuthState(
         status: AuthStatus.unauthenticated,
         error: e.toString(),
@@ -184,8 +200,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Sign out and clear state.
   Future<void> signOut() async {
     _telemetry.track(TelemetryEvents.authSignout);
-    _telemetry.reset();
     await _authService.logout();
+    try {
+      _telemetry.reset();
+    } catch (_) {}
     state = const AuthState(status: AuthStatus.unauthenticated);
     // Invalidate history providers so they re-fetch on next sign-in
     _ref.invalidate(scannedHistoryProvider);

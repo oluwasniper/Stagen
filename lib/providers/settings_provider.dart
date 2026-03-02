@@ -1,3 +1,5 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -22,7 +24,7 @@ class SettingsState {
   const SettingsState({
     this.vibrate = false,
     this.beep = false,
-    this.analyticsEnabled = true,
+    this.analyticsEnabled = false,
   });
 
   SettingsState copyWith({bool? vibrate, bool? beep, bool? analyticsEnabled}) {
@@ -51,7 +53,8 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     state = SettingsState(
       vibrate: vibrate == 'true',
       beep: beep == 'true',
-      analyticsEnabled: analyticsEnabled,
+      // Default false (opt-out); only explicitly stored 'true' enables it.
+      analyticsEnabled: analytics == 'true',
     );
     // Apply persisted consent state to the PostHog SDK on startup so the
     // PosthogObserver respects the user's previous choice immediately.
@@ -75,10 +78,18 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<void> toggleAnalytics(bool value) async {
     state = state.copyWith(analyticsEnabled: value);
     await _storage.write(key: _Keys.analytics, value: value.toString());
-    if (value) {
-      await Posthog().enable();
-    } else {
-      await Posthog().disable();
+    try {
+      if (value) {
+        await Posthog().enable();
+      } else {
+        await Posthog().disable();
+      }
+    } catch (e, st) {
+      dev.log(
+        '[SettingsNotifier] PostHog enable/disable failed: $e',
+        stackTrace: st,
+        name: 'SettingsNotifier',
+      );
     }
   }
 }

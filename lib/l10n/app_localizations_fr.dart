@@ -439,4 +439,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get historyEmpty => 'Pas encore d\'historique';
+
+  @override
+  String get privacy => 'Confidentialité';
+
+  @override
+  String get shareAnalytics => 'Partager les analyses';
+
+  @override
+  String get shareAnalyticsSubtitle =>
+      'Aidez à améliorer Scagen en partageant des données d\'utilisation anonymes';
 }

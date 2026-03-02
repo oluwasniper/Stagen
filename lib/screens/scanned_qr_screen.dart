@@ -1,3 +1,5 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -231,8 +233,12 @@ class ScannedQRScreen extends ConsumerWidget {
                               TelemetryEvents.qrShared,
                               properties: {'source': 'scanned'},
                             );
-                          } catch (e) {
-                            debugPrint('Failed to share QR data: $e');
+                          } catch (e, st) {
+                            dev.log(
+                              '[ScannedQRScreen] share failed: $e',
+                              stackTrace: st,
+                              name: 'ScannedQRScreen',
+                            );
                           }
                         },
                         child: Container(

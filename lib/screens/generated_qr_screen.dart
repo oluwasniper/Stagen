@@ -1,8 +1,11 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../l10n/app_localizations.dart';
 import '../providers/qr_providers.dart';
@@ -182,12 +185,20 @@ class GeneratedQRScreen extends ConsumerWidget {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {
-                          // TODO: implement share
-                          ref.read(telemetryServiceProvider).track(
-                            TelemetryEvents.qrShared,
-                            properties: {'source': 'generated'},
-                          );
+                        onTap: () async {
+                          try {
+                            await Share.share(qrData);
+                            ref.read(telemetryServiceProvider).track(
+                              TelemetryEvents.qrShared,
+                              properties: {'source': 'generated'},
+                            );
+                          } catch (e, st) {
+                            dev.log(
+                              '[GeneratedQRScreen] share failed: $e',
+                              stackTrace: st,
+                              name: 'GeneratedQRScreen',
+                            );
+                          }
                         },
                         child: Container(
                           height: 50,

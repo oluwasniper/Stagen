@@ -645,15 +645,15 @@
     },
 
     "privacy": "Privacy",
-    "@privacy" :{
+    "@privacy": {
         "description": "Privacy section header in settings"
     },
     "shareAnalytics": "Share Analytics",
-    "@shareAnalytics" :{
-        "description": "Toggle title for sharing anonymous analytics"
+    "@shareAnalytics": {
+        "description": "Toggle title to share anonymous analytics"
     },
-    "shareAnalyticsDesc": "Help improve Scagen by sharing anonymous usage data",
-    "@shareAnalyticsDesc" :{
-        "description": "Description for the analytics sharing toggle"
+    "shareAnalyticsSubtitle": "Help improve Scagen by sharing anonymous usage data",
+    "@shareAnalyticsSubtitle": {
+        "description": "Toggle subtitle explaining anonymous analytics sharing"
     }
 }
