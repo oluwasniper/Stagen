@@ -31,7 +31,7 @@ class ScannedQRScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff000000).withOpacity(0.25),
+                    color: const Color(0xff000000).withValues(alpha: 0.25),
                     offset: const Offset(0, 4),
                     blurRadius: 4,
                   ),
@@ -81,11 +81,11 @@ class ScannedQRScreen extends ConsumerWidget {
                 width: 225,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xffF5F5F5).withOpacity(0.85),
+                  color: const Color(0xffF5F5F5).withValues(alpha: 0.85),
                   borderRadius: BorderRadius.circular(6),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xff000000).withOpacity(0.25),
+                      color: const Color(0xff000000).withValues(alpha: 0.25),
                       offset: const Offset(0, 4),
                       blurRadius: 4,
                     ),
@@ -143,7 +143,7 @@ class ScannedQRScreen extends ConsumerWidget {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withOpacity(0.25),
+                                    const Color(0xff000000).withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -188,7 +188,7 @@ class ScannedQRScreen extends ConsumerWidget {
                               boxShadow: [
                                 BoxShadow(
                                   color:
-                                      const Color(0xff000000).withOpacity(0.25),
+                                      const Color(0xff000000).withValues(alpha: 0.25),
                                   offset: const Offset(0, 4),
                                   blurRadius: 4,
                                 ),
@@ -229,7 +229,7 @@ class ScannedQRScreen extends ConsumerWidget {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withOpacity(0.25),
+                                    const Color(0xff000000).withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),

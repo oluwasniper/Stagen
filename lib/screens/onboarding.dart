@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-<<<<<<< HEAD
-=======
-import '../l10n/app_localizations.dart';
->>>>>>> origin/dev
 
 import '../l10n/app_localizations.dart';
 import '../utils/app_router.dart';

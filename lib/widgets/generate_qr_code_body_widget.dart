@@ -356,11 +356,7 @@ class _WifiBodyTextWidgetState extends State<WifiBodyTextWidget> {
                         title: Text(ssid),
                         subtitle: connectedSsid == ssid
                             ? Text(
-<<<<<<< HEAD
-                                AppLocalizations.of(context)!
-=======
                                 AppLocalizations.of(context)
->>>>>>> origin/dev
                                     .wifiUseConnectedNetwork,
                               )
                             : null,

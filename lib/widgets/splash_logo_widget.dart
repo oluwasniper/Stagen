@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
-import '../l10n/app_localizations.dart';
->>>>>>> origin/dev
 
 import '../l10n/app_localizations.dart';
 import '../utils/app_asset.dart';
