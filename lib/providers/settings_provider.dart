@@ -21,7 +21,7 @@ class SettingsState {
   const SettingsState({
     this.vibrate = false,
     this.beep = false,
-    this.analyticsEnabled = true,
+    this.analyticsEnabled = false,
   });
 
   SettingsState copyWith({bool? vibrate, bool? beep, bool? analyticsEnabled}) {
@@ -48,8 +48,8 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     state = SettingsState(
       vibrate: vibrate == 'true',
       beep: beep == 'true',
-      // Default true (opt-in); only explicitly stored 'false' disables it.
-      analyticsEnabled: analytics != 'false',
+      // Default false (opt-out); only explicitly stored 'true' enables it.
+      analyticsEnabled: analytics == 'true',
     );
   }
 
