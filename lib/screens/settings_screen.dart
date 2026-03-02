@@ -243,9 +243,9 @@ class SettingsScreen extends ConsumerWidget {
         ),
       ],
       const SizedBox(height: 50),
-      const Text(
-        'Privacy',
-        style: TextStyle(
+      Text(
+        AppLocalizations.of(context).privacy,
+        style: const TextStyle(
             color: Color(0xffFDB623),
             fontSize: 26,
             fontWeight: FontWeight.w400),
@@ -254,12 +254,14 @@ class SettingsScreen extends ConsumerWidget {
       SettingsListTile(
         isSwitched: settings.analyticsEnabled,
         iconData: Icons.analytics_outlined,
-        title: 'Share Analytics',
-        subtitle: 'Help improve Scagen by sharing anonymous usage data',
+        title: AppLocalizations.of(context).shareAnalytics,
+        subtitle: AppLocalizations.of(context).shareAnalyticsDesc,
         onSwitchChanged: (value) {
-          final telemetry = ref.read(telemetryServiceProvider);
-          final settingsNotifier = ref.read(settingsProvider.notifier);
-
+          if (!value) {
+            // Track opt-out before disabling — last event while analytics is on.
+            ref.read(telemetryServiceProvider).track(TelemetryEvents.telemetryOptedOut);
+          }
+          ref.read(settingsProvider.notifier).toggleAnalytics(value);
           if (value) {
             // Re-enable the PostHog SDK before updating settings so the
             // opt-in event is captured correctly.

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 
 import '../l10n/l10n.dart';
 
@@ -45,12 +46,20 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
     final vibrate = await _storage.read(key: _Keys.vibrate);
     final beep = await _storage.read(key: _Keys.beep);
     final analytics = await _storage.read(key: _Keys.analytics);
+    // Default true (opt-in); only explicitly stored 'false' disables it.
+    final analyticsEnabled = analytics != 'false';
     state = SettingsState(
       vibrate: vibrate == 'true',
       beep: beep == 'true',
-      // Default true (opt-in); only explicitly stored 'false' disables it.
-      analyticsEnabled: analytics != 'false',
+      analyticsEnabled: analyticsEnabled,
     );
+    // Apply persisted consent state to the PostHog SDK on startup so the
+    // PosthogObserver respects the user's previous choice immediately.
+    if (analyticsEnabled) {
+      await Posthog().enable();
+    } else {
+      await Posthog().disable();
+    }
   }
 
   Future<void> toggleVibrate(bool value) async {
@@ -66,6 +75,11 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<void> toggleAnalytics(bool value) async {
     state = state.copyWith(analyticsEnabled: value);
     await _storage.write(key: _Keys.analytics, value: value.toString());
+    if (value) {
+      await Posthog().enable();
+    } else {
+      await Posthog().disable();
+    }
   }
 }
 
