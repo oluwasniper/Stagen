@@ -255,23 +255,18 @@ class SettingsScreen extends ConsumerWidget {
         isSwitched: settings.analyticsEnabled,
         iconData: Icons.analytics_outlined,
         title: AppLocalizations.of(context).shareAnalytics,
-        subtitle: AppLocalizations.of(context).shareAnalyticsDesc,
+        subtitle: 'Help improve Scagen by sharing anonymous usage data',
         onSwitchChanged: (value) {
-          if (!value) {
-            // Track opt-out before disabling — last event while analytics is on.
-            ref.read(telemetryServiceProvider).track(TelemetryEvents.telemetryOptedOut);
-          }
-          ref.read(settingsProvider.notifier).toggleAnalytics(value);
           if (value) {
             // Re-enable the PostHog SDK before updating settings so the
             // opt-in event is captured correctly.
             Posthog().enable();
-            settingsNotifier.toggleAnalytics(value);
-            telemetry.track(TelemetryEvents.telemetryOptedIn);
+            ref.read(settingsProvider.notifier).toggleAnalytics(value);
+            ref.read(telemetryServiceProvider).track(TelemetryEvents.telemetryOptedIn);
           } else {
             // Track before disabling — this opt-out event should be the last one sent.
-            telemetry.track(TelemetryEvents.telemetryOptedOut);
-            settingsNotifier.toggleAnalytics(value);
+            ref.read(telemetryServiceProvider).track(TelemetryEvents.telemetryOptedOut);
+            ref.read(settingsProvider.notifier).toggleAnalytics(value);
             Posthog().disable();
           }
         },
