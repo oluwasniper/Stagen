@@ -46,3 +46,15 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+# ── Secrets & local overrides ────────────────────────────────────────────────
+# Real credentials live in .env (gitignored). Use .env.example as the template.
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example
+
+# VS Code launch.json contains --dart-define values with real secrets.
+# Use .vscode/launch.json.example as the committed template instead.
+.vscode/launch.json

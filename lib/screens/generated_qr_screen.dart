@@ -1,11 +1,15 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../l10n/app_localizations.dart';
 import '../providers/qr_providers.dart';
+import '../services/telemetry_service.dart';
 import '../widgets/background_screen_widget.dart';
 
 class GeneratedQRScreen extends ConsumerWidget {
@@ -134,6 +138,10 @@ class GeneratedQRScreen extends ConsumerWidget {
                       InkWell(
                         onTap: () {
                           Clipboard.setData(ClipboardData(text: qrData));
+                          ref.read(telemetryServiceProvider).track(
+                            TelemetryEvents.qrCopied,
+                            properties: {'source': 'generated'},
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text(AppLocalizations.of(context)
@@ -177,8 +185,20 @@ class GeneratedQRScreen extends ConsumerWidget {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {
-                          // TODO: implement share
+                        onTap: () async {
+                          try {
+                            await Share.share(qrData);
+                            ref.read(telemetryServiceProvider).track(
+                              TelemetryEvents.qrShared,
+                              properties: {'source': 'generated'},
+                            );
+                          } catch (e, st) {
+                            dev.log(
+                              '[GeneratedQRScreen] share failed: $e',
+                              stackTrace: st,
+                              name: 'GeneratedQRScreen',
+                            );
+                          }
                         },
                         child: Container(
                           height: 50,

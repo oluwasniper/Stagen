@@ -1,0 +1,107 @@
+definitions:
+  scripts:
+    - &validate_env_vars
+      name: Validate required environment variables
+      script: |
+        missing=""
+        for var in APPWRITE_ENDPOINT APPWRITE_PROJECT_ID POSTHOG_API_KEY POSTHOG_HOST; do
+          eval "val=\$$var"
+          if [ -z "$val" ]; then
+            missing="$missing $var"
+          fi
+        done
+        if [ -n "$missing" ]; then
+          echo "ERROR: The following required environment variables are unset or empty:$missing"
+          exit 1
+        fi
+
+workflows:
+  android-release:
+    name: Android Release
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      vars:
+        APPWRITE_ENDPOINT: https://fra.cloud.appwrite.io/v1
+        POSTHOG_HOST: https://us.i.posthog.com
+        # APPWRITE_PROJECT_ID and POSTHOG_API_KEY are stored in the
+        # "stagen_secrets" environment variable group in Codemagic UI
+        # (Teams → Environment variables → mark as Secret).
+      groups:
+        - stagen_secrets
+      android_signing:
+        - stagen_keystore
+    scripts:
+      - name: Get dependencies
+        script: flutter pub get
+      - name: Validate required environment variables
+        script: |
+          missing=""
+          for var in APPWRITE_ENDPOINT APPWRITE_PROJECT_ID POSTHOG_API_KEY POSTHOG_HOST; do
+            eval val=\$$var
+            if [ -z "$val" ]; then
+              missing="$missing $var"
+            fi
+          done
+          if [ -n "$missing" ]; then
+            echo "ERROR: The following required variables are unset or empty:$missing"
+            exit 1
+          fi
+      - name: Build AAB
+        script: |
+          flutter build appbundle --release \
+            --dart-define=APPWRITE_ENDPOINT=$APPWRITE_ENDPOINT \
+            --dart-define=APPWRITE_PROJECT_ID=$APPWRITE_PROJECT_ID \
+            --dart-define=POSTHOG_API_KEY=$POSTHOG_API_KEY \
+            --dart-define=POSTHOG_HOST=$POSTHOG_HOST
+    artifacts:
+      - build/app/outputs/bundle/release/app-release.aab
+    publishing:
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+
+  ios-release:
+    name: iOS Release
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      vars:
+        APPWRITE_ENDPOINT: https://fra.cloud.appwrite.io/v1
+        POSTHOG_HOST: https://us.i.posthog.com
+      groups:
+        - stagen_secrets
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.example.revolutionaryStuff
+    scripts:
+      - name: Get dependencies
+        script: flutter pub get
+      - name: Validate required environment variables
+        script: |
+          missing=""
+          for var in APPWRITE_ENDPOINT APPWRITE_PROJECT_ID POSTHOG_API_KEY POSTHOG_HOST; do
+            eval val=\$$var
+            if [ -z "$val" ]; then
+              missing="$missing $var"
+            fi
+          done
+          if [ -n "$missing" ]; then
+            echo "ERROR: The following required variables are unset or empty:$missing"
+            exit 1
+          fi
+      - name: Build IPA
+        script: |
+          flutter build ipa --release \
+            --dart-define=APPWRITE_ENDPOINT=$APPWRITE_ENDPOINT \
+            --dart-define=APPWRITE_PROJECT_ID=$APPWRITE_PROJECT_ID \
+            --dart-define=POSTHOG_API_KEY=$POSTHOG_API_KEY \
+            --dart-define=POSTHOG_HOST=$POSTHOG_HOST
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true

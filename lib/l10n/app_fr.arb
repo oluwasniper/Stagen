@@ -179,5 +179,9 @@
 
     "historyLoadFailed": "Impossible de charger l'historique",
     "historyRetry": "Réessayer",
-    "historyEmpty": "Pas encore d'historique"
+    "historyEmpty": "Pas encore d'historique",
+
+    "privacy": "Confidentialité",
+    "shareAnalytics": "Partager les analyses",
+    "shareAnalyticsSubtitle": "Aidez à améliorer Scagen en partageant des données d'utilisation anonymes"
 }

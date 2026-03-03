@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/l10n.dart';
 import '../providers/auth_provider.dart';
+import '../services/telemetry_service.dart';
 import '../providers/settings_provider.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
@@ -127,6 +129,10 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   onTap: () {
                     ref.read(localeProvider.notifier).setLocale(locale);
+                    ref.read(telemetryServiceProvider).track(
+                      TelemetryEvents.languageChanged,
+                      properties: {'locale': locale.languageCode},
+                    );
                     Navigator.pop(ctx);
                   },
                 )
@@ -196,6 +202,10 @@ class SettingsScreen extends ConsumerWidget {
         subtitle: AppLocalizations.of(context).vibrateDesc,
         onSwitchChanged: (value) {
           ref.read(settingsProvider.notifier).toggleVibrate(value);
+          ref.read(telemetryServiceProvider).track(
+            TelemetryEvents.settingVibrationToggled,
+            properties: {'enabled': value},
+          );
         },
       ),
       const SizedBox(height: 20),
@@ -206,6 +216,10 @@ class SettingsScreen extends ConsumerWidget {
         subtitle: AppLocalizations.of(context).beepDesc,
         onSwitchChanged: (value) {
           ref.read(settingsProvider.notifier).toggleBeep(value);
+          ref.read(telemetryServiceProvider).track(
+            TelemetryEvents.settingBeepToggled,
+            properties: {'enabled': value},
+          );
         },
       ),
       const SizedBox(height: 20),
@@ -228,6 +242,40 @@ class SettingsScreen extends ConsumerWidget {
           onTap: showLinkDialog,
         ),
       ],
+      const SizedBox(height: 50),
+      Text(
+        AppLocalizations.of(context).privacy,
+        style: const TextStyle(
+            color: Color(0xffFDB623),
+            fontSize: 26,
+            fontWeight: FontWeight.w400),
+      ),
+      const SizedBox(height: 20),
+      SettingsListTile(
+        isSwitched: settings.analyticsEnabled,
+        iconData: Icons.analytics_outlined,
+        title: AppLocalizations.of(context).shareAnalytics,
+        subtitle: AppLocalizations.of(context).shareAnalyticsDesc,
+        onSwitchChanged: (value) {
+          if (!value) {
+            // Track opt-out before disabling — last event while analytics is on.
+            ref.read(telemetryServiceProvider).track(TelemetryEvents.telemetryOptedOut);
+          }
+          ref.read(settingsProvider.notifier).toggleAnalytics(value);
+          if (value) {
+            // Re-enable the PostHog SDK before updating settings so the
+            // opt-in event is captured correctly.
+            Posthog().enable();
+            settingsNotifier.toggleAnalytics(value);
+            telemetry.track(TelemetryEvents.telemetryOptedIn);
+          } else {
+            // Track before disabling — this opt-out event should be the last one sent.
+            telemetry.track(TelemetryEvents.telemetryOptedOut);
+            settingsNotifier.toggleAnalytics(value);
+            Posthog().disable();
+          }
+        },
+      ),
       const SizedBox(height: 50),
       Text(
         AppLocalizations.of(context).support,

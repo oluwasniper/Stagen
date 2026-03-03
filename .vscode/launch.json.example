@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Scagen (debug)",
+      "request": "launch",
+      "type": "dart",
+      "toolArgs": [
+        "--dart-define=APPWRITE_ENDPOINT=https://fra.cloud.appwrite.io/v1",
+        "--dart-define=APPWRITE_PROJECT_ID=YOUR_PROJECT_ID_HERE",
+        "--dart-define=POSTHOG_API_KEY=phc_YOUR_KEY_HERE",
+        "--dart-define=POSTHOG_HOST=https://us.i.posthog.com"
+      ]
+    },
+    {
+      "name": "Scagen (profile)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "toolArgs": [
+        "--dart-define=APPWRITE_ENDPOINT=https://fra.cloud.appwrite.io/v1",
+        "--dart-define=APPWRITE_PROJECT_ID=YOUR_PROJECT_ID_HERE",
+        "--dart-define=POSTHOG_API_KEY=phc_YOUR_KEY_HERE",
+        "--dart-define=POSTHOG_HOST=https://us.i.posthog.com"
+      ]
+    },
+    {
+      "name": "Scagen (release)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "toolArgs": [
+        "--dart-define=APPWRITE_ENDPOINT=https://fra.cloud.appwrite.io/v1",
+        "--dart-define=APPWRITE_PROJECT_ID=YOUR_PROJECT_ID_HERE",
+        "--dart-define=POSTHOG_API_KEY=phc_YOUR_KEY_HERE",
+        "--dart-define=POSTHOG_HOST=https://us.i.posthog.com"
+      ]
+    }
+  ]
+}

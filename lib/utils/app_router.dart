@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:posthog_flutter/posthog_flutter.dart';
 import '../models/qr_record.dart';
 import '../screens/auth_screen.dart';
 import '../screens/generate_code_screen.dart';
