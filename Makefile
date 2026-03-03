@@ -14,14 +14,7 @@
 -include .env
 export
 
-DART_DEFINES := \
-	--dart-define=APPWRITE_ENDPOINT=$(APPWRITE_ENDPOINT) \
-	--dart-define=APPWRITE_PROJECT_ID=$(APPWRITE_PROJECT_ID) \
-	--dart-define=POSTHOG_API_KEY=$(POSTHOG_API_KEY)
-
-ifneq ($(strip $(POSTHOG_HOST)),)
-DART_DEFINES += --dart-define=POSTHOG_HOST=$(POSTHOG_HOST)
-endif
+DEFINE_FROM_FILE := --dart-define-from-file=.env
 
 .PHONY: run build-android build-ios clean check-appwrite-defines
 
@@ -37,13 +30,13 @@ check-appwrite-defines:
 	fi
 
 run: check-appwrite-defines
-	flutter run $(DART_DEFINES)
+	flutter run $(DEFINE_FROM_FILE)
 
 build-android: check-appwrite-defines
-	flutter build apk $(DART_DEFINES) --release
+	flutter build apk $(DEFINE_FROM_FILE) --release
 
 build-ios: check-appwrite-defines
-	flutter build ios $(DART_DEFINES) --release
+	flutter build ios $(DEFINE_FROM_FILE) --release
 
 clean:
 	flutter clean
