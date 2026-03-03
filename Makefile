@@ -26,11 +26,11 @@ endif
 .PHONY: run build-android build-ios clean check-appwrite-defines
 
 check-appwrite-defines:
-	@missing=""; \
-	for var in APPWRITE_ENDPOINT APPWRITE_PROJECT_ID; do \
-		val=$$(eval echo \$${$$var}); \
-		if [ -z "$$val" ]; then missing="$$missing $$var"; fi; \
-	done; \
+	@endpoint="$$APPWRITE_ENDPOINT"; \
+	if [ -z "$$endpoint" ]; then endpoint="$$APPWRITE_URL"; fi; \
+	missing=""; \
+	if [ -z "$$endpoint" ]; then missing="$$missing APPWRITE_ENDPOINT/APPWRITE_URL"; fi; \
+	if [ -z "$$APPWRITE_PROJECT_ID" ]; then missing="$$missing APPWRITE_PROJECT_ID"; fi; \
 	if [ -n "$$missing" ]; then \
 		echo "ERROR: The following required Appwrite variables are unset or empty:$$missing"; \
 		exit 1; \
