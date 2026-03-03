@@ -9,15 +9,50 @@
 ///
 /// Or use the Makefile: `make run` (reads from .env file)
 ///
-/// Default values are intentionally empty strings so the app does not crash
-/// at runtime when dart-defines are omitted (e.g. in unit tests).
+/// These values are supplied at build/run time via --dart-define flags
+/// (for local development, loaded from .env by Makefile/launch configs).
 class AppConfig {
   const AppConfig._();
 
-  static const String appwriteEndpoint = String.fromEnvironment(
+  static const String _appwriteEndpointDefine = String.fromEnvironment(
     'APPWRITE_ENDPOINT',
     defaultValue: '',
   );
+
+  // Backward-compatible alias for environments still using APPWRITE_URL.
+  static const String _appwriteUrlDefine = String.fromEnvironment(
+    'APPWRITE_URL',
+    defaultValue: '',
+  );
+
+  static String get appwriteEndpoint {
+    final raw = (_appwriteEndpointDefine.isNotEmpty
+            ? _appwriteEndpointDefine
+            : _appwriteUrlDefine)
+        .trim();
+    if (raw.isEmpty) return '';
+
+    final sanitized = _stripWrappingQuotes(raw).replaceFirst(RegExp(r'/+$'), '');
+    if (sanitized.isEmpty) return '';
+    if (sanitized.endsWith('/v1')) return sanitized;
+    return '$sanitized/v1';
+  }
+
+  static String? get appwriteConfigError {
+    final endpoint = appwriteEndpoint;
+    if (endpoint.isEmpty) {
+      return 'Appwrite endpoint is missing. Pass APPWRITE_ENDPOINT '
+          '(or APPWRITE_URL) via --dart-define.';
+    }
+
+    final uri = Uri.tryParse(endpoint);
+    final validScheme = uri?.scheme == 'https' || uri?.scheme == 'http';
+    if (uri == null || !uri.isAbsolute || !validScheme || uri.host.isEmpty) {
+      return 'Invalid Appwrite endpoint "$endpoint". '
+          'Expected a full URL like https://fra.cloud.appwrite.io/v1';
+    }
+    return null;
+  }
 
   static const String appwriteProjectId = String.fromEnvironment(
     'APPWRITE_PROJECT_ID',
@@ -35,4 +70,14 @@ class AppConfig {
     'POSTHOG_HOST',
     defaultValue: 'https://us.i.posthog.com',
   );
+
+  static String _stripWrappingQuotes(String value) {
+    if (value.length < 2) return value;
+    final first = value[0];
+    final last = value[value.length - 1];
+    if ((first == '"' && last == '"') || (first == '\'' && last == '\'')) {
+      return value.substring(1, value.length - 1).trim();
+    }
+    return value;
+  }
 }
