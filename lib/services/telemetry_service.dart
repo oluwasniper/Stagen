@@ -84,9 +84,7 @@ class TelemetryService {
   /// Never pass email addresses or names here.
   void identify(String userId) {
     if (!_analyticsEnabled) return;
-    Posthog()
-        .identify(userId: userId)
-        .catchError((Object e, StackTrace st) {
+    Posthog().identify(userId: userId).catchError((Object e, StackTrace st) {
       dev.log(
         '[TelemetryService] identify failed: $e',
         stackTrace: st,
