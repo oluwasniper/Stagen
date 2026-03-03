@@ -1,8 +1,11 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/app_localizations.dart';
@@ -32,7 +35,7 @@ class ScannedQRScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff000000).withOpacity(0.25),
+                    color: const Color(0xff000000).withValues(alpha: 0.25),
                     offset: const Offset(0, 4),
                     blurRadius: 4,
                   ),
@@ -82,11 +85,11 @@ class ScannedQRScreen extends ConsumerWidget {
                 width: 225,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xffF5F5F5).withOpacity(0.85),
+                  color: const Color(0xffF5F5F5).withValues(alpha: 0.85),
                   borderRadius: BorderRadius.circular(6),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xff000000).withOpacity(0.25),
+                      color: const Color(0xff000000).withValues(alpha: 0.25),
                       offset: const Offset(0, 4),
                       blurRadius: 4,
                     ),
@@ -148,7 +151,7 @@ class ScannedQRScreen extends ConsumerWidget {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withOpacity(0.25),
+                                    const Color(0xff000000).withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -194,7 +197,7 @@ class ScannedQRScreen extends ConsumerWidget {
                               boxShadow: [
                                 BoxShadow(
                                   color:
-                                      const Color(0xff000000).withOpacity(0.25),
+                                      const Color(0xff000000).withValues(alpha: 0.25),
                                   offset: const Offset(0, 4),
                                   blurRadius: 4,
                                 ),
@@ -223,12 +226,21 @@ class ScannedQRScreen extends ConsumerWidget {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {
-                          // TODO: implement share
-                          ref.read(telemetryServiceProvider).track(
-                            TelemetryEvents.qrShared,
-                            properties: {'source': 'scanned'},
-                          );
+                        onTap: () async {
+                          try {
+                            await SharePlus.instance
+                                .share(ShareParams(text: qrData));
+                            ref.read(telemetryServiceProvider).track(
+                              TelemetryEvents.qrShared,
+                              properties: {'source': 'scanned'},
+                            );
+                          } catch (e, st) {
+                            dev.log(
+                              '[ScannedQRScreen] share failed: $e',
+                              stackTrace: st,
+                              name: 'ScannedQRScreen',
+                            );
+                          }
                         },
                         child: Container(
                           height: 50,
@@ -239,7 +251,7 @@ class ScannedQRScreen extends ConsumerWidget {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withOpacity(0.25),
+                                    const Color(0xff000000).withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),

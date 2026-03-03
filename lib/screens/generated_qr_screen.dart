@@ -1,8 +1,11 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../l10n/app_localizations.dart';
 import '../providers/qr_providers.dart';
@@ -33,7 +36,7 @@ class GeneratedQRScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff000000).withOpacity(0.25),
+                    color: const Color(0xff000000).withValues(alpha: 0.25),
                     offset: const Offset(0, 4),
                     blurRadius: 4,
                   ),
@@ -86,11 +89,11 @@ class GeneratedQRScreen extends ConsumerWidget {
                 width: 225,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xffF5F5F5).withOpacity(0.85),
+                  color: const Color(0xffF5F5F5).withValues(alpha: 0.85),
                   borderRadius: BorderRadius.circular(6),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xff000000).withOpacity(0.25),
+                      color: const Color(0xff000000).withValues(alpha: 0.25),
                       offset: const Offset(0, 4),
                       blurRadius: 4,
                     ),
@@ -154,7 +157,7 @@ class GeneratedQRScreen extends ConsumerWidget {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withOpacity(0.25),
+                                    const Color(0xff000000).withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -182,12 +185,21 @@ class GeneratedQRScreen extends ConsumerWidget {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {
-                          // TODO: implement share
-                          ref.read(telemetryServiceProvider).track(
-                            TelemetryEvents.qrShared,
-                            properties: {'source': 'generated'},
-                          );
+                        onTap: () async {
+                          try {
+                            await SharePlus.instance
+                                .share(ShareParams(text: qrData));
+                            ref.read(telemetryServiceProvider).track(
+                              TelemetryEvents.qrShared,
+                              properties: {'source': 'generated'},
+                            );
+                          } catch (e, st) {
+                            dev.log(
+                              '[GeneratedQRScreen] share failed: $e',
+                              stackTrace: st,
+                              name: 'GeneratedQRScreen',
+                            );
+                          }
                         },
                         child: Container(
                           height: 50,
@@ -198,7 +210,7 @@ class GeneratedQRScreen extends ConsumerWidget {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withOpacity(0.25),
+                                    const Color(0xff000000).withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),

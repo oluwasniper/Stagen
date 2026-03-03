@@ -21,13 +21,14 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
   bool _hasNavigated = false;
 
   String _classifyContent(String data) {
-    if (data.startsWith('http://') || data.startsWith('https://')) return 'url';
-    if (data.startsWith('mailto:')) return 'email';
-    if (data.startsWith('tel:')) return 'phone';
-    if (data.startsWith('WIFI:')) return 'wifi';
-    if (data.startsWith('BEGIN:VCARD')) return 'contact';
-    if (data.startsWith('BEGIN:VEVENT')) return 'event';
-    if (data.startsWith('geo:')) return 'location';
+    final lower = data.toLowerCase();
+    if (lower.startsWith('http://') || lower.startsWith('https://')) return 'url';
+    if (lower.startsWith('mailto:')) return 'email';
+    if (lower.startsWith('tel:')) return 'phone';
+    if (lower.startsWith('wifi:')) return 'wifi';
+    if (lower.startsWith('begin:vcard')) return 'contact';
+    if (lower.startsWith('begin:vevent')) return 'event';
+    if (lower.startsWith('geo:')) return 'location';
     return 'text';
   }
 
@@ -94,7 +95,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
               height: 45,
               width: MediaQuery.of(context).size.width - 60,
               decoration: BoxDecoration(
-                color: const Color(0xFF000000).withOpacity(0.4),
+                color: const Color(0xFF000000).withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Row(
