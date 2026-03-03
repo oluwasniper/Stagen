@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/app_localizations.dart';
 import '../providers/qr_providers.dart';
+import '../services/telemetry_service.dart';
 import '../widgets/background_screen_widget.dart';
 
 class ScannedQRScreen extends ConsumerWidget {
@@ -31,7 +32,7 @@ class ScannedQRScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff000000).withValues(alpha: 0.25),
+                    color: const Color(0xff000000).withOpacity(0.25),
                     offset: const Offset(0, 4),
                     blurRadius: 4,
                   ),
@@ -81,11 +82,11 @@ class ScannedQRScreen extends ConsumerWidget {
                 width: 225,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xffF5F5F5).withValues(alpha: 0.85),
+                  color: const Color(0xffF5F5F5).withOpacity(0.85),
                   borderRadius: BorderRadius.circular(6),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xff000000).withValues(alpha: 0.25),
+                      color: const Color(0xff000000).withOpacity(0.25),
                       offset: const Offset(0, 4),
                       blurRadius: 4,
                     ),
@@ -128,6 +129,10 @@ class ScannedQRScreen extends ConsumerWidget {
                       InkWell(
                         onTap: () {
                           Clipboard.setData(ClipboardData(text: qrData));
+                          ref.read(telemetryServiceProvider).track(
+                            TelemetryEvents.qrCopied,
+                            properties: {'source': 'scanned'},
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text(AppLocalizations.of(context)
@@ -143,7 +148,7 @@ class ScannedQRScreen extends ConsumerWidget {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withValues(alpha: 0.25),
+                                    const Color(0xff000000).withOpacity(0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -177,6 +182,7 @@ class ScannedQRScreen extends ConsumerWidget {
                             if (await canLaunchUrl(uri)) {
                               await launchUrl(uri,
                                   mode: LaunchMode.externalApplication);
+                              ref.read(telemetryServiceProvider).track(TelemetryEvents.qrUrlOpened);
                             }
                           },
                           child: Container(
@@ -188,7 +194,7 @@ class ScannedQRScreen extends ConsumerWidget {
                               boxShadow: [
                                 BoxShadow(
                                   color:
-                                      const Color(0xff000000).withValues(alpha: 0.25),
+                                      const Color(0xff000000).withOpacity(0.25),
                                   offset: const Offset(0, 4),
                                   blurRadius: 4,
                                 ),
@@ -219,6 +225,10 @@ class ScannedQRScreen extends ConsumerWidget {
                       InkWell(
                         onTap: () {
                           // TODO: implement share
+                          ref.read(telemetryServiceProvider).track(
+                            TelemetryEvents.qrShared,
+                            properties: {'source': 'scanned'},
+                          );
                         },
                         child: Container(
                           height: 50,
@@ -229,7 +239,7 @@ class ScannedQRScreen extends ConsumerWidget {
                             boxShadow: [
                               BoxShadow(
                                 color:
-                                    const Color(0xff000000).withValues(alpha: 0.25),
+                                    const Color(0xff000000).withOpacity(0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),

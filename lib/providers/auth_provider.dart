@@ -2,6 +2,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/auth_service.dart';
+import '../services/telemetry_service.dart';
 import '../utils/error_localizer.dart';
 import 'qr_providers.dart';
 
@@ -65,7 +66,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // After linking, fetch the updated user
       final user = await _authService.getCurrentUser();
       state = AuthState(status: AuthStatus.authenticated, user: user);
+      _telemetry.track(TelemetryEvents.authAccountLinked);
     } catch (e) {
+      _telemetry.track(TelemetryEvents.authError,
+          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
       state = state.copyWith(
         status: AuthStatus.authenticated, // Still authenticated, but show error
         error: e.toString(),
@@ -83,11 +87,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     initComplete = _init();
   }
 
+  TelemetryService get _telemetry => _ref.read(telemetryServiceProvider);
+
   /// Check for existing session on startup.
   Future<void> _init() async {
     final user = await _authService.getCurrentUser();
     if (user != null) {
       state = AuthState(status: AuthStatus.authenticated, user: user);
+      _telemetry.identify(user.$id);
+      _telemetry.track(TelemetryEvents.sessionResumed);
     } else {
       state = const AuthState(status: AuthStatus.unauthenticated);
     }
@@ -102,7 +110,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await _authService.createAnonymousSession();
       final user = await _authService.getCurrentUser();
       state = AuthState(status: AuthStatus.authenticated, user: user);
+      if (user != null) _telemetry.identify(user.$id);
+      _telemetry.track(TelemetryEvents.authSigninAnonymous);
     } catch (e) {
+      _telemetry.track(TelemetryEvents.authError,
+          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
       state = AuthState(
         status: AuthStatus.unauthenticated,
         error: e.toString(),
@@ -130,7 +142,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       final user = await _authService.getCurrentUser();
       state = AuthState(status: AuthStatus.authenticated, user: user);
+      if (user != null) _telemetry.identify(user.$id);
+      _telemetry.track(TelemetryEvents.authSignupEmail);
     } catch (e) {
+      _telemetry.track(TelemetryEvents.authError,
+          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
       state = AuthState(
         status: AuthStatus.unauthenticated,
         error: e.toString(),
@@ -152,7 +168,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       final user = await _authService.getCurrentUser();
       state = AuthState(status: AuthStatus.authenticated, user: user);
+      if (user != null) _telemetry.identify(user.$id);
+      _telemetry.track(TelemetryEvents.authSigninEmail);
     } catch (e) {
+      _telemetry.track(TelemetryEvents.authError,
+          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
       state = AuthState(
         status: AuthStatus.unauthenticated,
         error: e.toString(),
@@ -163,6 +183,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Sign out and clear state.
   Future<void> signOut() async {
+    _telemetry.track(TelemetryEvents.authSignout);
+    _telemetry.reset();
     await _authService.logout();
     state = const AuthState(status: AuthStatus.unauthenticated);
     // Invalidate history providers so they re-fetch on next sign-in

@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../providers/qr_providers.dart';
+import '../services/telemetry_service.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
@@ -101,7 +102,9 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
 
   /// Pick a contact from the phone's address book and fill the form fields.
   Future<void> _importFromContacts() async {
+    ref.read(telemetryServiceProvider).track(TelemetryEvents.contactImportRequested);
     if (!await FlutterContacts.requestPermission(readonly: true)) {
+      ref.read(telemetryServiceProvider).track(TelemetryEvents.contactImportDenied);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -127,6 +130,7 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
       withGroups: false,
     );
     if (fullContact == null) return;
+    ref.read(telemetryServiceProvider).track(TelemetryEvents.contactImportSuccess);
 
     // Populate form controllers with the imported data.
     _getController('firstName').text = fullContact.name.first;
@@ -168,6 +172,11 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
       return;
     }
 
+    ref.read(telemetryServiceProvider).track(
+      TelemetryEvents.qrGenerated,
+      properties: {'qr_type': widget.type.type.name},
+    );
+
     // Save to providers for display in GeneratedQRScreen
     ref.read(generatedQRDataProvider.notifier).state = data;
     ref.read(generatedQRLabelProvider.notifier).state = widget.type.label;
@@ -205,7 +214,7 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: const Color(0xff3B3B3B).withValues(alpha: 0.78),
+                    color: const Color(0xff3B3B3B).withOpacity(0.78),
                     borderRadius: BorderRadius.circular(6),
                     border: const Border.symmetric(
                       horizontal: BorderSide(
@@ -215,7 +224,7 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xff000000).withValues(alpha: 0.25),
+                        color: const Color(0xff000000).withOpacity(0.25),
                         offset: const Offset(0, 4),
                         blurRadius: 4,
                       ),

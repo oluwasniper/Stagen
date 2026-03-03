@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../providers/qr_providers.dart';
+import '../services/telemetry_service.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
@@ -46,7 +47,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
             height: 60,
             margin: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: const Color(0xff333333).withValues(alpha: 0.84),
+              color: const Color(0xff333333).withOpacity(0.84),
               borderRadius: BorderRadius.circular(6.0),
             ),
             child: TabBar(
@@ -145,7 +146,10 @@ class _HistoryListView extends ConsumerWidget {
           return RefreshIndicator(
             color: const Color(0xffFDB623),
             backgroundColor: const Color(0xff333333),
-            onRefresh: () => ref.read(provider.notifier).fetchRecords(),
+            onRefresh: () {
+              ref.read(telemetryServiceProvider).track(TelemetryEvents.historyRefreshed);
+              return ref.read(provider.notifier).fetchRecords();
+            },
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(
                 parent: BouncingScrollPhysics(),
@@ -167,7 +171,10 @@ class _HistoryListView extends ConsumerWidget {
         return RefreshIndicator(
           color: const Color(0xffFDB623),
           backgroundColor: const Color(0xff333333),
-          onRefresh: () => ref.read(provider.notifier).fetchRecords(),
+          onRefresh: () {
+            ref.read(telemetryServiceProvider).track(TelemetryEvents.historyRefreshed);
+            return ref.read(provider.notifier).fetchRecords();
+          },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 30.0),
             child: ListView.separated(
@@ -183,6 +190,7 @@ class _HistoryListView extends ConsumerWidget {
 
                 return GestureDetector(
                   onTap: () {
+                    ref.read(telemetryServiceProvider).track(TelemetryEvents.historyItemViewed);
                     AppGoRouter.router.push(
                       AppPath.historyOpenFile,
                       extra: record,
@@ -192,11 +200,11 @@ class _HistoryListView extends ConsumerWidget {
                     height: 60,
                     margin: const EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
-                      color: const Color(0xff333333).withValues(alpha: 0.84),
+                      color: const Color(0xff333333).withOpacity(0.84),
                       borderRadius: BorderRadius.circular(6.0),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xff000000).withValues(alpha: 0.25),
+                          color: const Color(0xff000000).withOpacity(0.25),
                           spreadRadius: 0,
                           blurRadius: 4,
                           offset: const Offset(0, 4),
@@ -239,6 +247,7 @@ class _HistoryListView extends ConsumerWidget {
                                     GestureDetector(
                                       onTap: () {
                                         if (record.id != null) {
+                                          ref.read(telemetryServiceProvider).track(TelemetryEvents.historyItemDeleted);
                                           ref
                                               .read(provider.notifier)
                                               .deleteRecord(record.id!);
