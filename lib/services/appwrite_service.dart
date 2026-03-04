@@ -1,4 +1,5 @@
 import 'package:appwrite/appwrite.dart';
+
 import '../models/qr_record.dart';
 
 /// Service class for interacting with the Appwrite backend.

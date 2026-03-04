@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:revolutionary_stuff/utils/app_asset.dart';
+
 import '../l10n/app_localizations.dart';
 
 enum QROptionType {

@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:wifi_scan/wifi_scan.dart';
+
 import '../l10n/app_localizations.dart';
 import 'generate_qr_widget.dart';
 import 'k_textfield_widget.dart';

@@ -1,6 +1,8 @@
-import 'package:appwrite/appwrite.dart';
 import 'dart:async';
+
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../config/app_config.dart';
 import '../models/qr_record.dart';
 import '../services/appwrite_service.dart';
