@@ -17,6 +17,11 @@ import '../models/qr_record.dart';
 ///    - `userId` (string, size 255, optional)
 ///    - `createdAt` (string, size 50, required)
 /// 4. Set collection-level permissions: Users role → read, create, update, delete
+/// Maximum number of records fetched per remote query.
+/// Used both in [AppwriteService.getQRRecords] and in the prune guard in
+/// [QRRecordListNotifier] to ensure the two thresholds stay in sync.
+const kFetchLimit = 100;
+
 class AppwriteService {
   static const String _databaseId = 'scagen_db';
   static const String _collectionId = 'qr_records';
@@ -55,7 +60,7 @@ class AppwriteService {
   }) async {
     final queries = <String>[
       Query.orderDesc('createdAt'),
-      Query.limit(100),
+      Query.limit(kFetchLimit),
     ];
     if (type != null) {
       queries.add(Query.equal('type', type));
