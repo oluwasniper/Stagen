@@ -51,8 +51,12 @@
     "showQRCode": "Mostrar código QR",
     "shareBtn": "Compartilhar",
     "copyBtn": "Copiar",
+    "openBtn": "Abrir",
 
     "qrCode": "Código QR",
+    "generatedLabel": "Gerado",
+    "scannedResultTitle": "Resultado escaneado",
+    "noData": "Sem dados",
     "saveBtn": "Salvar",
 
 
@@ -145,6 +149,15 @@
     "authLogout": "Sair",
     "authLogoutDesc": "Sair da sua conta",
     "authAccount": "Conta",
+    "linkAccountTitle": "Vincular conta",
+    "linkAccountSubtitle": "Atualizar para conta com e-mail e senha",
+    "linkAccountEmailLabel": "E-mail",
+    "linkAccountPasswordLabel": "Senha",
+    "linkAccountNameOptionalLabel": "Nome (opcional)",
+    "linkAccountCancel": "Cancelar",
+    "linkAccountAction": "Vincular",
+    "linkAccountEmailRequired": "E-mail obrigatório",
+    "linkAccountPasswordMin": "Mínimo de 8 caracteres",
 
     "snackbarLocationPermissionDenied": "Permissão de localização negada",
     "snackbarLocationPermissionPermanentlyDenied": "As permissões de localização foram negadas permanentemente. Por favor, habilite-as nas configurações.",
@@ -159,6 +172,7 @@
     },
     "snackbarFillRequiredFields": "Por favor, preencha os campos obrigatórios",
     "snackbarCopiedToClipboard": "Copiado para a área de transferência",
+    "noQrFoundInImage": "Nenhum código QR encontrado na imagem selecionada",
 
     "apiErrorUserAlreadyExists": "Já existe uma conta com este e-mail.",
     "apiErrorInvalidCredentials": "E-mail ou senha inválidos.",
@@ -176,6 +190,9 @@
     "historyLoadFailed": "Falha ao carregar o histórico",
     "historyRetry": "Tentar novamente",
     "historyEmpty": "Nenhum histórico ainda",
+    "syncNow": "Sincronizar agora",
+    "syncCompleted": "Sincronização concluída",
+    "pendingSync": "Pendente",
 
     "privacy": "Privacidade",
     "shareAnalytics": "Compartilhar análises",

@@ -17,8 +17,9 @@ class GeneratedQRScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final qrData = ref.watch(generatedQRDataProvider) ?? '';
-    final label = ref.watch(generatedQRLabelProvider) ?? 'QR Code';
+    final label = ref.watch(generatedQRLabelProvider) ?? l10n.qrCode;
     final qrType = ref.watch(generatedQRTypeProvider) ?? '';
 
     return BackgroundScreenWidget(
@@ -51,7 +52,7 @@ class GeneratedQRScreen extends ConsumerWidget {
                     Text(
                       qrType.isNotEmpty
                           ? qrType[0].toUpperCase() + qrType.substring(1)
-                          : 'Generated',
+                          : l10n.generatedLabel,
                       style: const TextStyle(
                         color: Color(0xffFDB623),
                         fontSize: 20,
@@ -109,8 +110,8 @@ class GeneratedQRScreen extends ConsumerWidget {
                         version: QrVersions.auto,
                         size: 200.0,
                       )
-                    : const Center(
-                        child: Text('No data'),
+                    : Center(
+                        child: Text(l10n.noData),
                       ),
               ),
             )
@@ -170,8 +171,8 @@ class GeneratedQRScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 7),
-                      const Text(
-                        'Copy',
+                      Text(
+                        l10n.copyBtn,
                         style: TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
@@ -109,7 +110,9 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                         version: QrVersions.auto,
                         size: 200.0,
                       )
-                    : const Center(child: Text('No data')),
+                    : Center(
+                        child: Text(AppLocalizations.of(context).noData),
+                      ),
               ),
             )
                 .animate()
@@ -132,8 +135,8 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {
-                          // TODO: implement share
+                        onTap: () async {
+                          await SharePlus.instance.share(ShareParams(text: data));
                         },
                         child: Container(
                           height: 50,
