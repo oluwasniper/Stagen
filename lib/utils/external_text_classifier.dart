@@ -68,20 +68,23 @@ ClassifiedExternalText classifyExternalText(String input) {
     if (scheme == 'http' || scheme == 'https') {
       final host = uri.host.toLowerCase();
       final pathSegments = uri.pathSegments.where((s) => s.isNotEmpty).toList();
-      if (host.contains('wa.me') && pathSegments.isNotEmpty) {
+      if ((host == 'wa.me' || host.endsWith('.wa.me')) &&
+          pathSegments.isNotEmpty) {
         return ClassifiedExternalText(
           type: QROptionType.whatsapp,
           prefill: {'whatsapp': pathSegments.first},
         );
       }
-      if ((host.contains('twitter.com') || host.contains('x.com')) &&
+      if ((host == 'twitter.com' || host.endsWith('.twitter.com') ||
+              host == 'x.com' || host.endsWith('.x.com')) &&
           pathSegments.isNotEmpty) {
         return ClassifiedExternalText(
           type: QROptionType.twitter,
           prefill: {'twitter': pathSegments.first},
         );
       }
-      if (host.contains('instagram.com') && pathSegments.isNotEmpty) {
+      if ((host == 'instagram.com' || host.endsWith('.instagram.com')) &&
+          pathSegments.isNotEmpty) {
         return ClassifiedExternalText(
           type: QROptionType.instagram,
           prefill: {'instagram': pathSegments.first},
@@ -133,9 +136,13 @@ ClassifiedExternalText classifyExternalText(String input) {
 }
 
 String? _extractWifiValue(String source, String key) {
-  final match = RegExp('$key:([^;]*)', caseSensitive: false).firstMatch(source);
-  final value = match?.group(1)?.trim();
-  return (value == null || value.isEmpty) ? null : value;
+  // Match values that may contain backslash-escaped characters (including \;).
+  final match = RegExp('$key:((?:\\\\.|[^;])*)', caseSensitive: false).firstMatch(source);
+  final raw = match?.group(1)?.trim();
+  if (raw == null || raw.isEmpty) return null;
+  // Unescape backslash-escaped characters (e.g. \; → ;, \\ → \).
+  final value = raw.replaceAllMapped(RegExp(r'\\(.)'), (m) => m.group(1)!);
+  return value.isEmpty ? null : value;
 }
 
 Map<String, String> _parseVCard(String vcard) {
@@ -207,7 +214,7 @@ String? _lineValue(List<String> lines, String key) {
 
 final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 final _phoneRegex = RegExp(r'^\+?[0-9][0-9\-\s().]{5,}$');
-final _domainRegex = RegExp(r'^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}([/?#].*)?$');
+final _domainRegex = RegExp(r'^(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}([/?#].*)?$');
 final _coordRegex = RegExp(
   r'^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$',
 );

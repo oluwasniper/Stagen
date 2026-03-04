@@ -723,5 +723,9 @@
     "shareAnalyticsSubtitle": "Help improve Scagen by sharing anonymous usage data",
     "@shareAnalyticsSubtitle": {
         "description": "Toggle subtitle explaining anonymous analytics sharing"
+    },
+    "failedToShare": "Failed to share",
+    "@failedToShare": {
+        "description": "Error message shown when sharing fails"
     }
 }

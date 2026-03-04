@@ -41,20 +41,22 @@ import Flutter
     open url: URL,
     options: [UIApplication.OpenURLOptionsKey : Any] = [:]
   ) -> Bool {
-    captureProcessText(from: url)
-    return super.application(app, open: url, options: options)
+    let handled = captureProcessText(from: url)
+    return handled || super.application(app, open: url, options: options)
   }
 
-  private func captureProcessText(from url: URL) {
+  @discardableResult
+  private func captureProcessText(from url: URL) -> Bool {
     guard url.scheme?.lowercased() == "scagen",
           url.host?.lowercased() == "process-text",
           let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
           let text = components.queryItems?.first(where: { $0.name == "text" })?.value,
           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-      return
+      return false
     }
 
     pendingText = text
     processTextChannel?.invokeMethod("onText", arguments: text)
+    return true
   }
 }

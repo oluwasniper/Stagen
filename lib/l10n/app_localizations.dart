@@ -846,43 +846,43 @@ abstract class AppLocalizations {
   /// **'Upgrade to email/password account'**
   String get linkAccountSubtitle;
 
-  /// No description provided for @linkAccountEmailLabel.
+  /// Label for the email input field in the account linking form
   ///
   /// In en, this message translates to:
   /// **'Email'**
   String get linkAccountEmailLabel;
 
-  /// No description provided for @linkAccountPasswordLabel.
+  /// Label for the password input field in the account linking form
   ///
   /// In en, this message translates to:
   /// **'Password'**
   String get linkAccountPasswordLabel;
 
-  /// No description provided for @linkAccountNameOptionalLabel.
+  /// Label for the optional name input field in the account linking form
   ///
   /// In en, this message translates to:
   /// **'Name (optional)'**
   String get linkAccountNameOptionalLabel;
 
-  /// No description provided for @linkAccountCancel.
+  /// Cancel button label in the account linking dialog
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
   String get linkAccountCancel;
 
-  /// No description provided for @linkAccountAction.
+  /// Submit button label in the account linking dialog
   ///
   /// In en, this message translates to:
   /// **'Link'**
   String get linkAccountAction;
 
-  /// No description provided for @linkAccountEmailRequired.
+  /// Validation message shown when the email field is empty in the account linking form
   ///
   /// In en, this message translates to:
   /// **'Email required'**
   String get linkAccountEmailRequired;
 
-  /// No description provided for @linkAccountPasswordMin.
+  /// Validation message shown when the password is shorter than 8 characters in the account linking form
   ///
   /// In en, this message translates to:
   /// **'Min 8 chars'**
@@ -1049,6 +1049,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Help improve Scagen by sharing anonymous usage data'**
   String get shareAnalyticsSubtitle;
+
+  /// Error message shown when sharing fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to share'**
+  String get failedToShare;
 }
 
 class _AppLocalizationsDelegate

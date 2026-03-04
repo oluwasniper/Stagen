@@ -386,7 +386,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get linkAccountSubtitle =>
-      'Vincular a una cuenta con correo y contraseña';
+      'Actualizar a cuenta con email y contraseña';
 
   @override
   String get linkAccountEmailLabel => 'Correo electrónico';
@@ -508,4 +508,7 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get shareAnalyticsSubtitle =>
       'Ayuda a mejorar Scagen compartiendo datos de uso anónimos';
+
+  @override
+  String get failedToShare => 'Error al compartir';
 }

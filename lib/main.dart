@@ -58,10 +58,10 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   Future<void> _initExternalProcessText() async {
-    await ExternalProcessTextService.instance.initialize();
     _processTextSub = ExternalProcessTextService.instance.textStream.listen(
       _handleIncomingText,
     );
+    await ExternalProcessTextService.instance.initialize();
   }
 
   void _handleIncomingText(String text) {

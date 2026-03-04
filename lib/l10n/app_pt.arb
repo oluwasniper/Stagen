@@ -196,5 +196,6 @@
 
     "privacy": "Privacidade",
     "shareAnalytics": "Compartilhar análises",
-    "shareAnalyticsSubtitle": "Ajude a melhorar o Scagen compartilhando dados de uso anônimos"
+    "shareAnalyticsSubtitle": "Ajude a melhorar o Scagen compartilhando dados de uso anônimos",
+    "failedToShare": "Falha ao compartilhar"
 }
