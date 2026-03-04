@@ -7,12 +7,17 @@ import 'package:posthog_flutter/posthog_flutter.dart';
 
 import '../l10n/l10n.dart';
 
+/// Shared storage key for the analytics opt-in setting.
+/// Exposed so other services (e.g. TelemetryService) can read the same key
+/// without duplicating the string literal.
+const kSettingAnalyticsKey = 'setting_analytics';
+
 /// Keys used for persisting settings.
 class _Keys {
   static const vibrate = 'setting_vibrate';
   static const beep = 'setting_beep';
   static const locale = 'setting_locale';
-  static const analytics = 'setting_analytics';
+  static const analytics = kSettingAnalyticsKey;
 }
 
 /// Holds the app settings state.
@@ -78,6 +83,9 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
         name: 'SettingsNotifier',
       );
       state = const SettingsState(analyticsEnabled: false);
+      try {
+        await Posthog().disable();
+      } catch (_) {}
     }
   }
 
