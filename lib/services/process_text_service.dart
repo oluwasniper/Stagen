@@ -29,9 +29,13 @@ class ExternalProcessTextService {
     });
 
     try {
-      final initial = await _channel.invokeMethod<String>('getInitialText');
-      if (initial != null && initial.trim().isNotEmpty) {
-        _streamController.add(initial.trim());
+      final initialTexts =
+          await _channel.invokeMethod<List<dynamic>>('getInitialText');
+      for (final text
+          in initialTexts?.whereType<String>() ?? const <String>[]) {
+        if (text.trim().isNotEmpty) {
+          _streamController.add(text.trim());
+        }
       }
     } catch (_) {
       // Not supported on this platform/build or no incoming intent text.

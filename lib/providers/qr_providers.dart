@@ -18,8 +18,7 @@ final appwriteClientProvider = Provider<Client>((ref) {
     );
   }
   if (AppConfig.appwriteProjectId.isEmpty) {
-    throw StateError(
-        'AppConfig.appwriteProjectId is not configured. '
+    throw StateError('AppConfig.appwriteProjectId is not configured. '
         'Pass --dart-define=APPWRITE_PROJECT_ID=<value> at build time.');
   }
   final client = Client();
@@ -79,8 +78,7 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
     this._service,
     this._type, {
     String? userId,
-  })
-      : _userId = userId,
+  })  : _userId = userId,
         super(const AsyncValue.loading()) {
     fetchRecords();
   }
@@ -179,15 +177,16 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
 
     // Pull remote snapshot and merge into local store.
     try {
-      final remoteRecords = await _service.getQRRecords(type: _type, userId: userId);
+      final remoteRecords =
+          await _service.getQRRecords(type: _type, userId: userId);
       await _offline.upsertAllFromRemote(remoteRecords, userId: userId);
       final remoteIds = {
         for (final r in remoteRecords)
           if (r.id != null) r.id!,
       };
       // Only prune when we have a full remote snapshot. If the result set hit
-      // the server page limit (100) there may be more records we haven't seen,
-      // so skip pruning to avoid deleting valid local records.
+      // the server page limit (kFetchLimit), there may be more records we
+      // haven't seen, so skip pruning to avoid deleting valid local records.
       if (remoteRecords.length < kFetchLimit) {
         await _offline.pruneSyncedMissingFromRemote(
           type: _type,
