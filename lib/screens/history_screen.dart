@@ -45,8 +45,10 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
       final l10n = AppLocalizations.of(context);
       setState(() => _isSyncing = true);
       try {
-        await ref.read(scannedHistoryProvider.notifier).fetchRecords();
-        await ref.read(generatedHistoryProvider.notifier).fetchRecords();
+        await Future.wait([
+          ref.read(scannedHistoryProvider.notifier).fetchRecords(),
+          ref.read(generatedHistoryProvider.notifier).fetchRecords(),
+        ]);
         if (mounted) {
           messenger.showSnackBar(
             SnackBar(
