@@ -9,6 +9,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private var channel: MethodChannel? = null
     private val pendingTexts = ArrayDeque<String>()
+    private var isDartReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +22,10 @@ class MainActivity : FlutterActivity() {
         channel?.setMethodCallHandler { call, result ->
             when (call.method) {
                 "getInitialText" -> {
-                    result.success(pendingTexts.removeFirstOrNull())
+                    isDartReady = true
+                    val initialTexts = pendingTexts.toList()
+                    pendingTexts.clear()
+                    result.success(initialTexts)
                 }
 
                 else -> result.notImplemented()
@@ -37,8 +41,11 @@ class MainActivity : FlutterActivity() {
 
     private fun captureIncomingText(intent: Intent?) {
         val text = extractIncomingText(intent) ?: return
-        pendingTexts.addLast(text)
-        channel?.invokeMethod("onText", text)
+        if (isDartReady && channel != null) {
+            channel?.invokeMethod("onText", text)
+        } else {
+            pendingTexts.addLast(text)
+        }
     }
 
     private fun extractIncomingText(intent: Intent?): String? {

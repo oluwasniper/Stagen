@@ -75,8 +75,10 @@ ClassifiedExternalText classifyExternalText(String input) {
           prefill: {'whatsapp': pathSegments.first},
         );
       }
-      if ((host == 'twitter.com' || host.endsWith('.twitter.com') ||
-              host == 'x.com' || host.endsWith('.x.com')) &&
+      if ((host == 'twitter.com' ||
+              host.endsWith('.twitter.com') ||
+              host == 'x.com' ||
+              host.endsWith('.x.com')) &&
           pathSegments.isNotEmpty) {
         return ClassifiedExternalText(
           type: QROptionType.twitter,
@@ -137,9 +139,13 @@ ClassifiedExternalText classifyExternalText(String input) {
 
 String? _extractWifiValue(String source, String key) {
   // Match values that may contain backslash-escaped characters (including \;).
-  final match = RegExp('$key:((?:\\\\.|[^;])*)', caseSensitive: false).firstMatch(source);
-  final raw = match?.group(1)?.trim();
-  if (raw == null || raw.isEmpty) return null;
+  final escapedKey = RegExp.escape(key);
+  final match = RegExp(
+    '$escapedKey:((?:\\\\.|[^;])*)',
+    caseSensitive: false,
+  ).firstMatch(source);
+  final raw = match?.group(1);
+  if (raw == null) return null;
   // Unescape backslash-escaped characters (e.g. \; → ;, \\ → \).
   final value = raw.replaceAllMapped(RegExp(r'\\(.)'), (m) => m.group(1)!);
   return value.isEmpty ? null : value;
