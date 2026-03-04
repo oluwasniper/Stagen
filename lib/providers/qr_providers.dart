@@ -188,7 +188,7 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
       // Only prune when we have a full remote snapshot. If the result set hit
       // the server page limit (100) there may be more records we haven't seen,
       // so skip pruning to avoid deleting valid local records.
-      if (remoteRecords.length < 100) {
+      if (remoteRecords.length < kFetchLimit) {
         await _offline.pruneSyncedMissingFromRemote(
           type: _type,
           userId: userId,

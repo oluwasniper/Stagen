@@ -228,6 +228,9 @@ class OfflineHistoryService {
           pendingDelete: false,
         );
         await _box.put(local.localId, local);
+        if (remote.id != null) {
+          remoteIdIndex[remote.id!] = local;
+        }
       }
     }
   }

@@ -484,7 +484,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get historyEmpty => 'Pas encore d\'historique';
 
   @override
-  String get syncNow => 'Synchroniser maintenant';
+  String get syncNow => 'Synchroniser';
 
   @override
   String get syncCompleted => 'Synchronisation terminée';
@@ -501,4 +501,7 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get shareAnalyticsSubtitle =>
       'Aidez à améliorer Scagen en partageant des données d\'utilisation anonymes';
+
+  @override
+  String get failedToShare => 'Échec du partage';
 }

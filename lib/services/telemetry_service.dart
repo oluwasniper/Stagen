@@ -144,7 +144,7 @@ Future<void> initPostHog() async {
   // Respect persisted opt-out before any capture can occur.
   try {
     const storage = FlutterSecureStorage();
-    final analyticsValue = await storage.read(key: 'setting_analytics');
+    final analyticsValue = await storage.read(key: kSettingAnalyticsKey);
     // Mirror SettingsNotifier: only 'true' enables analytics; null (first-run)
     // and any other value are treated as disabled.
     if (analyticsValue != 'true') {
@@ -156,5 +156,6 @@ Future<void> initPostHog() async {
       stackTrace: st,
       name: 'TelemetryService',
     );
+    await Posthog().disable();
   }
 }
