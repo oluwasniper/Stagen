@@ -71,11 +71,17 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
     );
     ref.read(scannedHistoryProvider.notifier).addRecord(record);
 
-    await controller.stop();
-    await AppGoRouter.router.push(AppPath.scannedQRResult);
-    if (!mounted) return;
-    setState(() => _hasNavigated = false);
-    await controller.start();
+    try {
+      await controller.stop();
+      await AppGoRouter.router.push(AppPath.scannedQRResult);
+    } finally {
+      if (mounted) {
+        setState(() => _hasNavigated = false);
+        await controller.start();
+      } else {
+        _hasNavigated = false;
+      }
+    }
   }
 
   Future<void> _onDetect(BarcodeCapture capture) async {
