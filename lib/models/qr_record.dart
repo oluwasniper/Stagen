@@ -9,6 +9,7 @@ class QRRecord {
   final String? label;
   final String? userId;
   final DateTime createdAt;
+  final bool isPendingSync;
 
   QRRecord({
     this.id,
@@ -17,6 +18,7 @@ class QRRecord {
     required this.qrType,
     this.label,
     this.userId,
+    this.isPendingSync = false,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
@@ -29,6 +31,7 @@ class QRRecord {
       qrType: json['qrType'] as String? ?? 'text',
       label: json['label'] as String?,
       userId: json['userId'] as String?,
+      isPendingSync: false,
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'] as String) ?? DateTime.now()
           : DateTime.now(),
@@ -55,6 +58,7 @@ class QRRecord {
     String? label,
     String? userId,
     DateTime? createdAt,
+    bool? isPendingSync,
   }) {
     return QRRecord(
       id: id ?? this.id,
@@ -64,6 +68,7 @@ class QRRecord {
       label: label ?? this.label,
       userId: userId ?? this.userId,
       createdAt: createdAt ?? this.createdAt,
+      isPendingSync: isPendingSync ?? this.isPendingSync,
     );
   }
 }
