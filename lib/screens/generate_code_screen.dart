@@ -16,9 +16,11 @@ import '../widgets/generate_qr_widget.dart';
 
 class GenerateCodeScreen extends ConsumerStatefulWidget {
   final QROption type;
+  final Map<String, String>? initialValues;
   const GenerateCodeScreen({
     super.key,
     required this.type,
+    this.initialValues,
   });
 
   @override
@@ -31,6 +33,16 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
 
   TextEditingController _getController(String key) {
     return _controllers.putIfAbsent(key, () => TextEditingController());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final values = widget.initialValues;
+    if (values == null || values.isEmpty) return;
+    for (final entry in values.entries) {
+      _getController(entry.key).text = entry.value;
+    }
   }
 
   @override
@@ -102,9 +114,13 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
 
   /// Pick a contact from the phone's address book and fill the form fields.
   Future<void> _importFromContacts() async {
-    ref.read(telemetryServiceProvider).track(TelemetryEvents.contactImportRequested);
+    ref
+        .read(telemetryServiceProvider)
+        .track(TelemetryEvents.contactImportRequested);
     if (!await FlutterContacts.requestPermission(readonly: true)) {
-      ref.read(telemetryServiceProvider).track(TelemetryEvents.contactImportDenied);
+      ref
+          .read(telemetryServiceProvider)
+          .track(TelemetryEvents.contactImportDenied);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -130,7 +146,9 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
       withGroups: false,
     );
     if (fullContact == null) return;
-    ref.read(telemetryServiceProvider).track(TelemetryEvents.contactImportSuccess);
+    ref
+        .read(telemetryServiceProvider)
+        .track(TelemetryEvents.contactImportSuccess);
 
     // Populate form controllers with the imported data.
     _getController('firstName').text = fullContact.name.first;
