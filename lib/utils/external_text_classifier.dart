@@ -1,0 +1,213 @@
+import '../widgets/generate_qr_widget.dart';
+
+class ClassifiedExternalText {
+  final QROptionType type;
+  final Map<String, String> prefill;
+
+  const ClassifiedExternalText({
+    required this.type,
+    required this.prefill,
+  });
+}
+
+ClassifiedExternalText classifyExternalText(String input) {
+  final text = input.trim();
+  final lower = text.toLowerCase();
+
+  if (lower.startsWith('wifi:')) {
+    final ssid = _extractWifiValue(text, 'S');
+    final password = _extractWifiValue(text, 'P');
+    return ClassifiedExternalText(
+      type: QROptionType.wifi,
+      prefill: {
+        if (ssid != null) 'network': ssid,
+        if (password != null) 'password': password,
+      },
+    );
+  }
+
+  if (lower.startsWith('begin:vcard')) {
+    return ClassifiedExternalText(
+      type: QROptionType.contact,
+      prefill: _parseVCard(text),
+    );
+  }
+
+  if (lower.startsWith('begin:vevent')) {
+    return ClassifiedExternalText(
+      type: QROptionType.event,
+      prefill: _parseVEvent(text),
+    );
+  }
+
+  final uri = Uri.tryParse(text);
+  if (uri != null && uri.hasScheme) {
+    final scheme = uri.scheme.toLowerCase();
+    if (scheme == 'mailto') {
+      return ClassifiedExternalText(
+        type: QROptionType.email,
+        prefill: {'email': uri.path},
+      );
+    }
+    if (scheme == 'tel') {
+      return ClassifiedExternalText(
+        type: QROptionType.telephone,
+        prefill: {'telephone': uri.path},
+      );
+    }
+    if (scheme == 'geo') {
+      final coords = uri.path.split(',');
+      return ClassifiedExternalText(
+        type: QROptionType.location,
+        prefill: {
+          if (coords.isNotEmpty) 'latitude': coords[0],
+          if (coords.length > 1) 'longitude': coords[1],
+        },
+      );
+    }
+    if (scheme == 'http' || scheme == 'https') {
+      final host = uri.host.toLowerCase();
+      final pathSegments = uri.pathSegments.where((s) => s.isNotEmpty).toList();
+      if (host.contains('wa.me') && pathSegments.isNotEmpty) {
+        return ClassifiedExternalText(
+          type: QROptionType.whatsapp,
+          prefill: {'whatsapp': pathSegments.first},
+        );
+      }
+      if ((host.contains('twitter.com') || host.contains('x.com')) &&
+          pathSegments.isNotEmpty) {
+        return ClassifiedExternalText(
+          type: QROptionType.twitter,
+          prefill: {'twitter': pathSegments.first},
+        );
+      }
+      if (host.contains('instagram.com') && pathSegments.isNotEmpty) {
+        return ClassifiedExternalText(
+          type: QROptionType.instagram,
+          prefill: {'instagram': pathSegments.first},
+        );
+      }
+      return ClassifiedExternalText(
+        type: QROptionType.website,
+        prefill: {'website': text},
+      );
+    }
+  }
+
+  if (_emailRegex.hasMatch(text)) {
+    return ClassifiedExternalText(
+      type: QROptionType.email,
+      prefill: {'email': text},
+    );
+  }
+
+  if (_phoneRegex.hasMatch(text)) {
+    return ClassifiedExternalText(
+      type: QROptionType.telephone,
+      prefill: {'telephone': text},
+    );
+  }
+
+  final coordMatch = _coordRegex.firstMatch(text);
+  if (coordMatch != null) {
+    return ClassifiedExternalText(
+      type: QROptionType.location,
+      prefill: {
+        'latitude': coordMatch.group(1) ?? '',
+        'longitude': coordMatch.group(2) ?? '',
+      },
+    );
+  }
+
+  if (_domainRegex.hasMatch(text)) {
+    return ClassifiedExternalText(
+      type: QROptionType.website,
+      prefill: {'website': text},
+    );
+  }
+
+  return ClassifiedExternalText(
+    type: QROptionType.text,
+    prefill: {'text': text},
+  );
+}
+
+String? _extractWifiValue(String source, String key) {
+  final match = RegExp('$key:([^;]*)', caseSensitive: false).firstMatch(source);
+  final value = match?.group(1)?.trim();
+  return (value == null || value.isEmpty) ? null : value;
+}
+
+Map<String, String> _parseVCard(String vcard) {
+  final fields = <String, String>{};
+  final lines = vcard.split(RegExp(r'\r?\n'));
+
+  final n = _lineValue(lines, 'N');
+  if (n != null) {
+    final parts = n.split(';');
+    if (parts.isNotEmpty) fields['lastName'] = parts.first;
+    if (parts.length > 1) fields['firstName'] = parts[1];
+  }
+  final org = _lineValue(lines, 'ORG');
+  final title = _lineValue(lines, 'TITLE');
+  final tel = _lineValue(lines, 'TEL');
+  final email = _lineValue(lines, 'EMAIL');
+  final url = _lineValue(lines, 'URL');
+  final adr = _lineValue(lines, 'ADR');
+
+  if (org != null) fields['company'] = org;
+  if (title != null) fields['job'] = title;
+  if (tel != null) fields['phone'] = tel;
+  if (email != null) fields['email'] = email;
+  if (url != null) fields['website'] = url;
+
+  if (adr != null) {
+    final parts = adr.split(';');
+    if (parts.length > 2) fields['address'] = parts[2];
+    if (parts.length > 3) fields['city'] = parts[3];
+    if (parts.length > 6) fields['country'] = parts[6];
+  }
+  return fields;
+}
+
+Map<String, String> _parseVEvent(String vevent) {
+  final lines = vevent.split(RegExp(r'\r?\n'));
+  final fields = <String, String>{};
+
+  final summary = _lineValue(lines, 'SUMMARY');
+  final dtStart = _lineValue(lines, 'DTSTART');
+  final dtEnd = _lineValue(lines, 'DTEND');
+  final location = _lineValue(lines, 'LOCATION');
+  final description = _lineValue(lines, 'DESCRIPTION');
+
+  if (summary != null) fields['eventName'] = summary;
+  if (dtStart != null) fields['startDate'] = dtStart;
+  if (dtEnd != null) fields['endDate'] = dtEnd;
+  if (location != null) fields['eventLocation'] = location;
+  if (description != null) fields['description'] = description;
+
+  return fields;
+}
+
+String? _lineValue(List<String> lines, String key) {
+  for (final line in lines) {
+    final normalized = line.trim();
+    if (normalized.toUpperCase().startsWith('$key:')) {
+      return normalized.substring(key.length + 1).trim();
+    }
+    if (normalized.toUpperCase().startsWith('$key;')) {
+      final idx = normalized.indexOf(':');
+      if (idx != -1 && idx + 1 < normalized.length) {
+        return normalized.substring(idx + 1).trim();
+      }
+    }
+  }
+  return null;
+}
+
+final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+final _phoneRegex = RegExp(r'^\+?[0-9][0-9\-\s().]{5,}$');
+final _domainRegex = RegExp(r'^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}([/?#].*)?$');
+final _coordRegex = RegExp(
+  r'^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$',
+);

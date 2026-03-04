@@ -2,6 +2,8 @@ import 'package:hive/hive.dart';
 
 import 'qr_record.dart';
 
+const _unset = Object();
+
 class LocalQRRecord {
   final String localId;
   final String? remoteId;
@@ -29,24 +31,24 @@ class LocalQRRecord {
 
   LocalQRRecord copyWith({
     String? localId,
-    String? remoteId,
+    Object? remoteId = _unset,
     String? data,
     String? type,
     String? qrType,
-    String? label,
-    String? userId,
+    Object? label = _unset,
+    Object? userId = _unset,
     DateTime? createdAt,
     bool? pendingCreate,
     bool? pendingDelete,
   }) {
     return LocalQRRecord(
       localId: localId ?? this.localId,
-      remoteId: remoteId ?? this.remoteId,
+      remoteId: identical(remoteId, _unset) ? this.remoteId : remoteId as String?,
       data: data ?? this.data,
       type: type ?? this.type,
       qrType: qrType ?? this.qrType,
-      label: label ?? this.label,
-      userId: userId ?? this.userId,
+      label: identical(label, _unset) ? this.label : label as String?,
+      userId: identical(userId, _unset) ? this.userId : userId as String?,
       createdAt: createdAt ?? this.createdAt,
       pendingCreate: pendingCreate ?? this.pendingCreate,
       pendingDelete: pendingDelete ?? this.pendingDelete,
@@ -86,8 +88,8 @@ class LocalQRRecordAdapter extends TypeAdapter<LocalQRRecord> {
       label: fields[5] as String?,
       userId: fields[6] as String?,
       createdAt: fields[7] as DateTime,
-      pendingCreate: fields[8] as bool,
-      pendingDelete: fields[9] as bool,
+      pendingCreate: fields[8] is bool ? fields[8] as bool : false,
+      pendingDelete: fields[9] is bool ? fields[9] as bool : false,
     );
   }
 

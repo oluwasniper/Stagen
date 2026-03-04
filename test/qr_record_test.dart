@@ -14,6 +14,8 @@ void main() {
       createdAt: createdAt,
     );
 
+    expect(record.isPendingSync, false);
+
     final json = record.toJson();
     final decoded = QRRecord.fromJson({...json, '\$id': record.id});
 
@@ -24,5 +26,6 @@ void main() {
     expect(decoded.label, 'Website');
     expect(decoded.userId, 'user_1');
     expect(decoded.createdAt, createdAt);
+    expect(decoded.isPendingSync, false);
   });
 }

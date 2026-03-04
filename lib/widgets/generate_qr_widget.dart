@@ -105,6 +105,17 @@ class QROptions {
       ),
     ];
   }
+
+  static QROption fromType(BuildContext context, QROptionType type) {
+    return getOptions(context).firstWhere(
+      (option) => option.type == type,
+      orElse: () => QROption(
+        label: AppLocalizations.of(context).textQR,
+        svgData: AppAsset.textIconSvg,
+        type: QROptionType.text,
+      ),
+    );
+  }
 }
 
 class QROptionCard extends StatelessWidget {

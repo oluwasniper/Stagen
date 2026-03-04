@@ -161,9 +161,12 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () async {
-                          await SharePlus.instance.share(ShareParams(text: data));
-                        },
+                        onTap: record == null
+                            ? null
+                            : () async {
+                                await SharePlus.instance
+                                    .share(ShareParams(text: record.data));
+                              },
                         child: Container(
                           height: 50,
                           width: 50,

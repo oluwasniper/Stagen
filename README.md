@@ -52,3 +52,22 @@ Notes:
 - **Simulator behavior differs from real device**
   - Test SSID features on a physical iPhone; simulator network APIs can be limited.
 
+## Process Highlighted Text → Scagen
+
+### Android
+
+Scagen now supports Android text processing intents:
+
+- Highlight text in another app
+- Tap **Process text** / overflow menu
+- Choose **Scagen**
+
+Scagen will open the **Generate** flow, auto-detect the best QR type, and prefill fields.
+
+### iOS
+
+Scagen is wired to receive process text via custom URL:
+
+- `scagen://process-text?text=<urlencoded text>`
+
+This is intended for use by an iOS Shortcut or share/action extension that forwards selected text into Scagen.

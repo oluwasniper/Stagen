@@ -28,7 +28,7 @@ class _LinkAccountDialogState extends State<LinkAccountDialog> {
       await widget.onSubmit(_email, _password, _name);
       if (mounted) Navigator.pop(context);
     } catch (e) {
-      setState(() => _error = e.toString());
+      if (mounted) setState(() => _error = e.toString());
     } finally {
       if (mounted) {
         setState(() => _loading = false);

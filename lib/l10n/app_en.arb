@@ -580,12 +580,33 @@
         "description": "Subtitle shown in settings tile for account linking"
     },
     "linkAccountEmailLabel": "Email",
+    "@linkAccountEmailLabel": {
+        "description": "Label for the email input field in the account linking form"
+    },
     "linkAccountPasswordLabel": "Password",
+    "@linkAccountPasswordLabel": {
+        "description": "Label for the password input field in the account linking form"
+    },
     "linkAccountNameOptionalLabel": "Name (optional)",
+    "@linkAccountNameOptionalLabel": {
+        "description": "Label for the optional name input field in the account linking form"
+    },
     "linkAccountCancel": "Cancel",
+    "@linkAccountCancel": {
+        "description": "Cancel button label in the account linking dialog"
+    },
     "linkAccountAction": "Link",
+    "@linkAccountAction": {
+        "description": "Submit button label in the account linking dialog"
+    },
     "linkAccountEmailRequired": "Email required",
+    "@linkAccountEmailRequired": {
+        "description": "Validation message shown when the email field is empty in the account linking form"
+    },
     "linkAccountPasswordMin": "Min 8 chars",
+    "@linkAccountPasswordMin": {
+        "description": "Validation message shown when the password is shorter than 8 characters in the account linking form"
+    },
 
     "snackbarLocationPermissionDenied": "Location permission denied",
     "@snackbarLocationPermissionDenied" :{

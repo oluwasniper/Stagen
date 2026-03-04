@@ -145,7 +145,9 @@ Future<void> initPostHog() async {
   try {
     const storage = FlutterSecureStorage();
     final analyticsValue = await storage.read(key: 'setting_analytics');
-    if (analyticsValue == 'false') {
+    // Mirror SettingsNotifier: only 'true' enables analytics; null (first-run)
+    // and any other value are treated as disabled.
+    if (analyticsValue != 'true') {
       await Posthog().disable();
     }
   } catch (e, st) {
