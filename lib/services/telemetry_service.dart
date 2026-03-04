@@ -150,7 +150,7 @@ Future<void> initPostHog() async {
         await Posthog().disable();
       } catch (disableError, disableSt) {
         dev.log(
-          '[TelemetryService] failed to disable PostHog after read failure: $disableError',
+          '[TelemetryService] failed to disable PostHog after reading analytics preference: $disableError',
           stackTrace: disableSt,
           name: 'TelemetryService',
         );
