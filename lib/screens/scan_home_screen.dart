@@ -1,9 +1,15 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../providers/qr_providers.dart';
+import '../providers/settings_provider.dart';
 import '../services/telemetry_service.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
@@ -17,6 +23,7 @@ class ScanHomeScreen extends ConsumerStatefulWidget {
 
 class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
   final MobileScannerController controller = MobileScannerController();
+  final ImagePicker _imagePicker = ImagePicker();
   String? qrScan;
   bool _hasNavigated = false;
 
@@ -32,35 +39,78 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
     return 'text';
   }
 
-  void _onDetect(BarcodeCapture capture) {
+  Future<void> _handleScannedData(String data) async {
+    if (_hasNavigated) return;
+    setState(() {
+      qrScan = data;
+      _hasNavigated = true;
+    });
+
+    final settings = ref.read(settingsProvider);
+    if (settings.vibrate) {
+      HapticFeedback.mediumImpact();
+    }
+    if (settings.beep) {
+      SystemSound.play(SystemSoundType.click);
+    }
+
+    ref.read(telemetryServiceProvider).track(
+      TelemetryEvents.qrScanned,
+      properties: {'content_type': _classifyContent(data)},
+    );
+
+    // Store scanned data in provider
+    ref.read(scannedQRDataProvider.notifier).state = data;
+
+    // Save to Appwrite
+    final record = QRRecord(
+      data: data,
+      type: 'scanned',
+      qrType: 'scan',
+      label: 'Scanned QR',
+    );
+    ref.read(scannedHistoryProvider.notifier).addRecord(record);
+
+    await controller.stop();
+    await AppGoRouter.router.push(AppPath.scannedQRResult);
+    if (!mounted) return;
+    setState(() => _hasNavigated = false);
+    await controller.start();
+  }
+
+  Future<void> _onDetect(BarcodeCapture capture) async {
     if (_hasNavigated) return;
     final List<Barcode> barcodes = capture.barcodes;
     if (barcodes.isNotEmpty && barcodes.first.rawValue != null) {
       final data = barcodes.first.rawValue!;
-      setState(() {
-        qrScan = data;
-        _hasNavigated = true;
-      });
+      await _handleScannedData(data);
+    }
+  }
 
-      ref.read(telemetryServiceProvider).track(
-        TelemetryEvents.qrScanned,
-        properties: {'content_type': _classifyContent(data)},
+  Future<void> _pickFromGallery() async {
+    try {
+      final image = await _imagePicker.pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      final capture = await controller.analyzeImage(image.path);
+      String? code;
+      if (capture != null && capture.barcodes.isNotEmpty) {
+        code = capture.barcodes.first.rawValue;
+      }
+      if (code == null || code.isEmpty) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context).noQrFoundInImage)),
+        );
+        return;
+      }
+      await _handleScannedData(code);
+    } catch (e, st) {
+      dev.log(
+        '[ScanHomeScreen] gallery scan failed: $e',
+        stackTrace: st,
+        name: 'ScanHomeScreen',
       );
-
-      // Store scanned data in provider
-      ref.read(scannedQRDataProvider.notifier).state = data;
-
-      // Save to Appwrite
-      final record = QRRecord(
-        data: data,
-        type: 'scanned',
-        qrType: 'scan',
-        label: 'Scanned QR',
-      );
-      ref.read(scannedHistoryProvider.notifier).addRecord(record);
-
-      // Navigate to scanned result
-      AppGoRouter.router.push(AppPath.scannedQRResult);
     }
   }
 
@@ -103,7 +153,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      // TODO: pick from gallery
+                      _pickFromGallery();
                     },
                     child: const Padding(
                       padding:

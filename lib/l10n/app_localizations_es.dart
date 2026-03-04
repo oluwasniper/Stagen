@@ -137,7 +137,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get copyBtn => 'Copiar';
 
   @override
+  String get openBtn => 'Abrir';
+
+  @override
   String get qrCode => 'Código QR';
+
+  @override
+  String get generatedLabel => 'Generado';
+
+  @override
+  String get scannedResultTitle => 'Resultado escaneado';
+
+  @override
+  String get noData => 'Sin datos';
 
   @override
   String get saveBtn => 'Guardar';
@@ -370,6 +382,34 @@ class AppLocalizationsEs extends AppLocalizations {
   String get authAccount => 'Cuenta';
 
   @override
+  String get linkAccountTitle => 'Vincular cuenta';
+
+  @override
+  String get linkAccountSubtitle =>
+      'Actualizar a cuenta con email y contraseña';
+
+  @override
+  String get linkAccountEmailLabel => 'Correo electrónico';
+
+  @override
+  String get linkAccountPasswordLabel => 'Contraseña';
+
+  @override
+  String get linkAccountNameOptionalLabel => 'Nombre (opcional)';
+
+  @override
+  String get linkAccountCancel => 'Cancelar';
+
+  @override
+  String get linkAccountAction => 'Vincular';
+
+  @override
+  String get linkAccountEmailRequired => 'Correo electrónico obligatorio';
+
+  @override
+  String get linkAccountPasswordMin => 'Mínimo 8 caracteres';
+
+  @override
   String get snackbarLocationPermissionDenied =>
       'Permiso de ubicación denegado';
 
@@ -388,6 +428,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get snackbarCopiedToClipboard => 'Copiado al portapapeles';
+
+  @override
+  String get noQrFoundInImage =>
+      'No se encontró un código QR en la imagen seleccionada';
 
   @override
   String get apiErrorUserAlreadyExists =>
@@ -445,6 +489,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get historyEmpty => 'Aún no hay historial';
+
+  @override
+  String get syncNow => 'Sincronizar ahora';
+
+  @override
+  String get syncCompleted => 'Sincronización completa';
+
+  @override
+  String get pendingSync => 'Pendiente';
 
   @override
   String get privacy => 'Privacidad';

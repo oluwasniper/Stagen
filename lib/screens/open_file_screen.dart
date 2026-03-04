@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
@@ -160,8 +161,8 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {
-                          // TODO: implement share
+                        onTap: () async {
+                          await SharePlus.instance.share(ShareParams(text: data));
                         },
                         child: Container(
                           height: 50,
