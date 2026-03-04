@@ -85,9 +85,7 @@ class TelemetryService {
   /// Never pass email addresses or names here.
   void identify(String userId) {
     if (!_analyticsEnabled) return;
-    Posthog()
-        .identify(userId: userId)
-        .catchError((Object e, StackTrace st) {
+    Posthog().identify(userId: userId).catchError((Object e, StackTrace st) {
       dev.log(
         '[TelemetryService] identify failed: $e',
         stackTrace: st,
@@ -148,7 +146,15 @@ Future<void> initPostHog() async {
     // Mirror SettingsNotifier: only 'true' enables analytics; null (first-run)
     // and any other value are treated as disabled.
     if (analyticsValue != 'true') {
-      await Posthog().disable();
+      try {
+        await Posthog().disable();
+      } catch (disableError, disableSt) {
+        dev.log(
+          '[TelemetryService] failed to disable PostHog after read failure: $disableError',
+          stackTrace: disableSt,
+          name: 'TelemetryService',
+        );
+      }
     }
   } catch (e, st) {
     dev.log(
@@ -156,6 +162,14 @@ Future<void> initPostHog() async {
       stackTrace: st,
       name: 'TelemetryService',
     );
-    await Posthog().disable();
+    try {
+      await Posthog().disable();
+    } catch (disableError, disableStack) {
+      dev.log(
+        '[TelemetryService] failed to disable PostHog after preference read failure: $disableError',
+        stackTrace: disableStack,
+        name: 'TelemetryService',
+      );
+    }
   }
 }

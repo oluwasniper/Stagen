@@ -386,7 +386,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get linkAccountSubtitle =>
-      'Actualizar a cuenta con email y contraseña';
+      'Actualizar a la cuenta con correo electrónico y contraseña';
 
   @override
   String get linkAccountEmailLabel => 'Correo electrónico';
