@@ -318,6 +318,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get phoneNumberHint => '+92xxxxxxxxxx';
 
   @override
+  String get locationUseCurrentLocation => 'Use Current Location';
+
+  @override
+  String get locationGettingCurrentLocation => 'Getting location...';
+
+  @override
+  String get locationOrDivider => 'OR';
+
+  @override
+  String get locationLatitudeLabel => 'Latitude';
+
+  @override
+  String get locationLatitudeHint => 'Enter latitude';
+
+  @override
+  String get locationLongitudeLabel => 'Longitude';
+
+  @override
+  String get locationLongitudeHint => 'Enter longitude';
+
+  @override
   String get changeLanguage => 'Language';
 
   @override

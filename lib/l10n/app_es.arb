@@ -135,6 +135,13 @@
 
     "phoneNumberLabel": "Número de teléfono",
     "phoneNumberHint": "+[código de país] xxxxxxxxx",
+    "locationUseCurrentLocation": "Usar ubicación actual",
+    "locationGettingCurrentLocation": "Obteniendo ubicación...",
+    "locationOrDivider": "O",
+    "locationLatitudeLabel": "Latitud",
+    "locationLatitudeHint": "Ingrese la latitud",
+    "locationLongitudeLabel": "Longitud",
+    "locationLongitudeHint": "Ingrese la longitud",
 
     "changeLanguage": "Idioma",
     "changeLanguageDesc": "Cambiar el idioma de la aplicación",

@@ -119,6 +119,13 @@
     "instagramUsernameHint": "Digite o nome de usuário do Instagram",
     "phoneNumberLabel": "Número de telefone",
     "phoneNumberHint": "+55xxxxxxxxx",
+    "locationUseCurrentLocation": "Usar localização atual",
+    "locationGettingCurrentLocation": "Obtendo localização...",
+    "locationOrDivider": "OU",
+    "locationLatitudeLabel": "Latitude",
+    "locationLatitudeHint": "Digite a latitude",
+    "locationLongitudeLabel": "Longitude",
+    "locationLongitudeHint": "Digite a longitude",
 
     "changeLanguage": "Idioma",
     "changeLanguageDesc": "Alterar o idioma do aplicativo",

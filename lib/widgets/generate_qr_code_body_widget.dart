@@ -801,6 +801,7 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -818,8 +819,8 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
                 : const Icon(Icons.my_location, color: Color(0xffFDB623)),
             label: Text(
               _isLoadingLocation
-                  ? 'Getting location...'
-                  : 'Use Current Location',
+                  ? l10n.locationGettingCurrentLocation
+                  : l10n.locationUseCurrentLocation,
               style: const TextStyle(color: Color(0xffFDB623)),
             ),
             style: OutlinedButton.styleFrom(
@@ -838,7 +839,7 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
-                'OR',
+                l10n.locationOrDivider,
                 style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               ),
             ),
@@ -847,15 +848,15 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
         ),
         const SizedBox(height: 16),
         KTextField(
-          labelText: 'Latitude',
-          hintText: 'Enter latitude',
+          labelText: l10n.locationLatitudeLabel,
+          hintText: l10n.locationLatitudeHint,
           autoFocus: true,
           controller: widget.latitudeController,
         ),
         const SizedBox(height: 20),
         KTextField(
-          labelText: 'Longitude',
-          hintText: 'Enter longitude',
+          labelText: l10n.locationLongitudeLabel,
+          hintText: l10n.locationLongitudeHint,
           autoFocus: true,
           controller: widget.longitudeController,
         ),

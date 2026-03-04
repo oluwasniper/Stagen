@@ -489,6 +489,34 @@
     "@phoneNumberHint" :{
         "description": "Hint for the phone number input"
     },
+    "locationUseCurrentLocation": "Use Current Location",
+    "@locationUseCurrentLocation": {
+        "description": "Button label to use the device current location"
+    },
+    "locationGettingCurrentLocation": "Getting location...",
+    "@locationGettingCurrentLocation": {
+        "description": "Button label shown while fetching current location"
+    },
+    "locationOrDivider": "OR",
+    "@locationOrDivider": {
+        "description": "Divider text between current location action and manual coordinate entry"
+    },
+    "locationLatitudeLabel": "Latitude",
+    "@locationLatitudeLabel": {
+        "description": "Label for the latitude input"
+    },
+    "locationLatitudeHint": "Enter latitude",
+    "@locationLatitudeHint": {
+        "description": "Hint for the latitude input"
+    },
+    "locationLongitudeLabel": "Longitude",
+    "@locationLongitudeLabel": {
+        "description": "Label for the longitude input"
+    },
+    "locationLongitudeHint": "Enter longitude",
+    "@locationLongitudeHint": {
+        "description": "Hint for the longitude input"
+    },
 
     "changeLanguage": "Language",
     "@changeLanguage" :{
