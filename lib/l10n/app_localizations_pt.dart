@@ -501,4 +501,7 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get shareAnalyticsSubtitle =>
       'Ajude a melhorar o Scagen compartilhando dados de uso anônimos';
+
+  @override
+  String get failedToShare => 'Falha ao compartilhar';
 }
