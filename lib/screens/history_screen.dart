@@ -23,6 +23,7 @@ class HistoryScreen extends ConsumerStatefulWidget {
 class _HistoryScreenState extends ConsumerState<HistoryScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  bool _isSyncing = false;
 
   @override
   void initState() {
@@ -38,11 +39,53 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
 
   @override
   Widget build(BuildContext context) {
+    Future<void> syncNow() async {
+      if (_isSyncing) return;
+      final messenger = ScaffoldMessenger.of(context);
+      final l10n = AppLocalizations.of(context);
+      setState(() => _isSyncing = true);
+      try {
+        await ref.read(scannedHistoryProvider.notifier).fetchRecords();
+        await ref.read(generatedHistoryProvider.notifier).fetchRecords();
+        if (mounted) {
+          messenger.showSnackBar(
+            SnackBar(
+              content: Text(l10n.syncCompleted),
+            ),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() => _isSyncing = false);
+        }
+      }
+    }
+
     return BackgroundScreenWidget(
       screenTitle: AppLocalizations.of(context).history,
       actionButton: () => AppGoRouter.router.push(AppPath.settings),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: _isSyncing ? null : syncNow,
+                icon: _isSyncing
+                    ? const SizedBox(
+                        height: 14,
+                        width: 14,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.sync_rounded),
+                label: Text(AppLocalizations.of(context).syncNow),
+                style: TextButton.styleFrom(
+                  foregroundColor: const Color(0xffFDB623),
+                ),
+              ),
+            ),
+          ),
           Container(
             height: 60,
             margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -244,6 +287,33 @@ class _HistoryListView extends ConsumerWidget {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
+                                    if (record.isPendingSync)
+                                      Container(
+                                        margin: const EdgeInsets.only(right: 8),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 2,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xffFDB623)
+                                              .withValues(alpha: 0.2),
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          border: Border.all(
+                                            color: const Color(0xffFDB623),
+                                            width: 0.6,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .pendingSync,
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            color: Color(0xffFDB623),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
                                     GestureDetector(
                                       onTap: () {
                                         if (record.id != null) {

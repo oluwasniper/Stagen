@@ -10,10 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:revolutionary_stuff/utils/app_theme.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:revolutionary_stuff/utils/storage/hive_box.dart';
-import 'package:revolutionary_stuff/models/history_items.dart';
-import 'package:revolutionary_stuff/services/history_service.dart';
 import 'package:revolutionary_stuff/services/telemetry_service.dart';
+import 'package:revolutionary_stuff/services/offline_history_service.dart';
 
 import 'l10n/l10n.dart';
 import 'providers/settings_provider.dart';
@@ -24,20 +22,7 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await initPostHog();
   await Hive.initFlutter();
-
-  // Register Hive adapters
-  if (!Hive.isAdapterRegistered(0)) {
-    Hive.registerAdapter(HistoryItemTypeAdapter());
-  }
-  if (!Hive.isAdapterRegistered(1)) {
-    Hive.registerAdapter(HistoryItemAdapter());
-  }
-
-  await Hive.openBox(userHiveBox);
-
-  // Initialize history service
-  final historyService = HistoryService();
-  await historyService.init();
+  await OfflineHistoryService.instance.init();
 
   runApp(
     const ProviderScope(

@@ -354,11 +354,35 @@ abstract class AppLocalizations {
   /// **'Copy'**
   String get copyBtn;
 
+  /// Button to open a scanned URL
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get openBtn;
+
   /// The QR code
   ///
   /// In en, this message translates to:
   /// **'QR Code'**
   String get qrCode;
+
+  /// Fallback label for generated QR content type
+  ///
+  /// In en, this message translates to:
+  /// **'Generated'**
+  String get generatedLabel;
+
+  /// Title shown on the scanned result card
+  ///
+  /// In en, this message translates to:
+  /// **'Scanned Result'**
+  String get scannedResultTitle;
+
+  /// Placeholder text when no data is available
+  ///
+  /// In en, this message translates to:
+  /// **'No data'**
+  String get noData;
 
   /// Button to save the QR code
   ///
@@ -810,6 +834,60 @@ abstract class AppLocalizations {
   /// **'Account'**
   String get authAccount;
 
+  /// Title for linking anonymous account to email/password
+  ///
+  /// In en, this message translates to:
+  /// **'Link Account'**
+  String get linkAccountTitle;
+
+  /// Subtitle shown in settings tile for account linking
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to email/password account'**
+  String get linkAccountSubtitle;
+
+  /// No description provided for @linkAccountEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get linkAccountEmailLabel;
+
+  /// No description provided for @linkAccountPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get linkAccountPasswordLabel;
+
+  /// No description provided for @linkAccountNameOptionalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name (optional)'**
+  String get linkAccountNameOptionalLabel;
+
+  /// No description provided for @linkAccountCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get linkAccountCancel;
+
+  /// No description provided for @linkAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Link'**
+  String get linkAccountAction;
+
+  /// No description provided for @linkAccountEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email required'**
+  String get linkAccountEmailRequired;
+
+  /// No description provided for @linkAccountPasswordMin.
+  ///
+  /// In en, this message translates to:
+  /// **'Min 8 chars'**
+  String get linkAccountPasswordMin;
+
   /// Snackbar message when location permission is denied
   ///
   /// In en, this message translates to:
@@ -839,6 +917,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copied to clipboard'**
   String get snackbarCopiedToClipboard;
+
+  /// Shown when user picks an image that has no decodable QR code
+  ///
+  /// In en, this message translates to:
+  /// **'No QR code found in selected image'**
+  String get noQrFoundInImage;
 
   /// Error when user tries to register with an existing email
   ///
@@ -929,6 +1013,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No history yet'**
   String get historyEmpty;
+
+  /// Action to trigger manual history synchronization
+  ///
+  /// In en, this message translates to:
+  /// **'Sync now'**
+  String get syncNow;
+
+  /// Shown when manual history sync completes
+  ///
+  /// In en, this message translates to:
+  /// **'Sync complete'**
+  String get syncCompleted;
+
+  /// Badge for records waiting to be synced
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pendingSync;
 
   /// Privacy section header in settings
   ///

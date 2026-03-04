@@ -198,10 +198,26 @@
     "@copyBtn" :{
         "description": "Button to copy the QR code"
     },
+    "openBtn": "Open",
+    "@openBtn" :{
+        "description": "Button to open a scanned URL"
+    },
 
     "qrCode": "QR Code",
     "@qrCode" :{
         "description": "The QR code"
+    },
+    "generatedLabel": "Generated",
+    "@generatedLabel" :{
+        "description": "Fallback label for generated QR content type"
+    },
+    "scannedResultTitle": "Scanned Result",
+    "@scannedResultTitle" :{
+        "description": "Title shown on the scanned result card"
+    },
+    "noData": "No data",
+    "@noData" :{
+        "description": "Placeholder text when no data is available"
     },
 
     "saveBtn": "Save",
@@ -555,6 +571,21 @@
     "@authAccount" :{
         "description": "Account section header"
     },
+    "linkAccountTitle": "Link Account",
+    "@linkAccountTitle" :{
+        "description": "Title for linking anonymous account to email/password"
+    },
+    "linkAccountSubtitle": "Upgrade to email/password account",
+    "@linkAccountSubtitle" :{
+        "description": "Subtitle shown in settings tile for account linking"
+    },
+    "linkAccountEmailLabel": "Email",
+    "linkAccountPasswordLabel": "Password",
+    "linkAccountNameOptionalLabel": "Name (optional)",
+    "linkAccountCancel": "Cancel",
+    "linkAccountAction": "Link",
+    "linkAccountEmailRequired": "Email required",
+    "linkAccountPasswordMin": "Min 8 chars",
 
     "snackbarLocationPermissionDenied": "Location permission denied",
     "@snackbarLocationPermissionDenied" :{
@@ -580,6 +611,10 @@
     "snackbarCopiedToClipboard": "Copied to clipboard",
     "@snackbarCopiedToClipboard" :{
         "description": "Snackbar message when text is copied to clipboard"
+    },
+    "noQrFoundInImage": "No QR code found in selected image",
+    "@noQrFoundInImage" :{
+        "description": "Shown when user picks an image that has no decodable QR code"
     },
 
     "apiErrorUserAlreadyExists": "An account with this email already exists.",
@@ -642,6 +677,18 @@
     "historyEmpty": "No history yet",
     "@historyEmpty" :{
         "description": "Message when there is no history"
+    },
+    "syncNow": "Sync now",
+    "@syncNow" :{
+        "description": "Action to trigger manual history synchronization"
+    },
+    "syncCompleted": "Sync complete",
+    "@syncCompleted" :{
+        "description": "Shown when manual history sync completes"
+    },
+    "pendingSync": "Pending",
+    "@pendingSync" :{
+        "description": "Badge for records waiting to be synced"
     },
 
     "privacy": "Privacy",

@@ -51,8 +51,12 @@
     "showQRCode": "Mostrar código QR",
     "shareBtn": "Compartir",
     "copyBtn": "Copiar",
+    "openBtn": "Abrir",
 
     "qrCode": "Código QR",
+    "generatedLabel": "Generado",
+    "scannedResultTitle": "Resultado escaneado",
+    "noData": "Sin datos",
     "saveBtn": "Guardar",
 
     "generateQRCodeBtn": "Generar Código QR",
@@ -156,6 +160,15 @@
     "authLogout": "Cerrar sesión",
     "authLogoutDesc": "Cerrar sesión de tu cuenta",
     "authAccount": "Cuenta",
+    "linkAccountTitle": "Vincular cuenta",
+    "linkAccountSubtitle": "Actualizar a cuenta con email y contraseña",
+    "linkAccountEmailLabel": "Correo electrónico",
+    "linkAccountPasswordLabel": "Contraseña",
+    "linkAccountNameOptionalLabel": "Nombre (opcional)",
+    "linkAccountCancel": "Cancelar",
+    "linkAccountAction": "Vincular",
+    "linkAccountEmailRequired": "Correo electrónico obligatorio",
+    "linkAccountPasswordMin": "Mínimo 8 caracteres",
 
     "snackbarLocationPermissionDenied": "Permiso de ubicación denegado",
     "snackbarLocationPermissionPermanentlyDenied": "Los permisos de ubicación están permanentemente denegados. Por favor, habilítelos en la configuración.",
@@ -170,6 +183,7 @@
     },
     "snackbarFillRequiredFields": "Por favor, complete los campos obligatorios",
     "snackbarCopiedToClipboard": "Copiado al portapapeles",
+    "noQrFoundInImage": "No se encontró un código QR en la imagen seleccionada",
 
     "apiErrorUserAlreadyExists": "Ya existe una cuenta con este correo electrónico.",
     "apiErrorInvalidCredentials": "Correo electrónico o contraseña incorrectos.",
@@ -187,6 +201,9 @@
     "historyLoadFailed": "Error al cargar el historial",
     "historyRetry": "Reintentar",
     "historyEmpty": "Aún no hay historial",
+    "syncNow": "Sincronizar ahora",
+    "syncCompleted": "Sincronización completa",
+    "pendingSync": "Pendiente",
 
     "privacy": "Privacidad",
     "shareAnalytics": "Compartir análisis",

@@ -170,16 +170,11 @@ class SettingsScreen extends ConsumerWidget {
         context: context,
         builder: (ctx) => LinkAccountDialog(
           onSubmit: (email, password, name) async {
-            Navigator.of(ctx).pop();
             await authNotifier.linkAnonymousAccount(
                 email: email, password: password, name: name);
-            if (context.mounted) {
-              final error = ref.read(authProvider).error;
-              if (error != null) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(error), backgroundColor: Colors.red),
-                );
-              }
+            final error = ref.read(authProvider).error;
+            if (error != null) {
+              throw Exception(error);
             }
           },
         ),
@@ -236,8 +231,8 @@ class SettingsScreen extends ConsumerWidget {
         SettingsListTile(
           isSwitched: false,
           showSwitch: false,
-          title: 'Link Account',
-          subtitle: 'Upgrade to email/password account',
+          title: AppLocalizations.of(context).linkAccountTitle,
+          subtitle: AppLocalizations.of(context).linkAccountSubtitle,
           iconData: Icons.link_rounded,
           onTap: showLinkDialog,
         ),
@@ -255,7 +250,7 @@ class SettingsScreen extends ConsumerWidget {
         isSwitched: settings.analyticsEnabled,
         iconData: Icons.analytics_outlined,
         title: AppLocalizations.of(context).shareAnalytics,
-        subtitle: 'Help improve Scagen by sharing anonymous usage data',
+        subtitle: AppLocalizations.of(context).shareAnalyticsSubtitle,
         onSwitchChanged: (value) {
           if (value) {
             // Re-enable the PostHog SDK before updating settings so the

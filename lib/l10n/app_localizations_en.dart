@@ -136,7 +136,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get copyBtn => 'Copy';
 
   @override
+  String get openBtn => 'Open';
+
+  @override
   String get qrCode => 'QR Code';
+
+  @override
+  String get generatedLabel => 'Generated';
+
+  @override
+  String get scannedResultTitle => 'Scanned Result';
+
+  @override
+  String get noData => 'No data';
 
   @override
   String get saveBtn => 'Save';
@@ -367,6 +379,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authAccount => 'Account';
 
   @override
+  String get linkAccountTitle => 'Link Account';
+
+  @override
+  String get linkAccountSubtitle => 'Upgrade to email/password account';
+
+  @override
+  String get linkAccountEmailLabel => 'Email';
+
+  @override
+  String get linkAccountPasswordLabel => 'Password';
+
+  @override
+  String get linkAccountNameOptionalLabel => 'Name (optional)';
+
+  @override
+  String get linkAccountCancel => 'Cancel';
+
+  @override
+  String get linkAccountAction => 'Link';
+
+  @override
+  String get linkAccountEmailRequired => 'Email required';
+
+  @override
+  String get linkAccountPasswordMin => 'Min 8 chars';
+
+  @override
   String get snackbarLocationPermissionDenied => 'Location permission denied';
 
   @override
@@ -383,6 +422,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get snackbarCopiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get noQrFoundInImage => 'No QR code found in selected image';
 
   @override
   String get apiErrorUserAlreadyExists =>
@@ -437,6 +479,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get historyEmpty => 'No history yet';
+
+  @override
+  String get syncNow => 'Sync now';
+
+  @override
+  String get syncCompleted => 'Sync complete';
+
+  @override
+  String get pendingSync => 'Pending';
 
   @override
   String get privacy => 'Privacy';

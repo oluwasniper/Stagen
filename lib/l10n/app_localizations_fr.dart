@@ -136,7 +136,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get copyBtn => 'Copier';
 
   @override
+  String get openBtn => 'Ouvrir';
+
+  @override
   String get qrCode => 'Code QR';
+
+  @override
+  String get generatedLabel => 'Généré';
+
+  @override
+  String get scannedResultTitle => 'Résultat scanné';
+
+  @override
+  String get noData => 'Aucune donnée';
 
   @override
   String get saveBtn => 'Enregistrer';
@@ -368,6 +380,33 @@ class AppLocalizationsFr extends AppLocalizations {
   String get authAccount => 'Compte';
 
   @override
+  String get linkAccountTitle => 'Lier le compte';
+
+  @override
+  String get linkAccountSubtitle => 'Passer à un compte e-mail/mot de passe';
+
+  @override
+  String get linkAccountEmailLabel => 'E-mail';
+
+  @override
+  String get linkAccountPasswordLabel => 'Mot de passe';
+
+  @override
+  String get linkAccountNameOptionalLabel => 'Nom (facultatif)';
+
+  @override
+  String get linkAccountCancel => 'Annuler';
+
+  @override
+  String get linkAccountAction => 'Lier';
+
+  @override
+  String get linkAccountEmailRequired => 'E-mail requis';
+
+  @override
+  String get linkAccountPasswordMin => '8 caractères min.';
+
+  @override
   String get snackbarLocationPermissionDenied =>
       'Autorisation de localisation refusée';
 
@@ -386,6 +425,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get snackbarCopiedToClipboard => 'Copié dans le presse-papiers';
+
+  @override
+  String get noQrFoundInImage =>
+      'Aucun code QR trouvé dans l’image sélectionnée';
 
   @override
   String get apiErrorUserAlreadyExists =>
@@ -439,6 +482,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get historyEmpty => 'Pas encore d\'historique';
+
+  @override
+  String get syncNow => 'Synchroniser';
+
+  @override
+  String get syncCompleted => 'Synchronisation terminée';
+
+  @override
+  String get pendingSync => 'En attente';
 
   @override
   String get privacy => 'Confidentialité';
