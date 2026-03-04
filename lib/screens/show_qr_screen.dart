@@ -149,8 +149,8 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                             );
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Failed to share')),
+                                SnackBar(
+                                    content: Text(AppLocalizations.of(context).failedToShare)),
                               );
                             }
                           }
