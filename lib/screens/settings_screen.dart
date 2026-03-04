@@ -3,11 +3,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../l10n/app_localizations.dart';
 import '../l10n/l10n.dart';
 import '../providers/auth_provider.dart';
-import '../services/telemetry_service.dart';
 import '../providers/settings_provider.dart';
+import '../services/telemetry_service.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
@@ -257,10 +258,14 @@ class SettingsScreen extends ConsumerWidget {
             // opt-in event is captured correctly.
             Posthog().enable();
             ref.read(settingsProvider.notifier).toggleAnalytics(value);
-            ref.read(telemetryServiceProvider).track(TelemetryEvents.telemetryOptedIn);
+            ref
+                .read(telemetryServiceProvider)
+                .track(TelemetryEvents.telemetryOptedIn);
           } else {
             // Track before disabling — this opt-out event should be the last one sent.
-            ref.read(telemetryServiceProvider).track(TelemetryEvents.telemetryOptedOut);
+            ref
+                .read(telemetryServiceProvider)
+                .track(TelemetryEvents.telemetryOptedOut);
             ref.read(settingsProvider.notifier).toggleAnalytics(value);
             Posthog().disable();
           }
