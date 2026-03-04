@@ -45,30 +45,39 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   }
 
   Future<void> _load() async {
-    final vibrate = await _storage.read(key: _Keys.vibrate);
-    final beep = await _storage.read(key: _Keys.beep);
-    final analytics = await _storage.read(key: _Keys.analytics);
-    // Default false (opt-out); only explicitly stored 'true' enables it.
-    final analyticsEnabled = analytics == 'true';
-    state = SettingsState(
-      vibrate: vibrate == 'true',
-      beep: beep == 'true',
-      analyticsEnabled: analyticsEnabled,
-    );
-    // Apply persisted consent state to the PostHog SDK on startup so the
-    // PosthogObserver respects the user's previous choice immediately.
     try {
-      if (analyticsEnabled) {
-        await Posthog().enable();
-      } else {
-        await Posthog().disable();
+      final vibrate = await _storage.read(key: _Keys.vibrate);
+      final beep = await _storage.read(key: _Keys.beep);
+      final analytics = await _storage.read(key: _Keys.analytics);
+      // Default false (opt-out); only explicitly stored 'true' enables it.
+      final analyticsEnabled = analytics == 'true';
+      state = SettingsState(
+        vibrate: vibrate == 'true',
+        beep: beep == 'true',
+        analyticsEnabled: analyticsEnabled,
+      );
+      // Apply persisted consent state to the PostHog SDK on startup so the
+      // PosthogObserver respects the user's previous choice immediately.
+      try {
+        if (analyticsEnabled) {
+          await Posthog().enable();
+        } else {
+          await Posthog().disable();
+        }
+      } catch (e, st) {
+        dev.log(
+          '[SettingsNotifier] initial PostHog enable/disable failed: $e',
+          stackTrace: st,
+          name: 'SettingsNotifier',
+        );
       }
     } catch (e, st) {
       dev.log(
-        '[SettingsNotifier] initial PostHog enable/disable failed: $e',
+        '[SettingsNotifier] _load failed, using defaults: $e',
         stackTrace: st,
         name: 'SettingsNotifier',
       );
+      state = const SettingsState(analyticsEnabled: false);
     }
   }
 

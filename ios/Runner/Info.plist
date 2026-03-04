@@ -52,7 +52,18 @@
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-</dict>
+		<key>UIApplicationSupportsIndirectInputEvents</key>
+		<true/>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleURLName</key>
+				<string>com.scagen.processText</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>scagen</string>
+				</array>
+			</dict>
+		</array>
+	</dict>
 </plist>

@@ -145,8 +145,7 @@ class GeneratedQRScreen extends ConsumerWidget {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(AppLocalizations.of(context)
-                                    .snackbarCopiedToClipboard)),
+                                content: Text(l10n.snackbarCopiedToClipboard)),
                           );
                         },
                         child: Container(
@@ -225,7 +224,7 @@ class GeneratedQRScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context).shareBtn,
+                        l10n.shareBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,

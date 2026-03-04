@@ -134,6 +134,11 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
     // Push pending creates
     final creates = await _offline.pendingCreates(type: _type, userId: userId);
     for (final local in creates) {
+      // Re-check that the entry is still pending before pushing remotely.
+      // A concurrent delete can remove it from the pending list between the
+      // snapshot above and this iteration, which would create a ghost record.
+      final stillPending = await _offline.isPendingCreate(local.localId);
+      if (!stillPending) continue;
       try {
         final saved = await _service.saveQRRecord(
           QRRecord(
@@ -146,10 +151,13 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
           ),
         );
         if (saved.id != null) {
-          await _offline.markCreateSynced(
-            localId: local.localId,
-            remoteId: saved.id!,
-          );
+          // Only mark synced if the entry is still present locally.
+          if (await _offline.isPendingCreate(local.localId)) {
+            await _offline.markCreateSynced(
+              localId: local.localId,
+              remoteId: saved.id!,
+            );
+          }
         }
       } catch (_) {
         // Offline/network errors are expected; keep pending for next sync.
@@ -172,18 +180,21 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
     // Pull remote snapshot and merge into local store.
     try {
       final remoteRecords = await _service.getQRRecords(type: _type, userId: userId);
-      final remoteIds = <String>{};
-      for (final remote in remoteRecords) {
-        if (remote.id != null) {
-          remoteIds.add(remote.id!);
-        }
-        await _offline.upsertFromRemote(remote, userId: userId);
+      await _offline.upsertAllFromRemote(remoteRecords, userId: userId);
+      final remoteIds = {
+        for (final r in remoteRecords)
+          if (r.id != null) r.id!,
+      };
+      // Only prune when we have a full remote snapshot. If the result set hit
+      // the server page limit (100) there may be more records we haven't seen,
+      // so skip pruning to avoid deleting valid local records.
+      if (remoteRecords.length < 100) {
+        await _offline.pruneSyncedMissingFromRemote(
+          type: _type,
+          userId: userId,
+          remoteIds: remoteIds,
+        );
       }
-      await _offline.pruneSyncedMissingFromRemote(
-        type: _type,
-        userId: userId,
-        remoteIds: remoteIds,
-      );
     } catch (_) {
       // Pull failed; keep local cache visible.
     }

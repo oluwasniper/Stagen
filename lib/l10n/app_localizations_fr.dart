@@ -484,7 +484,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get historyEmpty => 'Pas encore d\'historique';
 
   @override
-  String get syncNow => 'Synchroniser';
+  String get syncNow => 'Synchroniser maintenant';
 
   @override
   String get syncCompleted => 'Synchronisation terminée';

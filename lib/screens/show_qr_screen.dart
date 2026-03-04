@@ -1,3 +1,5 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -136,7 +138,22 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                     children: [
                       InkWell(
                         onTap: () async {
-                          await SharePlus.instance.share(ShareParams(text: data));
+                          try {
+                            await SharePlus.instance
+                                .share(ShareParams(text: data));
+                          } catch (e, st) {
+                            dev.log(
+                              '[ShowQrScreen] share failed: $e',
+                              stackTrace: st,
+                              name: 'ShowQrScreen',
+                            );
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Failed to share')),
+                              );
+                            }
+                          }
                         },
                         child: Container(
                           height: 50,

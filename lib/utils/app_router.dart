@@ -371,9 +371,36 @@ class AppGoRouter {
         path: AppPath.generateCode,
         name: PathName.generateCode,
         builder: (context, state) {
-          final type = state.extra as QROption;
+          final extra = state.extra;
+          QROption type;
+          Map<String, String>? initialValues;
+
+          if (extra is QROption) {
+            type = extra;
+          } else if (extra is Map) {
+            final typeName = extra['type']?.toString();
+            final qrType = QROptionType.values.firstWhere(
+              (value) => value.name == typeName,
+              orElse: () => QROptionType.text,
+            );
+            type = QROptions.fromType(context, qrType);
+
+            final rawPrefill = extra['prefill'];
+            if (rawPrefill is Map) {
+              initialValues = rawPrefill.map(
+                (key, value) => MapEntry(
+                  key.toString(),
+                  value?.toString() ?? '',
+                ),
+              );
+            }
+          } else {
+            type = QROptions.fromType(context, QROptionType.text);
+          }
+
           return GenerateCodeScreen(
             type: type,
+            initialValues: initialValues,
           );
         },
         parentNavigatorKey: mainNavigatorKey,

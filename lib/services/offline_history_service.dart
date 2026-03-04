@@ -127,6 +127,11 @@ class OfflineHistoryService {
         .toList();
   }
 
+  Future<bool> isPendingCreate(String localId) async {
+    final record = _box.get(localId);
+    return record != null && record.pendingCreate && !record.pendingDelete;
+  }
+
   Future<void> markCreateSynced({
     required String localId,
     required String remoteId,
@@ -180,6 +185,51 @@ class OfflineHistoryService {
       pendingDelete: false,
     );
     await _box.put(local.localId, local);
+  }
+
+  /// Upserts a batch of remote records using a single O(n) index scan rather
+  /// than an O(n²) per-record search.
+  Future<void> upsertAllFromRemote(
+    List<QRRecord> remotes, {
+    required String userId,
+  }) async {
+    final remoteIdIndex = <String, LocalQRRecord>{
+      for (final r in _box.values)
+        if (r.remoteId != null) r.remoteId!: r,
+    };
+
+    for (final remote in remotes) {
+      final current = remote.id != null ? remoteIdIndex[remote.id] : null;
+      if (current != null) {
+        if (!current.pendingCreate && !current.pendingDelete) {
+          await _box.put(
+            current.localId,
+            current.copyWith(
+              data: remote.data,
+              type: remote.type,
+              qrType: remote.qrType,
+              label: remote.label,
+              userId: remote.userId ?? userId,
+              createdAt: remote.createdAt,
+            ),
+          );
+        }
+      } else {
+        final local = LocalQRRecord(
+          localId: _newLocalId(),
+          remoteId: remote.id,
+          data: remote.data,
+          type: remote.type,
+          qrType: remote.qrType,
+          label: remote.label,
+          userId: remote.userId ?? userId,
+          createdAt: remote.createdAt,
+          pendingCreate: false,
+          pendingDelete: false,
+        );
+        await _box.put(local.localId, local);
+      }
+    }
   }
 
   Future<void> pruneSyncedMissingFromRemote({
