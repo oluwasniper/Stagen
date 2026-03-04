@@ -30,14 +30,23 @@ class ExternalProcessTextService {
 
     try {
       final initialTexts =
-          await _channel.invokeMethod<List<dynamic>>('getInitialText');
-      for (final text
-          in initialTexts?.whereType<String>() ?? const <String>[]) {
-        if (text.trim().isNotEmpty) {
-          _streamController.add(text.trim());
+          await _channel.invokeMethod<dynamic>('getInitialText');
+      if (initialTexts is String) {
+        final text = initialTexts.trim();
+        if (text.isNotEmpty) {
+          _streamController.add(text);
+        }
+      } else if (initialTexts is List) {
+        for (final text in initialTexts.whereType<String>()) {
+          final trimmed = text.trim();
+          if (trimmed.isNotEmpty) {
+            _streamController.add(trimmed);
+          }
         }
       }
-    } catch (_) {
+    } on MissingPluginException {
+      // Not supported on this platform/build or no incoming intent text.
+    } on PlatformException {
       // Not supported on this platform/build or no incoming intent text.
     }
   }
