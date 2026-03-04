@@ -18,6 +18,7 @@ class ScannedQRScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final qrData = ref.watch(scannedQRDataProvider) ?? '';
 
     return BackgroundScreenWidget(
@@ -47,8 +48,8 @@ class ScannedQRScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Scanned Result',
+                    Text(
+                      l10n.scannedResultTitle,
                       style: TextStyle(
                         color: Color(0xffFDB623),
                         fontSize: 20,
@@ -105,7 +106,7 @@ class ScannedQRScreen extends ConsumerWidget {
                         version: QrVersions.auto,
                         size: 200.0,
                       )
-                    : const Center(child: Text('No data')),
+                    : Center(child: Text(l10n.noData)),
               ),
             )
                 .animate()
@@ -164,8 +165,8 @@ class ScannedQRScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 7),
-                      const Text(
-                        'Copy',
+                      Text(
+                        l10n.copyBtn,
                         style: TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
@@ -210,8 +211,8 @@ class ScannedQRScreen extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(height: 7),
-                        const Text(
-                          'Open',
+                        Text(
+                          l10n.openBtn,
                           style: TextStyle(
                             color: Color(0xffD9D9D9),
                             fontSize: 15,

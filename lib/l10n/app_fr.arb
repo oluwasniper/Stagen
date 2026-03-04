@@ -51,8 +51,12 @@
     "showQRCode": "Afficher le code QR",
     "shareBtn": "Partager",
     "copyBtn": "Copier",
+    "openBtn": "Ouvrir",
 
     "qrCode": "Code QR",
+    "generatedLabel": "Généré",
+    "scannedResultTitle": "Résultat scanné",
+    "noData": "Aucune donnée",
     "saveBtn": "Enregistrer",
 
     "generateQRCodeBtn": "Générer un code QR",
@@ -149,6 +153,15 @@
     "authLogout": "Déconnexion",
     "authLogoutDesc": "Se déconnecter de votre compte",
     "authAccount": "Compte",
+    "linkAccountTitle": "Lier le compte",
+    "linkAccountSubtitle": "Passer à un compte e-mail/mot de passe",
+    "linkAccountEmailLabel": "E-mail",
+    "linkAccountPasswordLabel": "Mot de passe",
+    "linkAccountNameOptionalLabel": "Nom (facultatif)",
+    "linkAccountCancel": "Annuler",
+    "linkAccountAction": "Lier",
+    "linkAccountEmailRequired": "E-mail requis",
+    "linkAccountPasswordMin": "8 caractères min.",
 
     "snackbarLocationPermissionDenied": "Autorisation de localisation refusée",
     "snackbarLocationPermissionPermanentlyDenied": "Les autorisations de localisation sont définitivement refusées. Veuillez les activer dans les paramètres.",
@@ -163,6 +176,7 @@
     },
     "snackbarFillRequiredFields": "Veuillez remplir les champs obligatoires",
     "snackbarCopiedToClipboard": "Copié dans le presse-papiers",
+    "noQrFoundInImage": "Aucun code QR trouvé dans l’image sélectionnée",
 
     "apiErrorUserAlreadyExists": "Un compte avec cet e-mail existe déjà.",
     "apiErrorInvalidCredentials": "E-mail ou mot de passe invalide.",
@@ -180,6 +194,9 @@
     "historyLoadFailed": "Impossible de charger l'historique",
     "historyRetry": "Réessayer",
     "historyEmpty": "Pas encore d'historique",
+    "syncNow": "Synchroniser",
+    "syncCompleted": "Synchronisation terminée",
+    "pendingSync": "En attente",
 
     "privacy": "Confidentialité",
     "shareAnalytics": "Partager les analyses",

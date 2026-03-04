@@ -136,7 +136,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get copyBtn => 'Copiar';
 
   @override
+  String get openBtn => 'Abrir';
+
+  @override
   String get qrCode => 'Código QR';
+
+  @override
+  String get generatedLabel => 'Gerado';
+
+  @override
+  String get scannedResultTitle => 'Resultado escaneado';
+
+  @override
+  String get noData => 'Sem dados';
 
   @override
   String get saveBtn => 'Salvar';
@@ -367,6 +379,33 @@ class AppLocalizationsPt extends AppLocalizations {
   String get authAccount => 'Conta';
 
   @override
+  String get linkAccountTitle => 'Vincular conta';
+
+  @override
+  String get linkAccountSubtitle => 'Atualizar para conta com e-mail e senha';
+
+  @override
+  String get linkAccountEmailLabel => 'E-mail';
+
+  @override
+  String get linkAccountPasswordLabel => 'Senha';
+
+  @override
+  String get linkAccountNameOptionalLabel => 'Nome (opcional)';
+
+  @override
+  String get linkAccountCancel => 'Cancelar';
+
+  @override
+  String get linkAccountAction => 'Vincular';
+
+  @override
+  String get linkAccountEmailRequired => 'E-mail obrigatório';
+
+  @override
+  String get linkAccountPasswordMin => 'Mínimo de 8 caracteres';
+
+  @override
   String get snackbarLocationPermissionDenied =>
       'Permissão de localização negada';
 
@@ -386,6 +425,10 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get snackbarCopiedToClipboard =>
       'Copiado para a área de transferência';
+
+  @override
+  String get noQrFoundInImage =>
+      'Nenhum código QR encontrado na imagem selecionada';
 
   @override
   String get apiErrorUserAlreadyExists =>
@@ -439,6 +482,15 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get historyEmpty => 'Nenhum histórico ainda';
+
+  @override
+  String get syncNow => 'Sincronizar agora';
+
+  @override
+  String get syncCompleted => 'Sincronização concluída';
+
+  @override
+  String get pendingSync => 'Pendente';
 
   @override
   String get privacy => 'Privacidade';
