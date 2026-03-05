@@ -123,6 +123,13 @@
 
     "phoneNumberLabel": "Numéro de téléphone",
     "phoneNumberHint": "+55xxxxxxxxx",
+    "locationUseCurrentLocation": "Utiliser la position actuelle",
+    "locationGettingCurrentLocation": "Récupération de la position...",
+    "locationOrDivider": "OU",
+    "locationLatitudeLabel": "Latitude",
+    "locationLatitudeHint": "Entrez la latitude",
+    "locationLongitudeLabel": "Longitude",
+    "locationLongitudeHint": "Entrez la longitude",
 
     "changeLanguage": "Langue",
     "changeLanguageDesc": "Changer la langue de l'application",

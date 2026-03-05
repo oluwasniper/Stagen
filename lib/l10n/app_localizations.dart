@@ -714,6 +714,48 @@ abstract class AppLocalizations {
   /// **'+92xxxxxxxxxx'**
   String get phoneNumberHint;
 
+  /// Button label to use the device current location
+  ///
+  /// In en, this message translates to:
+  /// **'Use Current Location'**
+  String get locationUseCurrentLocation;
+
+  /// Button label shown while fetching current location
+  ///
+  /// In en, this message translates to:
+  /// **'Getting location...'**
+  String get locationGettingCurrentLocation;
+
+  /// Divider text between current location action and manual coordinate entry
+  ///
+  /// In en, this message translates to:
+  /// **'OR'**
+  String get locationOrDivider;
+
+  /// Label for the latitude input
+  ///
+  /// In en, this message translates to:
+  /// **'Latitude'**
+  String get locationLatitudeLabel;
+
+  /// Hint for the latitude input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter latitude'**
+  String get locationLatitudeHint;
+
+  /// Label for the longitude input
+  ///
+  /// In en, this message translates to:
+  /// **'Longitude'**
+  String get locationLongitudeLabel;
+
+  /// Hint for the longitude input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter longitude'**
+  String get locationLongitudeHint;
+
   /// Label for the language setting
   ///
   /// In en, this message translates to:

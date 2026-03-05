@@ -320,6 +320,27 @@ class AppLocalizationsEs extends AppLocalizations {
   String get phoneNumberHint => '+[código de país] xxxxxxxxx';
 
   @override
+  String get locationUseCurrentLocation => 'Usar ubicación actual';
+
+  @override
+  String get locationGettingCurrentLocation => 'Obteniendo ubicación...';
+
+  @override
+  String get locationOrDivider => 'O';
+
+  @override
+  String get locationLatitudeLabel => 'Latitud';
+
+  @override
+  String get locationLatitudeHint => 'Ingrese la latitud';
+
+  @override
+  String get locationLongitudeLabel => 'Longitud';
+
+  @override
+  String get locationLongitudeHint => 'Ingrese la longitud';
+
+  @override
   String get changeLanguage => 'Idioma';
 
   @override
