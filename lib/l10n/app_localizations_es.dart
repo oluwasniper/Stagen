@@ -301,10 +301,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get whatsappNumberHint => 'Ingrese el número de WhatsApp';
 
   @override
-  String get twitterUsernameLabel => 'Nombre de usuario de Twitter';
+  String get twitterUsernameLabel => 'Nombre de usuario de X(Twitter)';
 
   @override
-  String get twitterUsernameHint => 'Ingrese el nombre de usuario de Twitter';
+  String get twitterUsernameHint =>
+      'Ingrese el nombre de usuario de X(Twitter)';
 
   @override
   String get instagramUsernameLabel => 'Nombre de usuario de Instagram';
