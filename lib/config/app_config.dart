@@ -4,6 +4,7 @@
 ///   flutter run \
 ///     --dart-define=APPWRITE_ENDPOINT=https://fra.cloud.appwrite.io/v1 \
 ///     --dart-define=APPWRITE_PROJECT_ID=your_project_id \
+///     --dart-define=APPWRITE_PROJECT_NAME=your_project_name \
 ///     --dart-define=POSTHOG_API_KEY=phc_your_key \
 ///     --dart-define=POSTHOG_HOST=https://us.i.posthog.com
 ///
@@ -32,7 +33,8 @@ class AppConfig {
         .trim();
     if (raw.isEmpty) return '';
 
-    final sanitized = _stripWrappingQuotes(raw).replaceFirst(RegExp(r'/+$'), '');
+    final sanitized =
+        _stripWrappingQuotes(raw).replaceFirst(RegExp(r'/+$'), '');
     if (sanitized.isEmpty) return '';
     if (sanitized.endsWith('/v1')) return sanitized;
     return '$sanitized/v1';
@@ -56,6 +58,11 @@ class AppConfig {
 
   static const String appwriteProjectId = String.fromEnvironment(
     'APPWRITE_PROJECT_ID',
+    defaultValue: '',
+  );
+
+  static const String appwriteProjectName = String.fromEnvironment(
+    'APPWRITE_PROJECT_NAME',
     defaultValue: '',
   );
 

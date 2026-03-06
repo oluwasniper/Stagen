@@ -40,8 +40,8 @@ dependencies:
   flutter_secure_storage: ^9.2.2 # Secure storage
   page_transition: ^2.1.0 # Page transitions
   qr_flutter: ^4.1.0 # QR code generation
-  appwrite: ^17.0.1 # Appwrite
-  flutter_web_auth_2: ^4.1.0 # Web authentication
+  appwrite: 21.1.0 # Appwrite
+  flutter_web_auth_2: ^5.0.0-alpha.3 # Web authentication
   flutter_localizations:
     sdk: flutter 
   intl: ">=0.19.0 <0.21.0" # Internationalization (compatible with Flutter SDK pinning across versions)
