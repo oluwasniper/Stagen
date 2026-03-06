@@ -86,7 +86,11 @@ class AuthService {
     try {
       await _account.deleteSession(sessionId: 'current');
     } catch (_) {
-      // Session may already be expired / deleted
+      // Session may already be expired / deleted; try deleting all sessions
+      // as a fallback to ensure we're fully signed out.
+      try {
+        await _account.deleteSessions();
+      } catch (_) {}
     }
   }
 }

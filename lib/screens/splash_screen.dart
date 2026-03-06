@@ -9,11 +9,16 @@ import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/splash_logo_widget.dart';
 
-class SplashScreen extends ConsumerWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends ConsumerState<SplashScreen> {
+  @override
+  Widget build(BuildContext context) {
     /// AnnotatedRegion is used to set the system UI overlay style
 
     return AnnotatedRegion(
@@ -56,8 +61,11 @@ class SplashScreen extends ConsumerWidget {
 
           /// onEnd is used to navigate to the next screen after the splash screen ends
           onEnd: () async {
+            if (!mounted) return;
+            final authNotifier = ref.read(authProvider.notifier);
             // Wait for auth initialization to finish
-            await ref.read(authProvider.notifier).initComplete;
+            await authNotifier.initComplete;
+            if (!mounted) return;
             final auth = ref.read(authProvider);
             if (auth.isAuthenticated) {
               // Existing session → go straight to home
