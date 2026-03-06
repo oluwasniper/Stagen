@@ -10,6 +10,7 @@ import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../providers/qr_providers.dart';
 import '../providers/settings_provider.dart';
+import '../services/appwrite_client.dart';
 import '../services/telemetry_service.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
@@ -29,7 +30,9 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
 
   String _classifyContent(String data) {
     final lower = data.toLowerCase();
-    if (lower.startsWith('http://') || lower.startsWith('https://')) return 'url';
+    if (lower.startsWith('http://') || lower.startsWith('https://')) {
+      return 'url';
+    }
     if (lower.startsWith('mailto:')) return 'email';
     if (lower.startsWith('tel:')) return 'phone';
     if (lower.startsWith('wifi:')) return 'wifi';
@@ -106,7 +109,8 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
       if (code == null || code.isEmpty) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).noQrFoundInImage)),
+          SnackBar(
+              content: Text(AppLocalizations.of(context).noQrFoundInImage)),
         );
         return;
       }
@@ -116,6 +120,21 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
         '[ScanHomeScreen] gallery scan failed: $e',
         stackTrace: st,
         name: 'ScanHomeScreen',
+      );
+    }
+  }
+
+  Future<void> _sendPing() async {
+    try {
+      await client.ping();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Ping sent successfully.')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ping failed: $e')),
       );
     }
   }
@@ -170,7 +189,9 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
                   GestureDetector(
                     onTap: () {
                       controller.toggleTorch();
-                      ref.read(telemetryServiceProvider).track(TelemetryEvents.scannerTorchToggled);
+                      ref
+                          .read(telemetryServiceProvider)
+                          .track(TelemetryEvents.scannerTorchToggled);
                     },
                     child: const Padding(
                       padding:
@@ -181,7 +202,9 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
                   GestureDetector(
                     onTap: () {
                       controller.switchCamera();
-                      ref.read(telemetryServiceProvider).track(TelemetryEvents.scannerCameraSwitched);
+                      ref
+                          .read(telemetryServiceProvider)
+                          .track(TelemetryEvents.scannerCameraSwitched);
                     },
                     child: const Padding(
                       padding:
@@ -192,6 +215,15 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
                 ],
               ),
             )),
+        Positioned(
+          left: 30,
+          right: 30,
+          bottom: 50,
+          child: ElevatedButton(
+            onPressed: _sendPing,
+            child: const Text('Send a ping'),
+          ),
+        ),
       ],
     );
   }

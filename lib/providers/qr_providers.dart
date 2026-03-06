@@ -3,30 +3,15 @@ import 'dart:async';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../config/app_config.dart';
 import '../models/qr_record.dart';
 import '../services/appwrite_service.dart';
+import '../services/appwrite_client.dart';
 import '../services/offline_history_service.dart';
 import 'auth_provider.dart';
 
 // ─── Appwrite Client & Service Providers ───
 
 final appwriteClientProvider = Provider<Client>((ref) {
-  final configError = AppConfig.appwriteConfigError;
-  if (configError != null) {
-    throw StateError(
-      '$configError '
-      'Pass --dart-define-from-file=.env or explicit --dart-define flags.',
-    );
-  }
-  if (AppConfig.appwriteProjectId.isEmpty) {
-    throw StateError('AppConfig.appwriteProjectId is not configured. '
-        'Pass --dart-define=APPWRITE_PROJECT_ID=<value> at build time.');
-  }
-  final client = Client();
-  client
-      .setEndpoint(AppConfig.appwriteEndpoint)
-      .setProject(AppConfig.appwriteProjectId);
   return client;
 });
 
