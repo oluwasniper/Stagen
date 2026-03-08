@@ -29,7 +29,7 @@ class SettingsState {
   const SettingsState({
     this.vibrate = false,
     this.beep = false,
-    this.analyticsEnabled = false,
+    this.analyticsEnabled = true,
   });
 
   SettingsState copyWith({bool? vibrate, bool? beep, bool? analyticsEnabled}) {
@@ -54,8 +54,8 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
       final vibrate = await _storage.read(key: _Keys.vibrate);
       final beep = await _storage.read(key: _Keys.beep);
       final analytics = await _storage.read(key: _Keys.analytics);
-      // Default false (opt-out); only explicitly stored 'true' enables it.
-      final analyticsEnabled = analytics == 'true';
+      // Default true (opt-in); only explicitly stored 'false' disables it.
+      final analyticsEnabled = analytics != 'false';
       state = SettingsState(
         vibrate: vibrate == 'true',
         beep: beep == 'true',
@@ -82,9 +82,9 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
         stackTrace: st,
         name: 'SettingsNotifier',
       );
-      state = const SettingsState(analyticsEnabled: false);
+      state = const SettingsState(analyticsEnabled: true);
       try {
-        await Posthog().disable();
+        await Posthog().enable();
       } catch (_) {}
     }
   }

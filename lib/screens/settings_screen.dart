@@ -326,6 +326,7 @@ class SettingsScreen extends ConsumerWidget {
           AppGoRouter.router.go(AppPath.auth);
         },
       ),
+      const SizedBox(height: 20),
     ];
 
     return BackgroundScreenWidget(
