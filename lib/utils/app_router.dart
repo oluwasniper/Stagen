@@ -438,24 +438,73 @@ class AppGoRouter {
     return CustomTransitionPage(
       key: state.pageKey,
       child: child,
-      transitionDuration: const Duration(milliseconds: 300),
-      reverseTransitionDuration: const Duration(milliseconds: 250),
+      transitionDuration: const Duration(milliseconds: 380),
+      reverseTransitionDuration: const Duration(milliseconds: 300),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        final curved = CurvedAnimation(
+        // Spring-style forward curve (fast out, then settle)
+        final forwardCurved = CurvedAnimation(
           parent: animation,
-          curve: Curves.easeInOut,
+          curve: const _SpringCurve(),
+          reverseCurve: Curves.easeIn,
         );
+
+        // Secondary animation: outgoing screen fades and scales slightly
+        final secondaryCurved = CurvedAnimation(
+          parent: secondaryAnimation,
+          curve: Curves.easeIn,
+        );
+
         return FadeTransition(
-          opacity: curved,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.04, 0),
-              end: Offset.zero,
-            ).animate(curved),
-            child: child,
+          opacity: Tween<double>(begin: 0.0, end: 1.0).animate(forwardCurved),
+          child: FadeTransition(
+            opacity: Tween<double>(begin: 1.0, end: 0.92).animate(secondaryCurved),
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.055, 0),
+                end: Offset.zero,
+              ).animate(forwardCurved),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 0.97, end: 1.0).animate(forwardCurved),
+                child: child,
+              ),
+            ),
           ),
         );
       },
     );
+  }
+}
+
+/// Approximates iOS spring physics: fast start, gentle overshoot, smooth settle.
+class _SpringCurve extends Curve {
+  const _SpringCurve();
+
+  @override
+  double transformInternal(double t) {
+    // Cubic bezier approximation of a spring: fast out, tiny overshoot, settle
+    // Equivalent to cubic-bezier(0.34, 1.56, 0.64, 1) from CSS springs
+    return _cubicBezier(t, 0.34, 1.56, 0.64, 1.0);
+  }
+
+  /// Evaluates a cubic bezier at parameter [t] using numerical solve.
+  static double _cubicBezier(double t, double x1, double y1, double x2, double y2) {
+    double cx = 3 * x1;
+    double bx = 3 * (x2 - x1) - cx;
+    double ax = 1 - cx - bx;
+
+    double cy = 3 * y1;
+    double by = 3 * (y2 - y1) - cy;
+    double ay = 1 - cy - by;
+
+    // Solve for u such that bezierX(u) == t
+    double u = t;
+    for (int i = 0; i < 4; i++) {
+      double x = ((ax * u + bx) * u + cx) * u - t;
+      double dx = (3 * ax * u + 2 * bx) * u + cx;
+      if (dx.abs() < 1e-6) break;
+      u -= x / dx;
+    }
+    u = u.clamp(0.0, 1.0);
+    return ((ay * u + by) * u + cy) * u;
   }
 }

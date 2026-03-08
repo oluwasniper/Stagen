@@ -119,54 +119,108 @@ class QROptions {
   }
 }
 
-class QROptionCard extends StatelessWidget {
+class QROptionCard extends StatefulWidget {
   final QROption option;
 
   const QROptionCard({super.key, required this.option});
 
   @override
+  State<QROptionCard> createState() => _QROptionCardState();
+}
+
+class _QROptionCardState extends State<QROptionCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _pressController;
+  late Animation<double> _pressScale;
+  @override
+  void initState() {
+    super.initState();
+    _pressController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+      reverseDuration: const Duration(milliseconds: 220),
+    );
+    _pressScale = Tween<double>(begin: 1.0, end: 0.91).animate(
+      CurvedAnimation(parent: _pressController, curve: Curves.easeIn),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pressController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topCenter,
-      children: [
-        Center(
-          child: Container(
-            padding: const EdgeInsets.all(30),
-            decoration: BoxDecoration(
-              border: Border.all(color: Color(0xffFDB623), width: 2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            // child: Icon(option.icon, color: Color(0xffFDB623), size: 30),
-            child: SvgPicture.asset(
-              option.svgData,
-              colorFilter: ColorFilter.mode(
-                Color(0xffFDB623),
-                BlendMode.srcIn,
+    return GestureDetector(
+      onTapDown: (_) => _pressController.forward(),
+      onTapUp: (_) => _pressController.reverse(),
+      onTapCancel: () => _pressController.reverse(),
+      child: AnimatedBuilder(
+        animation: _pressController,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _pressScale.value,
+            child: child,
+          );
+        },
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(28),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color(0xffFDB623).withValues(alpha: 0.85),
+                    width: 1.5,
+                  ),
+                  borderRadius: BorderRadius.circular(14),
+                  color: const Color(0xffFDB623).withValues(alpha: 0.07),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xffFDB623).withValues(alpha: 0.12),
+                      blurRadius: 12,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: Hero(
+                  tag: 'qr_icon_${widget.option.type.name}',
+                  child: SvgPicture.asset(
+                    widget.option.svgData,
+                    colorFilter: const ColorFilter.mode(
+                      Color(0xffFDB623),
+                      BlendMode.srcIn,
+                    ),
+                    width: 36,
+                    height: 36,
+                  ),
+                ),
               ),
-              width: 40,
-              height: 40,
             ),
-          ),
-        ),
-        Positioned(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: Color(0xffFDB623),
-              border: Border.all(color: Color(0xffFDB623), width: 2),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              option.label,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w300,
-                color: Color(0xff2D3047),
+            Positioned(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xffFDB623),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Text(
+                  widget.option.label,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xff1A1A1A),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

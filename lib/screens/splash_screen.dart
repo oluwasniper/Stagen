@@ -1,13 +1,13 @@
-import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/app_localizations.dart';
 import '../providers/auth_provider.dart';
+import '../utils/app_asset.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
-import '../widgets/splash_logo_widget.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -17,64 +17,120 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
+  bool _animationDone = false;
+  bool _authDone = false;
+
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Color(0xffFDB623),
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Color(0xffFDB623),
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
+    _startAuth();
+  }
+
+  Future<void> _startAuth() async {
+    final authNotifier = ref.read(authProvider.notifier);
+    await authNotifier.initComplete;
+    if (!mounted) return;
+    setState(() => _authDone = true);
+    _maybeNavigate();
+  }
+
+  void _onAnimationComplete() {
+    if (!mounted) return;
+    setState(() => _animationDone = true);
+    _maybeNavigate();
+  }
+
+  void _maybeNavigate() {
+    if (!_animationDone || !_authDone) return;
+    final auth = ref.read(authProvider);
+    if (auth.isAuthenticated) {
+      AppGoRouter.router.go(AppPath.home);
+    } else {
+      AppGoRouter.router.go(AppPath.onboarding);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    /// AnnotatedRegion is used to set the system UI overlay style
+    final iconSize = MediaQuery.sizeOf(context).width * 0.38;
 
-    return AnnotatedRegion(
-      /// SystemChrome.setEnabledSystemUIMode is used to set the system UI mode
-      value: SystemChrome.setEnabledSystemUIMode(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Color(0xffFDB623),
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Color(0xffFDB623),
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        backgroundColor: const Color(0xffFDB623),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // App icon — spring scale + fade
+              Image.asset(
+                AppAsset.icon,
+                height: iconSize,
+                width: iconSize,
+                filterQuality: FilterQuality.high,
+                semanticLabel:
+                    '${AppLocalizations.of(context).appName} App Icon',
+              )
+                  .animate()
+                  .scale(
+                    begin: const Offset(0.5, 0.5),
+                    end: const Offset(1.0, 1.0),
+                    duration: 650.ms,
+                    curve: Curves.elasticOut,
+                  )
+                  .fade(begin: 0, end: 1, duration: 300.ms),
 
-          /// Manual mode for controlling system UI (status bar and navigation bar).
-          /// This gives full control over system chrome settings and visibility.
-          /// Use this with [SystemChrome.setSystemUIMode] and [SystemChrome.setEnabledSystemUIMode].
+              const SizedBox(height: 24),
 
-          SystemUiMode.manual,
-          overlays: [
-            SystemUiOverlay.top,
-          ]),
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
-          /// statusBarColor is used to set the color of the status bar
-          statusBarColor: Color(0xffFDB623),
+              // App name — slide up + fade
+              Text(
+                AppLocalizations.of(context).appName,
+                style: const TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                  letterSpacing: 1.5,
+                ),
+              )
+                  .animate()
+                  .slideY(
+                    begin: 0.4,
+                    end: 0,
+                    delay: 300.ms,
+                    duration: 500.ms,
+                    curve: Curves.easeOutCubic,
+                  )
+                  .fade(begin: 0, end: 1, delay: 300.ms, duration: 400.ms),
 
-          /// statusBarIconBrightness is used to set the brightness of the status bar icons
-          statusBarIconBrightness: Brightness.dark,
+              const SizedBox(height: 8),
 
-          /// systemNavigationBarColor is used to set the color of the system navigation bar
-          systemNavigationBarColor: Color(0xffFDB623),
-
-          /// systemNavigationBarIconBrightness is used to set the brightness of the system navigation bar icons
-          systemNavigationBarIconBrightness: Brightness.dark,
-        ),
-
-        /// FlutterSplashScreen is used to show the splash screen
-        child: FlutterSplashScreen(
-          /// SplashLogoWidget is used to show the logo on the splash screen
-          splashScreenBody: SplashLogoWidget(),
-
-          /// backgroundColor is used to set the background color of the splash screen
-          backgroundColor: Color(0xffFDB623),
-
-          /// duration is used to set the duration of the splash screen
-          duration: Duration(seconds: 3),
-
-          /// onEnd is used to navigate to the next screen after the splash screen ends
-          onEnd: () async {
-            if (!mounted) return;
-            final authNotifier = ref.read(authProvider.notifier);
-            // Wait for auth initialization to finish
-            await authNotifier.initComplete;
-            if (!mounted) return;
-            final auth = ref.read(authProvider);
-            if (auth.isAuthenticated) {
-              // Existing session → go straight to home
-              AppGoRouter.router.go(AppPath.home);
-            } else {
-              // No session → onboarding → auth
-              AppGoRouter.router.go(AppPath.onboarding);
-            }
-          },
+              // Tagline — last to appear, then triggers navigation
+              Text(
+                'Scan · Generate · Share',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black.withValues(alpha: 0.55),
+                  letterSpacing: 2.2,
+                ),
+              )
+                  .animate()
+                  .fade(begin: 0, end: 1, delay: 520.ms, duration: 450.ms)
+                  .then(delay: 500.ms)
+                  .callback(callback: (_) => _onAnimationComplete()),
+            ],
+          ),
         ),
       ),
     );
