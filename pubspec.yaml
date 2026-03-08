@@ -61,6 +61,7 @@ dependencies:
   hive_flutter: ^1.1.0
   posthog_flutter: ^5.17.0
   share_plus: ^12.0.1 # Sharing content
+  path_provider: ^2.1.0 # Temp directory for sharing files
   image_picker: ^1.1.2 # Pick image from gallery for QR scan
 
 dev_dependencies:
