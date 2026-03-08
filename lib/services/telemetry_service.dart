@@ -50,6 +50,22 @@ abstract final class TelemetryEvents {
   static const String languageChanged = 'language_changed';
   static const String telemetryOptedOut = 'telemetry_opted_out';
   static const String telemetryOptedIn = 'telemetry_opted_in';
+
+  // App Quality
+  static const String appStartupComplete = 'app_startup_complete';
+  static const String appException = 'app_exception';
+  static const String screenView = 'screen_view';
+  static const String screenDwell = 'screen_dwell';
+  static const String frameJankWindow = 'frame_jank_window';
+  static const String memoryPressureHandled = 'memory_pressure_handled';
+  static const String backgroundSyncCompleted = 'background_sync_completed';
+  static const String backgroundSyncFailed = 'background_sync_failed';
+
+  // Push Notifications
+  static const String pushRegistrationAttempted = 'push_registration_attempted';
+  static const String pushRegistrationFailed = 'push_registration_failed';
+  static const String pushNotificationReceived = 'push_notification_received';
+  static const String pushNotificationOpened = 'push_notification_opened';
 }
 
 // ─── TelemetryService ─────────────────────────────────────────────────────────
@@ -143,8 +159,7 @@ Future<void> initPostHog() async {
   try {
     const storage = FlutterSecureStorage();
     final analyticsValue = await storage.read(key: kSettingAnalyticsKey);
-    // Mirror SettingsNotifier: only 'true' enables analytics; null (first-run)
-    // and any other value are treated as disabled.
+    // Mirror SettingsNotifier: analytics is enabled only for explicit opt-in.
     if (analyticsValue != 'true') {
       try {
         await Posthog().disable();

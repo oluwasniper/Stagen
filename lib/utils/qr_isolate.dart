@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:isolate';
 
 /// Runs QR data classification + any heavy string parsing in a background
@@ -8,10 +9,143 @@ import 'dart:isolate';
 /// final result = await QRIsolate.classify(rawData);
 /// ```
 abstract final class QRIsolate {
+  static const _requestTimeout = Duration(seconds: 2);
+
+  static Isolate? _workerIsolate;
+  static ReceivePort? _receivePort;
+  static SendPort? _workerSendPort;
+  static Completer<void>? _startupCompleter;
+  static int _nextRequestId = 0;
+  static final Map<int, Completer<QRClassification>> _pendingRequests = {};
+
+  /// Starts the worker isolate ahead of time, so the first scan has no spawn
+  /// latency on the UI thread.
+  static Future<void> prewarm() async {
+    await _ensureWorkerStarted();
+  }
+
   /// Classifies raw QR data off the main thread and returns a [QRClassification].
+  ///
+  /// If isolate infrastructure fails for any reason, falls back to local
+  /// classification to avoid breaking the user flow.
   static Future<QRClassification> classify(String data) async {
-    final result = await Isolate.run(() => _classifyInIsolate(data));
-    return result;
+    try {
+      await _ensureWorkerStarted();
+      final port = _workerSendPort;
+      if (port == null) {
+        return _classifyInIsolate(data);
+      }
+
+      final id = _nextRequestId++;
+      final completer = Completer<QRClassification>();
+      _pendingRequests[id] = completer;
+      port.send({'id': id, 'data': data});
+
+      return completer.future.timeout(
+        _requestTimeout,
+        onTimeout: () {
+          _pendingRequests.remove(id);
+          return _classifyInIsolate(data);
+        },
+      );
+    } catch (_) {
+      return _classifyInIsolate(data);
+    }
+  }
+
+  static Future<void> dispose() async {
+    _workerIsolate?.kill(priority: Isolate.immediate);
+    _workerIsolate = null;
+    _workerSendPort = null;
+    _receivePort?.close();
+    _receivePort = null;
+    _startupCompleter = null;
+
+    final pending = _pendingRequests.values.toList(growable: false);
+    _pendingRequests.clear();
+    for (final completer in pending) {
+      if (!completer.isCompleted) {
+        completer.completeError(
+          StateError('QR worker isolate disposed before completion'),
+        );
+      }
+    }
+  }
+
+  static Future<void> _ensureWorkerStarted() async {
+    if (_workerSendPort != null) return;
+    final currentCompleter = _startupCompleter;
+    if (currentCompleter != null) {
+      return currentCompleter.future;
+    }
+
+    final completer = Completer<void>();
+    _startupCompleter = completer;
+
+    try {
+      final receivePort = ReceivePort();
+      _receivePort = receivePort;
+
+      receivePort.listen((message) {
+        if (message is SendPort) {
+          _workerSendPort ??= message;
+          if (!completer.isCompleted) {
+            completer.complete();
+          }
+          return;
+        }
+
+        if (message is! Map) return;
+        final id = message['id'];
+        if (id is! int) return;
+        final requestCompleter = _pendingRequests.remove(id);
+        if (requestCompleter == null || requestCompleter.isCompleted) return;
+        requestCompleter.complete(_classificationFromMap(message));
+      });
+
+      _workerIsolate = await Isolate.spawn<SendPort>(
+        _workerMain,
+        receivePort.sendPort,
+      );
+
+      await completer.future.timeout(_requestTimeout);
+    } catch (_) {
+      if (!completer.isCompleted) {
+        completer.complete();
+      }
+      await dispose();
+    } finally {
+      _startupCompleter = null;
+    }
+  }
+
+  static void _workerMain(SendPort mainPort) {
+    final workerPort = ReceivePort();
+    mainPort.send(workerPort.sendPort);
+
+    workerPort.listen((message) {
+      if (message is! Map) return;
+      final id = message['id'];
+      final raw = message['data'];
+      if (id is! int || raw is! String) return;
+
+      final result = _classifyInIsolate(raw);
+      mainPort.send({
+        'id': id,
+        'type': result.type.index,
+        'displayData': result.displayData,
+      });
+    });
+  }
+
+  static QRClassification _classificationFromMap(Map<dynamic, dynamic> map) {
+    final typeIndex = map['type'] as int? ?? QRDataType.text.index;
+    final normalizedIndex = typeIndex.clamp(0, QRDataType.values.length - 1);
+    final type = QRDataType.values[normalizedIndex];
+    return QRClassification(
+      type: type,
+      displayData: map['displayData']?.toString() ?? '',
+    );
   }
 
   static QRClassification _classifyInIsolate(String data) {
