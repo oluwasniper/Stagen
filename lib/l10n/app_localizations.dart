@@ -228,6 +228,24 @@ abstract class AppLocalizations {
   /// **'Telephone'**
   String get telephoneQR;
 
+  /// SMS details to be converted to QR code
+  ///
+  /// In en, this message translates to:
+  /// **'SMS'**
+  String get smsQR;
+
+  /// Telegram details to be converted to QR code
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram'**
+  String get telegramQR;
+
+  /// LinkedIn details to be converted to QR code
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn'**
+  String get linkedinQR;
+
   /// Button to generate a code
   ///
   /// In en, this message translates to:
@@ -714,6 +732,90 @@ abstract class AppLocalizations {
   /// **'+92xxxxxxxxxx'**
   String get phoneNumberHint;
 
+  /// Label for the SMS recipient number input
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Number'**
+  String get smsNumberLabel;
+
+  /// Hint for the SMS recipient number input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter recipient number'**
+  String get smsNumberHint;
+
+  /// Label for the SMS message body input
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Message'**
+  String get smsMessageLabel;
+
+  /// Hint for the SMS message body input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter message (optional)'**
+  String get smsMessageHint;
+
+  /// Label for Telegram username input
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram Username'**
+  String get telegramUsernameLabel;
+
+  /// Hint for Telegram username input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter username or @handle'**
+  String get telegramUsernameHint;
+
+  /// Label for LinkedIn profile input
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn Profile'**
+  String get linkedinProfileLabel;
+
+  /// Hint for LinkedIn profile input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter profile URL or username'**
+  String get linkedinProfileHint;
+
+  /// Validation error when SMS number is missing
+  ///
+  /// In en, this message translates to:
+  /// **'SMS number is required'**
+  String get validationSmsNumberRequired;
+
+  /// Validation error when SMS number format is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid SMS number'**
+  String get validationSmsNumberInvalid;
+
+  /// Validation error when Telegram username is missing
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram username is required'**
+  String get validationTelegramRequired;
+
+  /// Validation error when Telegram input is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid Telegram username or t.me link'**
+  String get validationTelegramInvalid;
+
+  /// Validation error when LinkedIn profile is missing
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn profile is required'**
+  String get validationLinkedinRequired;
+
+  /// Validation error when LinkedIn input is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid LinkedIn profile URL or username'**
+  String get validationLinkedinInvalid;
+
   /// Button label to use the device current location
   ///
   /// In en, this message translates to:
@@ -1097,6 +1199,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to share'**
   String get failedToShare;
+
+  /// Error message shown when scanned content cannot be opened
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open this content'**
+  String get unableToOpenContent;
 
   /// Banner shown when the device has no internet connection
   ///

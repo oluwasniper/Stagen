@@ -73,6 +73,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get telephoneQR => 'Telephone';
 
   @override
+  String get smsQR => 'SMS';
+
+  @override
+  String get telegramQR => 'Telegram';
+
+  @override
+  String get linkedinQR => 'LinkedIn';
+
+  @override
   String get generateCode => 'Generate a Code';
 
   @override
@@ -318,6 +327,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get phoneNumberHint => '+92xxxxxxxxxx';
 
   @override
+  String get smsNumberLabel => 'SMS Number';
+
+  @override
+  String get smsNumberHint => 'Enter recipient number';
+
+  @override
+  String get smsMessageLabel => 'SMS Message';
+
+  @override
+  String get smsMessageHint => 'Enter message (optional)';
+
+  @override
+  String get telegramUsernameLabel => 'Telegram Username';
+
+  @override
+  String get telegramUsernameHint => 'Enter username or @handle';
+
+  @override
+  String get linkedinProfileLabel => 'LinkedIn Profile';
+
+  @override
+  String get linkedinProfileHint => 'Enter profile URL or username';
+
+  @override
+  String get validationSmsNumberRequired => 'SMS number is required';
+
+  @override
+  String get validationSmsNumberInvalid => 'Enter a valid SMS number';
+
+  @override
+  String get validationTelegramRequired => 'Telegram username is required';
+
+  @override
+  String get validationTelegramInvalid =>
+      'Enter a valid Telegram username or t.me link';
+
+  @override
+  String get validationLinkedinRequired => 'LinkedIn profile is required';
+
+  @override
+  String get validationLinkedinInvalid =>
+      'Enter a valid LinkedIn profile URL or username';
+
+  @override
   String get locationUseCurrentLocation => 'Use Current Location';
 
   @override
@@ -522,6 +575,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedToShare => 'Failed to share';
+
+  @override
+  String get unableToOpenContent => 'Unable to open this content';
 
   @override
   String get noInternet => 'No internet connection';

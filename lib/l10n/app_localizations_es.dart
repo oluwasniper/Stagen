@@ -73,6 +73,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get telephoneQR => 'Teléfono';
 
   @override
+  String get smsQR => 'SMS';
+
+  @override
+  String get telegramQR => 'Telegram';
+
+  @override
+  String get linkedinQR => 'LinkedIn';
+
+  @override
   String get generateCode => 'Generar un Código';
 
   @override
@@ -320,6 +329,52 @@ class AppLocalizationsEs extends AppLocalizations {
   String get phoneNumberHint => '+[código de país] xxxxxxxxx';
 
   @override
+  String get smsNumberLabel => 'Número SMS';
+
+  @override
+  String get smsNumberHint => 'Ingrese el número del destinatario';
+
+  @override
+  String get smsMessageLabel => 'Mensaje SMS';
+
+  @override
+  String get smsMessageHint => 'Ingrese el mensaje (opcional)';
+
+  @override
+  String get telegramUsernameLabel => 'Usuario de Telegram';
+
+  @override
+  String get telegramUsernameHint => 'Ingrese usuario o @usuario';
+
+  @override
+  String get linkedinProfileLabel => 'Perfil de LinkedIn';
+
+  @override
+  String get linkedinProfileHint => 'Ingrese URL del perfil o usuario';
+
+  @override
+  String get validationSmsNumberRequired => 'El número SMS es obligatorio';
+
+  @override
+  String get validationSmsNumberInvalid => 'Ingrese un número SMS válido';
+
+  @override
+  String get validationTelegramRequired =>
+      'El usuario de Telegram es obligatorio';
+
+  @override
+  String get validationTelegramInvalid =>
+      'Ingrese un usuario de Telegram o enlace t.me válido';
+
+  @override
+  String get validationLinkedinRequired =>
+      'El perfil de LinkedIn es obligatorio';
+
+  @override
+  String get validationLinkedinInvalid =>
+      'Ingrese una URL o usuario de LinkedIn válido';
+
+  @override
   String get locationUseCurrentLocation => 'Usar ubicación actual';
 
   @override
@@ -532,6 +587,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get failedToShare => 'Error al compartir';
+
+  @override
+  String get unableToOpenContent => 'No se puede abrir este contenido';
 
   @override
   String get noInternet => 'Sin conexión a internet';

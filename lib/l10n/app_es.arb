@@ -25,6 +25,9 @@
     "twitterQR": "Twitter",
     "instagramQR": "Instagram",
     "telephoneQR": "Teléfono",
+    "smsQR": "SMS",
+    "telegramQR": "Telegram",
+    "linkedinQR": "LinkedIn",
 
     "generateCode": "Generar un Código",
 
@@ -135,6 +138,20 @@
 
     "phoneNumberLabel": "Número de teléfono",
     "phoneNumberHint": "+[código de país] xxxxxxxxx",
+    "smsNumberLabel": "Número SMS",
+    "smsNumberHint": "Ingrese el número del destinatario",
+    "smsMessageLabel": "Mensaje SMS",
+    "smsMessageHint": "Ingrese el mensaje (opcional)",
+    "telegramUsernameLabel": "Usuario de Telegram",
+    "telegramUsernameHint": "Ingrese usuario o @usuario",
+    "linkedinProfileLabel": "Perfil de LinkedIn",
+    "linkedinProfileHint": "Ingrese URL del perfil o usuario",
+    "validationSmsNumberRequired": "El número SMS es obligatorio",
+    "validationSmsNumberInvalid": "Ingrese un número SMS válido",
+    "validationTelegramRequired": "El usuario de Telegram es obligatorio",
+    "validationTelegramInvalid": "Ingrese un usuario de Telegram o enlace t.me válido",
+    "validationLinkedinRequired": "El perfil de LinkedIn es obligatorio",
+    "validationLinkedinInvalid": "Ingrese una URL o usuario de LinkedIn válido",
     "locationUseCurrentLocation": "Usar ubicación actual",
     "locationGettingCurrentLocation": "Obteniendo ubicación...",
     "locationOrDivider": "O",
@@ -216,5 +233,6 @@
     "shareAnalytics": "Compartir análisis",
     "shareAnalyticsSubtitle": "Ayuda a mejorar Scagen compartiendo datos de uso anónimos",
     "failedToShare": "Error al compartir",
+    "unableToOpenContent": "No se puede abrir este contenido",
     "noInternet": "Sin conexión a internet"
 }
