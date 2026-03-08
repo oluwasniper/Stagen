@@ -1,9 +1,14 @@
 import 'dart:developer' as dev;
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pasteboard/pasteboard.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,11 +18,72 @@ import '../providers/qr_providers.dart';
 import '../services/telemetry_service.dart';
 import '../widgets/background_screen_widget.dart';
 
-class ScannedQRScreen extends ConsumerWidget {
+class ScannedQRScreen extends ConsumerStatefulWidget {
   const ScannedQRScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ScannedQRScreen> createState() => _ScannedQRScreenState();
+}
+
+class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
+  final _qrKey = GlobalKey();
+
+  Future<Uint8List?> _captureQrImage() async {
+    final boundary =
+        _qrKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+    if (boundary == null) return null;
+    final image = await boundary.toImage(pixelRatio: 3.0);
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData?.buffer.asUint8List();
+  }
+
+  Future<void> _copyQrImage(BuildContext context) async {
+    try {
+      final bytes = await _captureQrImage();
+      if (bytes == null) return;
+      await Pasteboard.writeImage(bytes);
+      ref.read(telemetryServiceProvider).track(
+        TelemetryEvents.qrCopied,
+        properties: {'source': 'scanned'},
+      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context).snackbarCopiedToClipboard)),
+        );
+      }
+    } catch (e, st) {
+      dev.log('[ScannedQRScreen] copy failed: $e',
+          stackTrace: st, name: 'ScannedQRScreen');
+    }
+  }
+
+  Future<void> _shareQrImage(BuildContext context, String qrData) async {
+    try {
+      final bytes = await _captureQrImage();
+      if (bytes == null) return;
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/qr_code.png');
+      await file.writeAsBytes(bytes);
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          fileNameOverrides: ['scanned_qr.png'],
+        ),
+      );
+      ref.read(telemetryServiceProvider).track(
+        TelemetryEvents.qrShared,
+        properties: {'source': 'scanned'},
+      );
+    } catch (e, st) {
+      dev.log('[ScannedQRScreen] share failed: $e',
+          stackTrace: st, name: 'ScannedQRScreen');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final qrData = ref.watch(scannedQRDataProvider) ?? '';
 
@@ -101,10 +167,13 @@ class ScannedQRScreen extends ConsumerWidget {
                   ),
                 ),
                 child: qrData.isNotEmpty
-                    ? QrImageView(
-                        data: qrData,
-                        version: QrVersions.auto,
-                        size: 200.0,
+                    ? RepaintBoundary(
+                        key: _qrKey,
+                        child: QrImageView(
+                          data: qrData,
+                          version: QrVersions.auto,
+                          size: 200.0,
+                        ),
                       )
                     : Center(child: Text(l10n.noData)),
               ),
@@ -131,17 +200,7 @@ class ScannedQRScreen extends ConsumerWidget {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {
-                          Clipboard.setData(ClipboardData(text: qrData));
-                          ref.read(telemetryServiceProvider).track(
-                            TelemetryEvents.qrCopied,
-                            properties: {'source': 'scanned'},
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text(l10n.snackbarCopiedToClipboard)),
-                          );
-                        },
+                        onTap: () => _copyQrImage(context),
                         child: Container(
                           height: 50,
                           width: 50,
@@ -150,8 +209,8 @@ class ScannedQRScreen extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    const Color(0xff000000).withValues(alpha: 0.25),
+                                color: const Color(0xff000000)
+                                    .withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -185,7 +244,9 @@ class ScannedQRScreen extends ConsumerWidget {
                             if (await canLaunchUrl(uri)) {
                               await launchUrl(uri,
                                   mode: LaunchMode.externalApplication);
-                              ref.read(telemetryServiceProvider).track(TelemetryEvents.qrUrlOpened);
+                              ref
+                                  .read(telemetryServiceProvider)
+                                  .track(TelemetryEvents.qrUrlOpened);
                             }
                           },
                           child: Container(
@@ -196,8 +257,8 @@ class ScannedQRScreen extends ConsumerWidget {
                               borderRadius: BorderRadius.circular(6),
                               boxShadow: [
                                 BoxShadow(
-                                  color:
-                                      const Color(0xff000000).withValues(alpha: 0.25),
+                                  color: const Color(0xff000000)
+                                      .withValues(alpha: 0.25),
                                   offset: const Offset(0, 4),
                                   blurRadius: 4,
                                 ),
@@ -226,22 +287,7 @@ class ScannedQRScreen extends ConsumerWidget {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () async {
-                          try {
-                            await SharePlus.instance
-                                .share(ShareParams(text: qrData));
-                            ref.read(telemetryServiceProvider).track(
-                              TelemetryEvents.qrShared,
-                              properties: {'source': 'scanned'},
-                            );
-                          } catch (e, st) {
-                            dev.log(
-                              '[ScannedQRScreen] share failed: $e',
-                              stackTrace: st,
-                              name: 'ScannedQRScreen',
-                            );
-                          }
-                        },
+                        onTap: () => _shareQrImage(context, qrData),
                         child: Container(
                           height: 50,
                           width: 50,
@@ -250,8 +296,8 @@ class ScannedQRScreen extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    const Color(0xff000000).withValues(alpha: 0.25),
+                                color: const Color(0xff000000)
+                                    .withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),

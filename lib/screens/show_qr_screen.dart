@@ -1,8 +1,13 @@
 import 'dart:developer' as dev;
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:pasteboard/pasteboard.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -19,6 +24,61 @@ class ShowQrScreen extends StatefulWidget {
 }
 
 class _ShowQrScreenState extends State<ShowQrScreen> {
+  final _qrKey = GlobalKey();
+
+  Future<Uint8List?> _captureQrImage() async {
+    final boundary =
+        _qrKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+    if (boundary == null) return null;
+    final image = await boundary.toImage(pixelRatio: 3.0);
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData?.buffer.asUint8List();
+  }
+
+  Future<void> _shareQrImage(BuildContext context, String qrType) async {
+    try {
+      final bytes = await _captureQrImage();
+      if (bytes == null) return;
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/qr_code.png');
+      await file.writeAsBytes(bytes);
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          fileNameOverrides: ['${qrType}_qr.png'],
+        ),
+      );
+    } catch (e, st) {
+      dev.log('[ShowQrScreen] share failed: $e',
+          stackTrace: st, name: 'ShowQrScreen');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context).failedToShare)),
+        );
+      }
+    }
+  }
+
+  Future<void> _copyQrImage(BuildContext context) async {
+    try {
+      final bytes = await _captureQrImage();
+      if (bytes == null) return;
+      await Pasteboard.writeImage(bytes);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  AppLocalizations.of(context).snackbarCopiedToClipboard)),
+        );
+      }
+    } catch (e, st) {
+      dev.log('[ShowQrScreen] copy failed: $e',
+          stackTrace: st, name: 'ShowQrScreen');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final record = widget.record;
@@ -107,10 +167,13 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                   ),
                 ),
                 child: data.isNotEmpty
-                    ? QrImageView(
-                        data: data,
-                        version: QrVersions.auto,
-                        size: 200.0,
+                    ? RepaintBoundary(
+                        key: _qrKey,
+                        child: QrImageView(
+                          data: data,
+                          version: QrVersions.auto,
+                          size: 200.0,
+                        ),
                       )
                     : Center(
                         child: Text(AppLocalizations.of(context).noData),
@@ -137,24 +200,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () async {
-                          try {
-                            await SharePlus.instance
-                                .share(ShareParams(text: data));
-                          } catch (e, st) {
-                            dev.log(
-                              '[ShowQrScreen] share failed: $e',
-                              stackTrace: st,
-                              name: 'ShowQrScreen',
-                            );
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text(AppLocalizations.of(context).failedToShare)),
-                              );
-                            }
-                          }
-                        },
+                        onTap: () => _shareQrImage(context, qrType),
                         child: Container(
                           height: 50,
                           width: 50,
@@ -163,8 +209,8 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    const Color(0xff000000).withValues(alpha: 0.25),
+                                color: const Color(0xff000000)
+                                    .withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -191,14 +237,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () {
-                          Clipboard.setData(ClipboardData(text: data));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text(AppLocalizations.of(context)
-                                    .snackbarCopiedToClipboard)),
-                          );
-                        },
+                        onTap: () => _copyQrImage(context),
                         child: Container(
                           height: 50,
                           width: 50,
@@ -207,22 +246,22 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    const Color(0xff000000).withValues(alpha: 0.25),
+                                color: const Color(0xff000000)
+                                    .withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
                             ],
                           ),
                           child: const Icon(
-                            Icons.save_alt_rounded,
+                            Icons.copy,
                             color: Color(0xff3C3C3C),
                           ),
                         ),
                       ),
                       const SizedBox(height: 7),
                       Text(
-                        AppLocalizations.of(context).saveBtn,
+                        AppLocalizations.of(context).copyBtn,
                         style: const TextStyle(
                           color: Color(0xffD9D9D9),
                           fontSize: 15,
@@ -230,7 +269,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             )
