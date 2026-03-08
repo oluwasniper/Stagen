@@ -78,6 +78,16 @@ class AppConfig {
     defaultValue: 'https://us.i.posthog.com',
   );
 
+  static const String appStoreUrl = String.fromEnvironment(
+    'APP_STORE_URL',
+    defaultValue: 'https://apps.apple.com',
+  );
+
+  static const String privacyPolicyUrl = String.fromEnvironment(
+    'PRIVACY_POLICY_URL',
+    defaultValue: 'https://example.com/privacy',
+  );
+
   static String _stripWrappingQuotes(String value) {
     if (value.length < 2) return value;
     final first = value[0];

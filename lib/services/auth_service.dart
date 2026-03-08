@@ -10,6 +10,13 @@ class AuthService {
 
   AuthService({required Client client}) : _account = Account(client);
 
+  bool _isNoActiveSessionError(Object error) {
+    if (error is! AppwriteException) return false;
+    return error.code == 401 ||
+        error.type == 'user_unauthorized' ||
+        error.type == 'general_unauthorized_scope';
+  }
+
   // ─── Session Management ───
 
   /// Get the currently logged-in user, or `null` if there is no active session.
@@ -85,12 +92,20 @@ class AuthService {
   Future<void> logout() async {
     try {
       await _account.deleteSession(sessionId: 'current');
-    } catch (_) {
-      // Session may already be expired / deleted; try deleting all sessions
-      // as a fallback to ensure we're fully signed out.
+      return;
+    } catch (error) {
+      // If there is no active session, we're already signed out.
+      if (_isNoActiveSessionError(error)) return;
+
+      // Fallback: try deleting all sessions.
       try {
         await _account.deleteSessions();
-      } catch (_) {}
+        return;
+      } catch (fallbackError) {
+        // If fallback says there is no active session, treat as success.
+        if (_isNoActiveSessionError(fallbackError)) return;
+        rethrow;
+      }
     }
   }
 }

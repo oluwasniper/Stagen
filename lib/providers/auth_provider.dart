@@ -217,15 +217,44 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Sign out and clear state.
   Future<void> signOut() async {
-    _telemetry.track(TelemetryEvents.authSignout);
-    await _authService.logout();
+    final previousUser = state.user;
+    state = state.copyWith(
+      status: AuthStatus.loading,
+      error: null,
+      errorType: null,
+    );
+
     try {
-      _telemetry.reset();
+      _telemetry.track(TelemetryEvents.authSignout);
     } catch (_) {}
-    state = const AuthState(status: AuthStatus.unauthenticated);
-    // Invalidate history providers so they re-fetch on next sign-in
-    _ref.invalidate(scannedHistoryProvider);
-    _ref.invalidate(generatedHistoryProvider);
+
+    try {
+      await _authService.logout();
+      try {
+        _telemetry.reset();
+      } catch (_) {}
+      state = const AuthState(status: AuthStatus.unauthenticated);
+      // Invalidate history providers so they re-fetch on next sign-in
+      _ref.invalidate(scannedHistoryProvider);
+      _ref.invalidate(generatedHistoryProvider);
+    } catch (e) {
+      try {
+        _telemetry.track(
+          TelemetryEvents.authError,
+          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'},
+        );
+      } catch (_) {}
+
+      final currentUser = await _authService.getCurrentUser();
+      state = AuthState(
+        status: currentUser == null
+            ? AuthStatus.unauthenticated
+            : AuthStatus.authenticated,
+        user: currentUser ?? previousUser,
+        error: e.toString(),
+        errorType: appwriteErrorType(e),
+      );
+    }
   }
 }
 
