@@ -290,30 +290,12 @@ class _HistoryListView extends ConsumerWidget {
                                       ),
                                     ),
                                     if (record.isPendingSync)
-                                      Container(
-                                        margin: const EdgeInsets.only(right: 8),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 6,
-                                          vertical: 2,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xffFDB623)
-                                              .withValues(alpha: 0.2),
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          border: Border.all(
-                                            color: const Color(0xffFDB623),
-                                            width: 0.6,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          AppLocalizations.of(context)
-                                              .pendingSync,
-                                          style: const TextStyle(
-                                            fontSize: 10,
-                                            color: Color(0xffFDB623),
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 6),
+                                        child: Icon(
+                                          Icons.cloud_off_rounded,
+                                          size: 16,
+                                          color: const Color(0xffFDB623),
                                         ),
                                       ),
                                     GestureDetector(

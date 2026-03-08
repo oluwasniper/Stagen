@@ -91,12 +91,17 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
   Future<void> addRecord(QRRecord record) async {
     try {
       await _offline.addPendingCreate(record, userId: _userId);
+      if (_userId != null) {
+        await _syncWithRemote();
+      }
       state = AsyncValue.data(
         _offline.getVisibleRecords(type: _type, userId: _userId),
       );
-      unawaited(fetchRecords());
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
+    } catch (_) {
+      // Show whatever is locally cached even on error.
+      state = AsyncValue.data(
+        _offline.getVisibleRecords(type: _type, userId: _userId),
+      );
     }
   }
 
@@ -106,7 +111,12 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
       state = AsyncValue.data(
         _offline.getVisibleRecords(type: _type, userId: _userId),
       );
-      unawaited(fetchRecords());
+      if (_userId != null) {
+        await _syncWithRemote();
+      }
+      state = AsyncValue.data(
+        _offline.getVisibleRecords(type: _type, userId: _userId),
+      );
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
