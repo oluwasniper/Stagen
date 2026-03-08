@@ -19,6 +19,9 @@ enum QROptionType {
   twitter,
   instagram,
   telephone,
+  sms,
+  telegram,
+  linkedin,
 }
 
 class QROption {
@@ -104,6 +107,24 @@ class QROptions {
         label: AppLocalizations.of(context).telephoneQR,
         svgData: AppAsset.telephoneIconSvg,
         type: QROptionType.telephone,
+      ),
+      // sms
+      QROption(
+        label: AppLocalizations.of(context).smsQR,
+        svgData: AppAsset.smsIconSvg,
+        type: QROptionType.sms,
+      ),
+      // telegram
+      QROption(
+        label: AppLocalizations.of(context).telegramQR,
+        svgData: AppAsset.telegramIconSvg,
+        type: QROptionType.telegram,
+      ),
+      // linkedin
+      QROption(
+        label: AppLocalizations.of(context).linkedinQR,
+        svgData: AppAsset.linkedinIconSvg,
+        type: QROptionType.linkedin,
       ),
     ];
   }
