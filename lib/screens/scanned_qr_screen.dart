@@ -29,6 +29,16 @@ class ScannedQRScreen extends ConsumerStatefulWidget {
 }
 
 class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
+  static const Set<String> _openableSchemes = {
+    'http',
+    'https',
+    'mailto',
+    'tel',
+    'sms',
+    'smsto',
+    'geo',
+  };
+
   final _qrKey = GlobalKey();
   bool _copied = false;
 
@@ -95,12 +105,46 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
     }
   }
 
+  bool _canOpenScannedValue(String value) {
+    final uri = Uri.tryParse(value);
+    if (uri == null || !uri.hasScheme) return false;
+    return _openableSchemes.contains(uri.scheme.toLowerCase());
+  }
+
+  Future<void> _openScannedValue(String value) async {
+    final l10n = AppLocalizations.of(context);
+    final uri = Uri.tryParse(value);
+    if (uri == null || !uri.hasScheme) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.unableToOpenContent)),
+      );
+      return;
+    }
+
+    final canLaunch = await canLaunchUrl(uri);
+    if (!mounted) return;
+    if (!canLaunch) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.unableToOpenContent)),
+      );
+      return;
+    }
+
+    AppHaptics.light(context);
+    AppSounds.click();
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+    ref.read(telemetryServiceProvider).track(
+      TelemetryEvents.qrUrlOpened,
+      properties: {'scheme': uri.scheme.toLowerCase()},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final qrData = ref.watch(scannedQRDataProvider) ?? '';
-    final isUrl = Uri.tryParse(qrData)?.hasScheme == true &&
-        (qrData.startsWith('http') || qrData.startsWith('https'));
+    final canOpen = _canOpenScannedValue(qrData);
     final motion = AppMotion.of(context);
 
     return BackgroundScreenWidget(
@@ -223,24 +267,12 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
                   confirmed: _copied,
                   onTap: _copyQrImage,
                 ),
-                if (isUrl) ...[
+                if (canOpen) ...[
                   const SizedBox(width: 32),
                   _ActionButton(
                     icon: Icons.open_in_browser_rounded,
                     label: l10n.openBtn,
-                    onTap: () async {
-                      final uri = Uri.parse(qrData);
-                      if (await canLaunchUrl(uri)) {
-                        if (!context.mounted) return;
-                        AppHaptics.light(context);
-                        AppSounds.click();
-                        await launchUrl(uri,
-                            mode: LaunchMode.externalApplication);
-                        ref
-                            .read(telemetryServiceProvider)
-                            .track(TelemetryEvents.qrUrlOpened);
-                      }
-                    },
+                    onTap: () => _openScannedValue(qrData),
                   ),
                 ],
                 const SizedBox(width: 32),

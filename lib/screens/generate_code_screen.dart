@@ -29,6 +29,11 @@ class GenerateCodeScreen extends ConsumerStatefulWidget {
 }
 
 class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
+  static final RegExp _phoneValidationRegex =
+      RegExp(r'^\+?[0-9][0-9\-\s().]{5,}$');
+  static final RegExp _telegramHandleRegex = RegExp(r'^[A-Za-z0-9_]{5,32}$');
+  static final RegExp _linkedInHandleRegex = RegExp(r'^[A-Za-z0-9_-]{3,100}$');
+
   /// Map of field name → controller. Created dynamically by the body widget.
   final Map<String, TextEditingController> _controllers = {};
 
@@ -74,6 +79,30 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
         return 'https://instagram.com/$user';
       case QROptionType.telephone:
         return 'tel:${_controllers['telephone']?.text.trim() ?? ''}';
+      case QROptionType.sms:
+        final number = _controllers['smsNumber']?.text.trim() ?? '';
+        final message = _controllers['smsMessage']?.text.trim() ?? '';
+        if (number.isEmpty && message.isEmpty) return '';
+        if (message.isEmpty) return 'SMSTO:$number';
+        return 'SMSTO:$number:$message';
+      case QROptionType.telegram:
+        final telegram = _controllers['telegram']?.text.trim() ?? '';
+        if (telegram.isEmpty) return '';
+        if (telegram.startsWith('http://') || telegram.startsWith('https://')) {
+          return telegram;
+        }
+        final cleanHandle =
+            telegram.startsWith('@') ? telegram.substring(1) : telegram;
+        return 'https://t.me/$cleanHandle';
+      case QROptionType.linkedin:
+        final linkedIn = _controllers['linkedin']?.text.trim() ?? '';
+        if (linkedIn.isEmpty) return '';
+        if (linkedIn.startsWith('http://') || linkedIn.startsWith('https://')) {
+          return linkedIn;
+        }
+        final cleanHandle =
+            linkedIn.startsWith('@') ? linkedIn.substring(1) : linkedIn;
+        return 'https://www.linkedin.com/in/$cleanHandle';
       case QROptionType.wifi:
         final ssid = _controllers['network']?.text.trim() ?? '';
         final pass = _controllers['password']?.text.trim() ?? '';
@@ -111,6 +140,84 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
         final lng = _controllers['longitude']?.text.trim() ?? '0';
         return 'geo:$lat,$lng';
     }
+  }
+
+  String? _validateInput() {
+    final l10n = AppLocalizations.of(context);
+    switch (widget.type.type) {
+      case QROptionType.sms:
+        final number = _controllers['smsNumber']?.text.trim() ?? '';
+        if (number.isEmpty) {
+          return l10n.validationSmsNumberRequired;
+        }
+        if (!_phoneValidationRegex.hasMatch(number)) {
+          return l10n.validationSmsNumberInvalid;
+        }
+        return null;
+      case QROptionType.telegram:
+        final telegram = _controllers['telegram']?.text.trim() ?? '';
+        if (telegram.isEmpty) {
+          return l10n.validationTelegramRequired;
+        }
+        if (!_isValidTelegramInput(telegram)) {
+          return l10n.validationTelegramInvalid;
+        }
+        return null;
+      case QROptionType.linkedin:
+        final linkedIn = _controllers['linkedin']?.text.trim() ?? '';
+        if (linkedIn.isEmpty) {
+          return l10n.validationLinkedinRequired;
+        }
+        if (!_isValidLinkedInInput(linkedIn)) {
+          return l10n.validationLinkedinInvalid;
+        }
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  bool _isValidTelegramInput(String value) {
+    final candidate = value.startsWith('@') ? value.substring(1) : value;
+    final uri = Uri.tryParse(candidate);
+    if (uri != null && uri.hasScheme) {
+      final host = uri.host.toLowerCase();
+      if (host == 't.me' || host.endsWith('.t.me')) {
+        final segment = _firstNonEmptySegment(uri.pathSegments);
+        return segment != null && _telegramHandleRegex.hasMatch(segment);
+      }
+      if (host == 'telegram.me' || host.endsWith('.telegram.me')) {
+        final segment = _firstNonEmptySegment(uri.pathSegments);
+        return segment != null && _telegramHandleRegex.hasMatch(segment);
+      }
+      return false;
+    }
+    return _telegramHandleRegex.hasMatch(candidate);
+  }
+
+  bool _isValidLinkedInInput(String value) {
+    final candidate = value.startsWith('@') ? value.substring(1) : value;
+    final uri = Uri.tryParse(candidate);
+    if (uri != null && uri.hasScheme) {
+      final host = uri.host.toLowerCase();
+      if (!(host == 'linkedin.com' ||
+          host.endsWith('.linkedin.com') ||
+          host == 'www.linkedin.com')) {
+        return false;
+      }
+      if (uri.pathSegments.length < 2 || uri.pathSegments.first != 'in') {
+        return false;
+      }
+      return _linkedInHandleRegex.hasMatch(uri.pathSegments[1]);
+    }
+    return _linkedInHandleRegex.hasMatch(candidate);
+  }
+
+  String? _firstNonEmptySegment(List<String> segments) {
+    for (final segment in segments) {
+      if (segment.isNotEmpty) return segment;
+    }
+    return null;
   }
 
   /// Pick a contact from the phone's address book and fill the form fields.
@@ -181,6 +288,14 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
   }
 
   void _onGenerate() {
+    final validationError = _validateInput();
+    if (validationError != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(validationError)),
+      );
+      return;
+    }
+
     final data = _buildQRData();
     if (data.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
