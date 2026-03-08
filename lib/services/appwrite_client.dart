@@ -1,5 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 
+import '../config/app_config.dart';
+
 final Client client = Client()
-  ..setProject('6742d23d00333f806b41')
-  ..setEndpoint('https://fra.cloud.appwrite.io/v1');
+  ..setProject(AppConfig.appwriteProjectId)
+  ..setEndpoint(AppConfig.appwriteEndpoint);
