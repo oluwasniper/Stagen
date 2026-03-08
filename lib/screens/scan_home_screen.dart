@@ -193,10 +193,19 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen> {
                           .read(telemetryServiceProvider)
                           .track(TelemetryEvents.scannerTorchToggled);
                     },
-                    child: const Padding(
+                    child: Padding(
                       padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                      child: Icon(Icons.flash_on_rounded),
+                          const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                      child: ValueListenableBuilder(
+                        valueListenable: controller,
+                        builder: (context, state, _) {
+                          final isOn = state.torchState == TorchState.on;
+                          return Icon(
+                            isOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
+                            color: isOn ? const Color(0xffFDB623) : Colors.white,
+                          );
+                        },
+                      ),
                     ),
                   ),
                   GestureDetector(
