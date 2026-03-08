@@ -1,12 +1,13 @@
 import 'dart:developer' as dev;
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pasteboard/pasteboard.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
@@ -35,17 +36,29 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
     return byteData?.buffer.asUint8List();
   }
 
-  void _copyQrData(BuildContext context, String qrData) {
-    Clipboard.setData(ClipboardData(text: qrData));
-    ref.read(telemetryServiceProvider).track(
-      TelemetryEvents.qrCopied,
-      properties: {'source': 'generated'},
-    );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content:
-              Text(AppLocalizations.of(context).snackbarCopiedToClipboard)),
-    );
+  Future<void> _copyQrImage(BuildContext context) async {
+    try {
+      final bytes = await _captureQrImage();
+      if (bytes == null) return;
+      await Pasteboard.writeImage(bytes);
+      ref.read(telemetryServiceProvider).track(
+        TelemetryEvents.qrCopied,
+        properties: {'source': 'generated'},
+      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  AppLocalizations.of(context).snackbarCopiedToClipboard)),
+        );
+      }
+    } catch (e, st) {
+      dev.log(
+        '[GeneratedQRScreen] copy failed: $e',
+        stackTrace: st,
+        name: 'GeneratedQRScreen',
+      );
+    }
   }
 
   Future<void> _shareQrImage(String label) async {
@@ -201,7 +214,7 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
                   Column(
                     children: [
                       InkWell(
-                        onTap: () => _copyQrData(context, qrData),
+                        onTap: () => _copyQrImage(context),
                         child: Container(
                           height: 50,
                           width: 50,
