@@ -166,6 +166,12 @@ abstract final class QRIsolate {
         displayData: data.substring(4),
       );
     }
+    if (lower.startsWith('smsto:') || lower.startsWith('sms:')) {
+      return QRClassification(
+        type: QRDataType.sms,
+        displayData: _parseSmsTarget(data) ?? data,
+      );
+    }
     if (lower.startsWith('wifi:')) {
       return QRClassification(
         type: QRDataType.wifi,
@@ -205,6 +211,16 @@ abstract final class QRIsolate {
     return match?.group(1);
   }
 
+  static String? _parseSmsTarget(String data) {
+    final content = data.replaceFirst(
+      RegExp(r'^sms(to)?:', caseSensitive: false),
+      '',
+    );
+    if (content.isEmpty) return null;
+    final number = content.split(RegExp(r'[:?]')).first.trim();
+    return number.isEmpty ? null : number;
+  }
+
   static String? _parseVCardName(String data) {
     final match = RegExp(r'FN:(.+)', caseSensitive: false).firstMatch(data);
     return match?.group(1)?.trim();
@@ -217,7 +233,7 @@ abstract final class QRIsolate {
   }
 }
 
-enum QRDataType { url, email, phone, wifi, contact, event, location, text }
+enum QRDataType { url, email, phone, sms, wifi, contact, event, location, text }
 
 class QRClassification {
   final QRDataType type;
@@ -232,6 +248,7 @@ class QRClassification {
         QRDataType.url => 'url',
         QRDataType.email => 'email',
         QRDataType.phone => 'phone',
+        QRDataType.sms => 'sms',
         QRDataType.wifi => 'wifi',
         QRDataType.contact => 'contact',
         QRDataType.event => 'event',
