@@ -215,5 +215,6 @@
     "privacy": "Privacidad",
     "shareAnalytics": "Compartir análisis",
     "shareAnalyticsSubtitle": "Ayuda a mejorar Scagen compartiendo datos de uso anónimos",
-    "failedToShare": "Error al compartir"
+    "failedToShare": "Error al compartir",
+    "noInternet": "Sin conexión a internet"
 }

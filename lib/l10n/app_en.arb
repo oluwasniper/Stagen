@@ -755,5 +755,9 @@
     "failedToShare": "Failed to share",
     "@failedToShare": {
         "description": "Error message shown when sharing fails"
+    },
+    "noInternet": "No internet connection",
+    "@noInternet": {
+        "description": "Banner shown when the device has no internet connection"
     }
 }

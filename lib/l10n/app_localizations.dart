@@ -1097,6 +1097,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to share'**
   String get failedToShare;
+
+  /// Banner shown when the device has no internet connection
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternet;
 }
 
 class _AppLocalizationsDelegate

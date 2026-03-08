@@ -64,6 +64,7 @@ dependencies:
   path_provider: ^2.1.0 # Temp directory for sharing files
   image_picker: ^1.1.2 # Pick image from gallery for QR scan
   pasteboard: ^0.5.0
+  connectivity_plus: ^7.0.0
 
 dev_dependencies:
   flutter_test:

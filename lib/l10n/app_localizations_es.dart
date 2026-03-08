@@ -532,4 +532,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get failedToShare => 'Error al compartir';
+
+  @override
+  String get noInternet => 'Sin conexión a internet';
 }

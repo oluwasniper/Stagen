@@ -208,5 +208,6 @@
     "privacy": "Confidentialité",
     "shareAnalytics": "Partager les analyses",
     "shareAnalyticsSubtitle": "Aidez à améliorer Scagen en partageant des données d'utilisation anonymes",
-    "failedToShare": "Échec du partage"
+    "failedToShare": "Échec du partage",
+    "noInternet": "Pas de connexion internet"
 }

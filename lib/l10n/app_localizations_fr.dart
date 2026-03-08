@@ -525,4 +525,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get failedToShare => 'Échec du partage';
+
+  @override
+  String get noInternet => 'Pas de connexion internet';
 }
