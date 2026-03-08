@@ -1,74 +1,51 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import 'l10n/app_localizations.dart';
 import 'utils/app_asset.dart';
+import 'utils/app_motion.dart';
 
-class BottomNavigationPage extends StatefulWidget {
+class BottomNavigationPage extends StatelessWidget {
   const BottomNavigationPage({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
   @override
-  State<BottomNavigationPage> createState() => _BottomNavigationPageState();
-}
-
-class _BottomNavigationPageState extends State<BottomNavigationPage> {
-  void _onItemTapped(int index) {
-    widget.navigationShell.goBranch(
-      index,
-      initialLocation: index == widget.navigationShell.currentIndex,
-    );
-  }
-
-  int _selectedIndex = 1;
-  late List<CustomNavBarItem> _navItems;
-
-  @override
-  void didUpdateWidget(covariant BottomNavigationPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.navigationShell != widget.navigationShell) {
-      _selectedIndex = widget.navigationShell.currentIndex;
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _navItems = [
-      CustomNavBarItem(
-          svgData: AppAsset.generateIconSvg,
-          label: AppLocalizations.of(context).generate),
-      CustomNavBarItem(
-          svgData: AppAsset.scanIconSvg,
-          label: AppLocalizations.of(context).scan),
-      CustomNavBarItem(
-          svgData: AppAsset.historyIconSvg,
-          label: AppLocalizations.of(context).history),
-    ];
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final selectedIndex = navigationShell.currentIndex;
+    final navItems = [
+      CustomNavBarItem(
+        svgData: AppAsset.generateIconSvg,
+        label: AppLocalizations.of(context).generate,
+      ),
+      CustomNavBarItem(
+        svgData: AppAsset.scanIconSvg,
+        label: AppLocalizations.of(context).scan,
+      ),
+      CustomNavBarItem(
+        svgData: AppAsset.historyIconSvg,
+        label: AppLocalizations.of(context).history,
+      ),
+    ];
+
     return Scaffold(
-      body: widget.navigationShell,
+      body: navigationShell,
       extendBody: true,
       bottomNavigationBar: CustomFloatingNavBar(
-        selectedIndex: _selectedIndex,
+        selectedIndex: selectedIndex,
         onItemSelected: (index) {
-          if (index != _selectedIndex) {
-            HapticFeedback.selectionClick();
+          if (index != selectedIndex) {
+            AppHaptics.selection(context);
           }
-          setState(() {
-            _selectedIndex = index;
-            _onItemTapped(index);
-          });
+          navigationShell.goBranch(
+            index,
+            initialLocation: index == selectedIndex,
+          );
         },
-        items: _navItems,
+        items: navItems,
       ),
     );
   }
@@ -88,10 +65,12 @@ class CustomFloatingNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final safeBottom = MediaQuery.of(context).viewPadding.bottom;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 52),
+      padding: EdgeInsets.fromLTRB(36, 18, 36, 16 + safeBottom),
       child: SizedBox(
-        height: 108,
+        height: 90 + safeBottom,
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -125,7 +104,7 @@ class CustomFloatingNavBar extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: List.generate(items.length, (index) {
                         if (index == 1) return const SizedBox(width: 72);
-                        return _buildNavItem(index);
+                        return _buildNavItem(context, index);
                       }),
                     ),
                   ),
@@ -142,6 +121,7 @@ class CustomFloatingNavBar extends StatelessWidget {
                 child: Center(
                   child: _ScanFAB(
                     isSelected: selectedIndex == 1,
+                    semanticsLabel: items[1].label,
                     svgData: items[1].svgData,
                     onTap: () => onItemSelected(1),
                   ),
@@ -153,9 +133,10 @@ class CustomFloatingNavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(int index) {
+  Widget _buildNavItem(BuildContext context, int index) {
     final item = items[index];
     final isSelected = selectedIndex == index;
+    final motion = AppMotion.of(context);
 
     return GestureDetector(
       onTap: () => onItemSelected(index),
@@ -167,20 +148,25 @@ class CustomFloatingNavBar extends StatelessWidget {
           children: [
             AnimatedScale(
               scale: isSelected ? 1.18 : 1.0,
-              duration: const Duration(milliseconds: 280),
-              curve: Curves.easeOutBack,
-              child: SvgPicture.asset(
-                item.svgData,
-                colorFilter: ColorFilter.mode(
-                  isSelected ? const Color(0xffFDB623) : Colors.white60,
-                  BlendMode.srcIn,
+              duration: motion.duration(AppMotion.medium),
+              curve: motion.curve(AppMotion.spring),
+              child: Semantics(
+                selected: isSelected,
+                button: true,
+                label: item.label,
+                child: SvgPicture.asset(
+                  item.svgData,
+                  colorFilter: ColorFilter.mode(
+                    isSelected ? const Color(0xffFDB623) : Colors.white60,
+                    BlendMode.srcIn,
+                  ),
+                  width: 26,
                 ),
-                width: 26,
               ),
             ),
             const SizedBox(height: 3),
             AnimatedDefaultTextStyle(
-              duration: const Duration(milliseconds: 220),
+              duration: motion.duration(AppMotion.fast),
               style: TextStyle(
                 color: isSelected ? const Color(0xffFDB623) : Colors.white54,
                 fontSize: isSelected ? 11.5 : 11,
@@ -191,8 +177,8 @@ class CustomFloatingNavBar extends StatelessWidget {
             ),
             const Spacer(),
             AnimatedContainer(
-              duration: const Duration(milliseconds: 280),
-              curve: Curves.easeInOutCubic,
+              duration: motion.duration(AppMotion.medium),
+              curve: motion.curve(AppMotion.standard),
               height: 3,
               width: isSelected ? 22 : 0,
               decoration: BoxDecoration(
@@ -219,11 +205,13 @@ class CustomFloatingNavBar extends StatelessWidget {
 class _ScanFAB extends StatefulWidget {
   final bool isSelected;
   final String svgData;
+  final String semanticsLabel;
   final VoidCallback onTap;
 
   const _ScanFAB({
     required this.isSelected,
     required this.svgData,
+    required this.semanticsLabel,
     required this.onTap,
   });
 
@@ -257,53 +245,71 @@ class _ScanFABState extends State<_ScanFAB>
 
   @override
   Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
+
     return GestureDetector(
-      onTapDown: (_) => _pressController.forward(),
+      onTapDown: (_) {
+        if (!motion.reduceMotion) {
+          _pressController.forward();
+        }
+      },
       onTapUp: (_) {
-        _pressController.reverse();
+        if (!motion.reduceMotion) {
+          _pressController.reverse();
+        }
         widget.onTap();
       },
-      onTapCancel: () => _pressController.reverse(),
+      onTapCancel: () {
+        if (!motion.reduceMotion) {
+          _pressController.reverse();
+        }
+      },
       child: AnimatedBuilder(
         animation: _pressController,
         builder: (context, child) {
           return Transform.scale(
-            scale: _pressScale.value *
-                (widget.isSelected ? 1.08 : 1.0),
+            scale: motion.reduceMotion
+                ? 1.0
+                : _pressScale.value * (widget.isSelected ? 1.08 : 1.0),
             child: child,
           );
         },
-        child: Container(
-          height: 68,
-          width: 68,
-          decoration: BoxDecoration(
-            gradient: widget.isSelected
-                ? const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xffFDC93A), Color(0xffFDB623)],
-                  )
-                : null,
-            color: widget.isSelected ? null : const Color(0xff333333),
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: widget.isSelected
-                    ? const Color(0xffFDB623).withValues(alpha: 0.45)
-                    : Colors.black.withValues(alpha: 0.3),
-                blurRadius: widget.isSelected ? 16 : 8,
-                offset: const Offset(0, 4),
+        child: Semantics(
+          selected: widget.isSelected,
+          button: true,
+          label: widget.semanticsLabel,
+          child: Container(
+            height: 68,
+            width: 68,
+            decoration: BoxDecoration(
+              gradient: widget.isSelected
+                  ? const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color(0xffFDC93A), Color(0xffFDB623)],
+                    )
+                  : null,
+              color: widget.isSelected ? null : const Color(0xff333333),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: widget.isSelected
+                      ? const Color(0xffFDB623).withValues(alpha: 0.45)
+                      : Colors.black.withValues(alpha: 0.3),
+                  blurRadius: widget.isSelected ? 16 : 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Center(
+              child: SvgPicture.asset(
+                widget.svgData,
+                colorFilter: ColorFilter.mode(
+                  widget.isSelected ? Colors.black : Colors.white70,
+                  BlendMode.srcIn,
+                ),
+                width: 28,
               ),
-            ],
-          ),
-          child: Center(
-            child: SvgPicture.asset(
-              widget.svgData,
-              colorFilter: ColorFilter.mode(
-                widget.isSelected ? Colors.black : Colors.white70,
-                BlendMode.srcIn,
-              ),
-              width: 28,
             ),
           ),
         ),

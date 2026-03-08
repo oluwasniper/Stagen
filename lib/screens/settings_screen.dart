@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:posthog_flutter/posthog_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../config/app_config.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/l10n.dart';
 import '../providers/auth_provider.dart';
 import '../providers/settings_provider.dart';
 import '../services/telemetry_service.dart';
+import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
+import '../utils/error_localizer.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
 import '../widgets/link_account_dialog.dart';
@@ -18,12 +20,8 @@ import '../widgets/settings_list_tile.dart';
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  // TODO: Replace with your real App Store / Play Store URL
-  static const String _appUrl =
-      'https://play.google.com/store/apps/details?id=com.example.scagen';
-
-  // TODO: Replace with your real privacy policy URL
-  static const String _privacyUrl = 'https://example.com/privacy';
+  static const String _appUrl = AppConfig.appStoreUrl;
+  static const String _privacyUrl = AppConfig.privacyPolicyUrl;
 
   Future<void> _rateApp() async {
     final uri = Uri.parse(_appUrl);
@@ -57,6 +55,7 @@ class SettingsScreen extends ConsumerWidget {
 
   void _showLanguagePicker(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.read(localeProvider);
+    final motion = AppMotion.of(context);
 
     showModalBottomSheet(
       context: context,
@@ -99,7 +98,7 @@ class SettingsScreen extends ConsumerWidget {
 
                 return ListTile(
                   leading: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
+                    duration: motion.duration(AppMotion.fast),
                     width: 24,
                     height: 24,
                     decoration: BoxDecoration(
@@ -139,15 +138,17 @@ class SettingsScreen extends ConsumerWidget {
                 )
                     .animate()
                     .fadeIn(
-                      delay: Duration(milliseconds: 60 * index),
-                      duration: const Duration(milliseconds: 250),
+                      delay: motion.delay(Duration(milliseconds: 60 * index)),
+                      duration:
+                          motion.duration(const Duration(milliseconds: 250)),
                     )
                     .slideX(
                       begin: 0.1,
                       end: 0,
-                      delay: Duration(milliseconds: 60 * index),
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.easeOut,
+                      delay: motion.delay(Duration(milliseconds: 60 * index)),
+                      duration:
+                          motion.duration(const Duration(milliseconds: 250)),
+                      curve: motion.curve(AppMotion.enter),
                     );
               }),
               const SizedBox(height: 12),
@@ -160,6 +161,7 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final motion = AppMotion.of(context);
     final settings = ref.watch(settingsProvider);
     final currentLocale = ref.watch(localeProvider);
     final langName = _languageNames[currentLocale.languageCode] ?? 'English';
@@ -254,9 +256,6 @@ class SettingsScreen extends ConsumerWidget {
         subtitle: AppLocalizations.of(context).shareAnalyticsSubtitle,
         onSwitchChanged: (value) {
           if (value) {
-            // Re-enable the PostHog SDK before updating settings so the
-            // opt-in event is captured correctly.
-            Posthog().enable();
             ref.read(settingsProvider.notifier).toggleAnalytics(value);
             ref
                 .read(telemetryServiceProvider)
@@ -267,7 +266,6 @@ class SettingsScreen extends ConsumerWidget {
                 .read(telemetryServiceProvider)
                 .track(TelemetryEvents.telemetryOptedOut);
             ref.read(settingsProvider.notifier).toggleAnalytics(value);
-            Posthog().disable();
           }
         },
       ),
@@ -323,7 +321,25 @@ class SettingsScreen extends ConsumerWidget {
         iconData: Icons.logout_rounded,
         onTap: () async {
           await ref.read(authProvider.notifier).signOut();
-          AppGoRouter.router.go(AppPath.auth);
+          if (!context.mounted) return;
+
+          final authState = ref.read(authProvider);
+          if (!authState.isAuthenticated) {
+            AppGoRouter.router.go(AppPath.auth);
+            return;
+          }
+
+          final message = localizeApiError(
+            AppLocalizations.of(context),
+            authState.errorType,
+            authState.error,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(message),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
         },
       ),
       const SizedBox(height: 20),
@@ -343,15 +359,17 @@ class SettingsScreen extends ConsumerWidget {
                 return widget
                     .animate()
                     .fadeIn(
-                      delay: Duration(milliseconds: 80 * index),
-                      duration: const Duration(milliseconds: 350),
+                      delay: motion.delay(Duration(milliseconds: 80 * index)),
+                      duration:
+                          motion.duration(const Duration(milliseconds: 350)),
                     )
                     .slideX(
-                      begin: 0.05,
+                      begin: motion.reduceMotion ? 0 : 0.05,
                       end: 0,
-                      delay: Duration(milliseconds: 80 * index),
-                      duration: const Duration(milliseconds: 350),
-                      curve: Curves.easeOut,
+                      delay: motion.delay(Duration(milliseconds: 80 * index)),
+                      duration:
+                          motion.duration(const Duration(milliseconds: 350)),
+                      curve: motion.curve(AppMotion.enter),
                     );
               }
               return widget;

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../l10n/app_localizations.dart';
 import '../utils/app_asset.dart';
+import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 
@@ -28,11 +29,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _next() {
-    HapticFeedback.lightImpact();
+    AppHaptics.light(context);
+    final motion = AppMotion.of(context);
     if (_currentPage < _totalPages - 1) {
       _pageController.nextPage(
-        duration: const Duration(milliseconds: 420),
-        curve: Curves.easeInOutCubic,
+        duration: motion.duration(const Duration(milliseconds: 420)),
+        curve: motion.curve(AppMotion.standard),
       );
     } else {
       AppGoRouter.router.go(AppPath.auth);
@@ -41,6 +43,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Color(0xffFDB623),
@@ -65,10 +69,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     .scale(
                       begin: const Offset(0.7, 0.7),
                       end: const Offset(1.0, 1.0),
-                      duration: 600.ms,
-                      curve: Curves.elasticOut,
+                      duration:
+                          motion.duration(const Duration(milliseconds: 600)),
+                      curve: motion.curve(AppMotion.spring),
                     )
-                    .fade(begin: 0, end: 1, duration: 300.ms),
+                    .fade(
+                      begin: 0,
+                      end: 1,
+                      duration: motion.duration(AppMotion.medium),
+                    ),
               ),
             ),
 
@@ -94,10 +103,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         children: List.generate(
                           _totalPages,
                           (i) => AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOutCubic,
-                            margin:
-                                const EdgeInsets.symmetric(horizontal: 4),
+                            duration: motion.duration(AppMotion.fast),
+                            curve: motion.curve(AppMotion.standard),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
                             height: 5,
                             width: _currentPage == i ? 28 : 8,
                             decoration: BoxDecoration(
@@ -115,13 +123,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     Expanded(
                       child: PageView(
                         controller: _pageController,
-                        onPageChanged: (i) =>
-                            setState(() => _currentPage = i),
+                        onPageChanged: (i) => setState(() => _currentPage = i),
                         children: [
                           _OnboardingPage(
                             svgAsset: AppAsset.scanIconSvg,
-                            title: AppLocalizations.of(context)
-                                .onboardingHeader,
+                            title:
+                                AppLocalizations.of(context).onboardingHeader,
                             subtitle: AppLocalizations.of(context)
                                 .onboardingSubHeader,
                           ),
@@ -170,8 +177,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              const Icon(Icons.arrow_forward_rounded,
-                                  size: 20),
+                              const Icon(Icons.arrow_forward_rounded, size: 20),
                             ],
                           ),
                         ),

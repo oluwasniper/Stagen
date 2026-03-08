@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:revolutionary_stuff/utils/app_asset.dart';
 
 import '../l10n/app_localizations.dart';
+import '../utils/app_motion.dart';
 
 enum QROptionType {
   text,
@@ -121,8 +122,9 @@ class QROptions {
 
 class QROptionCard extends StatefulWidget {
   final QROption option;
+  final VoidCallback? onTap;
 
-  const QROptionCard({super.key, required this.option});
+  const QROptionCard({super.key, required this.option, this.onTap});
 
   @override
   State<QROptionCard> createState() => _QROptionCardState();
@@ -153,15 +155,30 @@ class _QROptionCardState extends State<QROptionCard>
 
   @override
   Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
+
     return GestureDetector(
-      onTapDown: (_) => _pressController.forward(),
-      onTapUp: (_) => _pressController.reverse(),
-      onTapCancel: () => _pressController.reverse(),
+      onTapDown: (_) {
+        if (!motion.reduceMotion) {
+          _pressController.forward();
+        }
+      },
+      onTapUp: (_) {
+        if (!motion.reduceMotion) {
+          _pressController.reverse();
+        }
+      },
+      onTapCancel: () {
+        if (!motion.reduceMotion) {
+          _pressController.reverse();
+        }
+      },
+      onTap: widget.onTap,
       child: AnimatedBuilder(
         animation: _pressController,
         builder: (context, child) {
           return Transform.scale(
-            scale: _pressScale.value,
+            scale: motion.reduceMotion ? 1.0 : _pressScale.value,
             child: child,
           );
         },
@@ -202,8 +219,7 @@ class _QROptionCardState extends State<QROptionCard>
             ),
             Positioned(
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                 decoration: BoxDecoration(
                   color: const Color(0xffFDB623),
                   borderRadius: BorderRadius.circular(5),

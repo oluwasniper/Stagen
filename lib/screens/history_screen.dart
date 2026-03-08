@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -10,6 +9,7 @@ import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../providers/qr_providers.dart';
 import '../services/telemetry_service.dart';
+import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
@@ -91,7 +91,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
 
           // Tab bar
           Container(
-            height: 56,
+            height: 52,
             margin: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
               color: const Color(0xff333333).withValues(alpha: 0.84),
@@ -102,7 +102,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
               padding: const EdgeInsets.all(5),
               controller: _tabController,
               indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(9),
+                borderRadius: BorderRadius.circular(8),
                 color: const Color(0xffFDB623),
                 boxShadow: [
                   BoxShadow(
@@ -112,14 +112,15 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen>
                   ),
                 ],
               ),
+              indicatorSize: TabBarIndicatorSize.tab,
+              labelColor: const Color(0xff1A1A1A),
+              unselectedLabelColor: Colors.white60,
               labelStyle: const TextStyle(
                 fontSize: 14,
-                color: Color(0xff1A1A1A),
                 fontWeight: FontWeight.w600,
               ),
               unselectedLabelStyle: const TextStyle(
                 fontSize: 14,
-                color: Colors.white60,
                 fontWeight: FontWeight.w400,
               ),
               dividerColor: Colors.transparent,
@@ -201,16 +202,17 @@ class _HistoryListView extends ConsumerWidget {
                 index: index,
                 onDelete: record.id != null
                     ? () {
-                        HapticFeedback.mediumImpact();
+                        AppHaptics.medium(context);
+                        AppSounds.click();
                         ref
                             .read(telemetryServiceProvider)
                             .track(TelemetryEvents.historyItemDeleted);
-                        ref
-                            .read(provider.notifier)
-                            .deleteRecord(record.id!);
+                        ref.read(provider.notifier).deleteRecord(record.id!);
                       }
                     : null,
                 onTap: () {
+                  AppHaptics.light(context);
+                  AppSounds.click();
                   ref
                       .read(telemetryServiceProvider)
                       .track(TelemetryEvents.historyItemViewed);
@@ -247,8 +249,8 @@ class _HistoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateStr =
-        DateFormat('dd MMM yyyy, h:mm a').format(record.createdAt);
+    final motion = AppMotion.of(context);
+    final dateStr = DateFormat('dd MMM yyyy, h:mm a').format(record.createdAt);
 
     final tile = Dismissible(
       key: ValueKey(record.id ?? record.data),
@@ -366,15 +368,15 @@ class _HistoryTile extends StatelessWidget {
     return tile
         .animate()
         .fadeIn(
-          delay: Duration(milliseconds: 40 * index),
-          duration: 320.ms,
+          delay: motion.delay(Duration(milliseconds: 40 * index)),
+          duration: motion.duration(const Duration(milliseconds: 320)),
         )
         .slideX(
-          begin: 0.08,
+          begin: motion.reduceMotion ? 0 : 0.08,
           end: 0,
-          delay: Duration(milliseconds: 40 * index),
-          duration: 320.ms,
-          curve: Curves.easeOut,
+          delay: motion.delay(Duration(milliseconds: 40 * index)),
+          duration: motion.duration(const Duration(milliseconds: 320)),
+          curve: motion.curve(AppMotion.enter),
         );
   }
 }
@@ -404,7 +406,8 @@ class _SkeletonTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final motion = AppMotion.of(context);
+    final tile = Container(
       height: 68,
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
@@ -451,11 +454,13 @@ class _SkeletonTile extends StatelessWidget {
           ),
         ],
       ),
-    )
-        .animate(onPlay: (c) => c.repeat(reverse: true))
-        .shimmer(
+    );
+
+    if (motion.reduceMotion) return tile;
+
+    return tile.animate(onPlay: (c) => c.repeat(reverse: true)).shimmer(
           delay: Duration(milliseconds: 80 * index),
-          duration: 1200.ms,
+          duration: motion.duration(const Duration(milliseconds: 1200)),
           color: Colors.white.withValues(alpha: 0.04),
         );
   }

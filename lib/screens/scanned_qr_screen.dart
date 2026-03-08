@@ -16,6 +16,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/qr_providers.dart';
 import '../services/telemetry_service.dart';
+import '../utils/app_motion.dart';
+import '../utils/app_router.dart';
+import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
 
 class ScannedQRScreen extends ConsumerStatefulWidget {
@@ -27,39 +30,45 @@ class ScannedQRScreen extends ConsumerStatefulWidget {
 
 class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
   final _qrKey = GlobalKey();
+  bool _copied = false;
 
   Future<Uint8List?> _captureQrImage() async {
     final boundary =
         _qrKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
     if (boundary == null) return null;
     final image = await boundary.toImage(pixelRatio: 3.0);
-    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    return byteData?.buffer.asUint8List();
+    try {
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      return byteData?.buffer.asUint8List();
+    } finally {
+      image.dispose();
+    }
   }
 
-  Future<void> _copyQrImage(BuildContext context) async {
+  Future<void> _copyQrImage() async {
+    if (_copied) return;
     try {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
       await Pasteboard.writeImage(bytes);
+      if (!mounted) return;
+      AppHaptics.medium(context);
+      AppSounds.click();
       ref.read(telemetryServiceProvider).track(
         TelemetryEvents.qrCopied,
         properties: {'source': 'scanned'},
       );
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content:
-                  Text(AppLocalizations.of(context).snackbarCopiedToClipboard)),
-        );
-      }
+      setState(() => _copied = true);
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        if (mounted) setState(() => _copied = false);
+      });
     } catch (e, st) {
       dev.log('[ScannedQRScreen] copy failed: $e',
           stackTrace: st, name: 'ScannedQRScreen');
     }
   }
 
-  Future<void> _shareQrImage(BuildContext context, String qrData) async {
+  Future<void> _shareQrImage() async {
     try {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
@@ -72,6 +81,10 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
           fileNameOverrides: ['scanned_qr.png'],
         ),
       );
+      if (mounted) {
+        AppHaptics.light(context);
+      }
+      AppSounds.click();
       ref.read(telemetryServiceProvider).track(
         TelemetryEvents.qrShared,
         properties: {'source': 'scanned'},
@@ -86,6 +99,9 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final qrData = ref.watch(scannedQRDataProvider) ?? '';
+    final isUrl = Uri.tryParse(qrData)?.hasScheme == true &&
+        (qrData.startsWith('http') || qrData.startsWith('https'));
+    final motion = AppMotion.of(context);
 
     return BackgroundScreenWidget(
       screenTitle: l10n.scan,
@@ -94,32 +110,35 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
         child: ListView(
           physics: const BouncingScrollPhysics(),
           children: [
+            const SizedBox(height: 8),
+
             // Scanned data card
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 color: const Color(0xff3C3C3C),
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff000000).withValues(alpha: 0.25),
+                    color: Colors.black.withValues(alpha: 0.25),
                     offset: const Offset(0, 4),
-                    blurRadius: 4,
+                    blurRadius: 8,
                   ),
                 ],
               ),
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       l10n.scannedResultTitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Color(0xffFDB623),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -129,6 +148,7 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
                         color: Color(0xffD9D9D9),
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
+                        height: 1.5,
                       ),
                       maxLines: 6,
                     ),
@@ -137,34 +157,33 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
               ),
             )
                 .animate()
-                .fadeIn(duration: const Duration(milliseconds: 400))
+                .fadeIn(duration: motion.duration(AppMotion.medium))
                 .slideY(
-                  begin: -0.1,
+                  begin: motion.reduceMotion ? 0 : -0.1,
                   end: 0,
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.easeOut,
+                  duration: motion.duration(AppMotion.medium),
+                  curve: motion.curve(AppMotion.enter),
                 ),
-            const SizedBox(height: 40),
-            // QR code display
+
+            const SizedBox(height: 36),
+
+            // QR code
             Center(
               child: Container(
                 height: 225,
                 width: 225,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xffF5F5F5).withValues(alpha: 0.85),
-                  borderRadius: BorderRadius.circular(6),
+                  color: const Color(0xffF5F5F5).withValues(alpha: 0.92),
+                  borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xff000000).withValues(alpha: 0.25),
-                      offset: const Offset(0, 4),
-                      blurRadius: 4,
+                      color: Colors.black.withValues(alpha: 0.3),
+                      offset: const Offset(0, 6),
+                      blurRadius: 16,
                     ),
                   ],
-                  border: Border.all(
-                    color: const Color(0xffFDB623),
-                    width: 5,
-                  ),
+                  border: Border.all(color: const Color(0xffFDB623), width: 4),
                 ),
                 child: qrData.isNotEmpty
                     ? RepaintBoundary(
@@ -182,159 +201,233 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
                 .scale(
                   begin: const Offset(0.5, 0.5),
                   end: const Offset(1, 1),
-                  delay: const Duration(milliseconds: 200),
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeOutBack,
+                  delay: motion.delay(AppMotion.fast),
+                  duration: motion.duration(AppMotion.slow),
+                  curve: motion.curve(AppMotion.spring),
                 )
                 .fadeIn(
-                  delay: const Duration(milliseconds: 200),
-                  duration: const Duration(milliseconds: 400),
+                  delay: motion.delay(AppMotion.fast),
+                  duration: motion.duration(AppMotion.medium),
                 ),
-            const SizedBox(height: 60),
+
+            const SizedBox(height: 52),
+
             // Action buttons
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Copy button
-                  Column(
-                    children: [
-                      InkWell(
-                        onTap: () => _copyQrImage(context),
-                        child: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: const Color(0xffFDB623),
-                            borderRadius: BorderRadius.circular(6),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xff000000)
-                                    .withValues(alpha: 0.25),
-                                offset: const Offset(0, 4),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.copy,
-                            color: Color(0xff3C3C3C),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 7),
-                      Text(
-                        l10n.copyBtn,
-                        style: TextStyle(
-                          color: Color(0xffD9D9D9),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 40),
-                  // Open URL button (if it's a URL)
-                  if (Uri.tryParse(qrData)?.hasScheme == true)
-                    Column(
-                      children: [
-                        InkWell(
-                          onTap: () async {
-                            final uri = Uri.parse(qrData);
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(uri,
-                                  mode: LaunchMode.externalApplication);
-                              ref
-                                  .read(telemetryServiceProvider)
-                                  .track(TelemetryEvents.qrUrlOpened);
-                            }
-                          },
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: const Color(0xffFDB623),
-                              borderRadius: BorderRadius.circular(6),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0xff000000)
-                                      .withValues(alpha: 0.25),
-                                  offset: const Offset(0, 4),
-                                  blurRadius: 4,
-                                ),
-                              ],
-                            ),
-                            child: const Icon(
-                              Icons.open_in_browser,
-                              color: Color(0xff3C3C3C),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 7),
-                        Text(
-                          l10n.openBtn,
-                          style: TextStyle(
-                            color: Color(0xffD9D9D9),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  if (Uri.tryParse(qrData)?.hasScheme == true)
-                    const SizedBox(width: 40),
-                  // Share button
-                  Column(
-                    children: [
-                      InkWell(
-                        onTap: () => _shareQrImage(context, qrData),
-                        child: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: const Color(0xffFDB623),
-                            borderRadius: BorderRadius.circular(6),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xff000000)
-                                    .withValues(alpha: 0.25),
-                                offset: const Offset(0, 4),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.share,
-                            color: Color(0xff3C3C3C),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 7),
-                      Text(
-                        l10n.shareBtn,
-                        style: const TextStyle(
-                          color: Color(0xffD9D9D9),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _ActionButton(
+                  icon: _copied ? Icons.check_rounded : Icons.copy_rounded,
+                  label:
+                      _copied ? l10n.snackbarCopiedToClipboard : l10n.copyBtn,
+                  confirmed: _copied,
+                  onTap: _copyQrImage,
+                ),
+                if (isUrl) ...[
+                  const SizedBox(width: 32),
+                  _ActionButton(
+                    icon: Icons.open_in_browser_rounded,
+                    label: l10n.openBtn,
+                    onTap: () async {
+                      final uri = Uri.parse(qrData);
+                      if (await canLaunchUrl(uri)) {
+                        if (!context.mounted) return;
+                        AppHaptics.light(context);
+                        AppSounds.click();
+                        await launchUrl(uri,
+                            mode: LaunchMode.externalApplication);
+                        ref
+                            .read(telemetryServiceProvider)
+                            .track(TelemetryEvents.qrUrlOpened);
+                      }
+                    },
                   ),
                 ],
-              ),
+                const SizedBox(width: 32),
+                _ActionButton(
+                  icon: Icons.share_rounded,
+                  label: l10n.shareBtn,
+                  onTap: _shareQrImage,
+                ),
+              ],
             )
                 .animate()
                 .fadeIn(
-                  delay: const Duration(milliseconds: 500),
-                  duration: const Duration(milliseconds: 400),
+                  delay: motion.delay(AppMotion.slow),
+                  duration: motion.duration(AppMotion.medium),
                 )
                 .slideY(
-                  begin: 0.2,
+                  begin: motion.reduceMotion ? 0 : 0.2,
                   end: 0,
-                  delay: const Duration(milliseconds: 500),
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.easeOut,
+                  delay: motion.delay(AppMotion.slow),
+                  duration: motion.duration(AppMotion.medium),
+                  curve: motion.curve(AppMotion.enter),
                 ),
+
+            const SizedBox(height: 32),
+
+            // Close / Done button
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    AppHaptics.light(context);
+                    AppSounds.click();
+                    AppGoRouter.router.go(AppPath.home);
+                  },
+                  icon: const Icon(Icons.qr_code_scanner_rounded, size: 20),
+                  label: const Text('Scan Another'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xffFDB623),
+                    side:
+                        const BorderSide(color: Color(0xffFDB623), width: 1.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ),
+            ).animate().fadeIn(
+                  delay: motion.delay(const Duration(milliseconds: 650)),
+                  duration: motion.duration(const Duration(milliseconds: 350)),
+                ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Shared action button widget
+// ---------------------------------------------------------------------------
+
+class _ActionButton extends StatefulWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool confirmed;
+
+  const _ActionButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.confirmed = false,
+  });
+
+  @override
+  State<_ActionButton> createState() => _ActionButtonState();
+}
+
+class _ActionButtonState extends State<_ActionButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _press;
+  late Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _press = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 90),
+      reverseDuration: const Duration(milliseconds: 200),
+    );
+    _scale = Tween<double>(begin: 1.0, end: 0.88).animate(
+      CurvedAnimation(parent: _press, curve: Curves.easeIn),
+    );
+  }
+
+  @override
+  void dispose() {
+    _press.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
+
+    return GestureDetector(
+      onTapDown: (_) {
+        if (!motion.reduceMotion) {
+          _press.forward();
+        }
+      },
+      onTapUp: (_) {
+        if (!motion.reduceMotion) {
+          _press.reverse();
+        }
+        widget.onTap();
+      },
+      onTapCancel: () {
+        if (!motion.reduceMotion) {
+          _press.reverse();
+        }
+      },
+      child: AnimatedBuilder(
+        animation: _press,
+        builder: (_, child) => Transform.scale(
+          scale: motion.reduceMotion ? 1.0 : _scale.value,
+          child: child,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: motion.duration(AppMotion.fast),
+              curve: motion.curve(AppMotion.standard),
+              height: 54,
+              width: 54,
+              decoration: BoxDecoration(
+                color: widget.confirmed
+                    ? const Color(0xff4CAF50)
+                    : const Color(0xffFDB623),
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: (widget.confirmed
+                            ? const Color(0xff4CAF50)
+                            : const Color(0xffFDB623))
+                        .withValues(alpha: 0.4),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: AnimatedSwitcher(
+                duration: motion.duration(AppMotion.fast),
+                transitionBuilder: (child, animation) => ScaleTransition(
+                  scale: animation,
+                  child: child,
+                ),
+                child: Icon(
+                  widget.icon,
+                  key: ValueKey(widget.icon),
+                  color:
+                      widget.confirmed ? Colors.white : const Color(0xff1A1A1A),
+                  size: 22,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            AnimatedDefaultTextStyle(
+              duration: motion.duration(AppMotion.fast),
+              style: TextStyle(
+                color: widget.confirmed
+                    ? const Color(0xff4CAF50)
+                    : const Color(0xffD9D9D9),
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+              child: Text(
+                widget.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ],
         ),
       ),

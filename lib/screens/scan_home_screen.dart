@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer' as dev;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +12,7 @@ import '../models/qr_record.dart';
 import '../providers/qr_providers.dart';
 import '../providers/settings_provider.dart';
 import '../services/telemetry_service.dart';
+import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
 import '../utils/qr_isolate.dart';
 import '../utils/route/app_path.dart';
@@ -25,12 +25,14 @@ class ScanHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   final MobileScannerController controller = MobileScannerController();
   final ImagePicker _imagePicker = ImagePicker();
 
   bool _hasNavigated = false;
   bool _didSucceed = false;
+  bool _isProcessing = false;
+  bool _reduceMotion = false;
 
   // Scanning line animation
   late AnimationController _scanLineController;
@@ -47,11 +49,12 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     _scanLineController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2000),
-    )..repeat(reverse: true);
+    );
     _scanLineAnimation = CurvedAnimation(
       parent: _scanLineController,
       curve: Curves.easeInOut,
@@ -68,14 +71,38 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
     _breatheController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 3000),
-    )..repeat(reverse: true);
+    );
     _breatheAnimation = Tween<double>(begin: 0.85, end: 1.0).animate(
       CurvedAnimation(parent: _breatheController, curve: Curves.easeInOut),
     );
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final reduceMotion = AppMotion.of(context).reduceMotion;
+    if (_reduceMotion == reduceMotion) return;
+    _reduceMotion = reduceMotion;
+
+    if (_reduceMotion) {
+      _scanLineController.stop();
+      _scanLineController.value = 0.5;
+      _breatheController.stop();
+      _breatheController.value = 1.0;
+      return;
+    }
+
+    if (!_scanLineController.isAnimating) {
+      _scanLineController.repeat(reverse: true);
+    }
+    if (!_breatheController.isAnimating) {
+      _breatheController.repeat(reverse: true);
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     controller.dispose();
     _scanLineController.dispose();
     _pulseController.dispose();
@@ -83,44 +110,85 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
     super.dispose();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (!mounted) return;
+    switch (state) {
+      case AppLifecycleState.resumed:
+        if (!_hasNavigated) {
+          unawaited(_safeStartScanner());
+        }
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        unawaited(_safeStopScanner());
+        break;
+    }
+  }
+
+  Future<void> _safeStartScanner() async {
+    try {
+      await controller.start();
+    } catch (e, st) {
+      dev.log('[ScanHomeScreen] start scanner failed: $e', stackTrace: st);
+    }
+  }
+
+  Future<void> _safeStopScanner() async {
+    try {
+      await controller.stop();
+    } catch (e, st) {
+      dev.log('[ScanHomeScreen] stop scanner failed: $e', stackTrace: st);
+    }
+  }
+
   Future<void> _handleScannedData(String data) async {
-    if (_hasNavigated) return;
+    if (_hasNavigated || _isProcessing) return;
+    _isProcessing = true;
     setState(() {
       _hasNavigated = true;
       _didSucceed = true;
     });
 
     final settings = ref.read(settingsProvider);
-    if (settings.vibrate) HapticFeedback.mediumImpact();
-    if (settings.beep) SystemSound.play(SystemSoundType.click);
+    if (settings.vibrate) {
+      AppHaptics.medium(context);
+    }
+    if (settings.beep) {
+      AppSounds.click();
+    }
 
     // Play success pulse
     _pulseController.forward(from: 0);
 
-    // Classify off the main thread — no jank during scan detection
-    final classification = await QRIsolate.classify(data);
-
-    ref.read(telemetryServiceProvider).track(
-      TelemetryEvents.qrScanned,
-      properties: {'content_type': classification.qrTypeString},
-    );
-
-    ref.read(scannedQRDataProvider.notifier).state = data;
-
-    final record = QRRecord(
-      data: data,
-      type: 'scanned',
-      qrType: classification.qrTypeString,
-      label: null,
-    );
-    ref.read(scannedHistoryProvider.notifier).addRecord(record);
-
-    // Brief delay so user sees the success flash
-    await Future.delayed(const Duration(milliseconds: 350));
-
     try {
-      await controller.stop();
+      // Classify off the main thread — no jank during scan detection.
+      final classification = await QRIsolate.classify(data);
+
+      ref.read(telemetryServiceProvider).track(
+        TelemetryEvents.qrScanned,
+        properties: {'content_type': classification.qrTypeString},
+      );
+
+      ref.read(scannedQRDataProvider.notifier).state = data;
+
+      final record = QRRecord(
+        data: data,
+        type: 'scanned',
+        qrType: classification.qrTypeString,
+        label: null,
+      );
+      ref.read(scannedHistoryProvider.notifier).addRecord(record);
+
+      // Brief delay so user sees the success flash.
+      await Future.delayed(const Duration(milliseconds: 350));
+
+      await _safeStopScanner();
       await AppGoRouter.router.push(AppPath.scannedQRResult);
+    } catch (e, st) {
+      dev.log('[ScanHomeScreen] scan handling failed: $e', stackTrace: st);
     } finally {
       if (mounted) {
         setState(() {
@@ -128,19 +196,24 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
           _didSucceed = false;
         });
         _pulseController.reset();
-        await controller.start();
+        await _safeStartScanner();
       } else {
         _hasNavigated = false;
         _didSucceed = false;
       }
+      _isProcessing = false;
     }
   }
 
   Future<void> _onDetect(BarcodeCapture capture) async {
-    if (_hasNavigated) return;
+    if (_hasNavigated || _isProcessing) return;
     final barcodes = capture.barcodes;
-    if (barcodes.isNotEmpty && barcodes.first.rawValue != null) {
-      await _handleScannedData(barcodes.first.rawValue!);
+    for (final barcode in barcodes) {
+      final value = barcode.rawValue;
+      if (value != null && value.isNotEmpty) {
+        await _handleScannedData(value);
+        return;
+      }
     }
   }
 
@@ -173,6 +246,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
     final size = MediaQuery.of(context).size;
     final scanWindowSize = size.width - 80.0;
     final scanWindowTop = (size.height - scanWindowSize) / 2 - 40;
@@ -202,19 +276,25 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
         ),
 
         // Animated corner brackets
-        AnimatedBuilder(
-          animation: _breatheAnimation,
-          builder: (context, _) {
-            return _ScanCornerBrackets(
-              scanRect: scanRect,
-              didSucceed: _didSucceed,
-              breathe: _breatheAnimation.value,
-            );
-          },
-        ),
+        motion.reduceMotion
+            ? _ScanCornerBrackets(
+                scanRect: scanRect,
+                didSucceed: _didSucceed,
+                breathe: 1,
+              )
+            : AnimatedBuilder(
+                animation: _breatheAnimation,
+                builder: (context, _) {
+                  return _ScanCornerBrackets(
+                    scanRect: scanRect,
+                    didSucceed: _didSucceed,
+                    breathe: _breatheAnimation.value,
+                  );
+                },
+              ),
 
         // Scanning line
-        if (!_didSucceed)
+        if (!_didSucceed && !motion.reduceMotion)
           AnimatedBuilder(
             animation: _scanLineAnimation,
             builder: (context, _) {
@@ -249,7 +329,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
           ),
 
         // Success pulse ring
-        if (_didSucceed)
+        if (_didSucceed && !motion.reduceMotion)
           AnimatedBuilder(
             animation: _pulseController,
             builder: (context, _) {
@@ -262,7 +342,8 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
                     width: (scanRect.width + 16) * _pulseScale.value,
                     height: (scanRect.height + 16) * _pulseScale.value,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20 * _pulseScale.value),
+                      borderRadius:
+                          BorderRadius.circular(20 * _pulseScale.value),
                       border: Border.all(
                         color: const Color(0xff4CAF50),
                         width: 3,
@@ -282,16 +363,21 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
           child: _ScanControlBar(
             controller: controller,
             onGallery: _pickFromGallery,
-          ).animate().fadeIn(duration: 400.ms).slideY(begin: -0.5, end: 0, curve: Curves.easeOut),
+          )
+              .animate()
+              .fadeIn(duration: motion.duration(AppMotion.medium))
+              .slideY(
+                begin: motion.reduceMotion ? 0 : -0.5,
+                end: 0,
+                curve: motion.curve(AppMotion.enter),
+              ),
         ),
 
         // Bottom hint label
         Positioned(
           left: 20,
           right: 20,
-          bottom: scanRect.top > 200
-              ? scanRect.top - 60
-              : scanRect.bottom + 24,
+          bottom: scanRect.top > 200 ? scanRect.top - 60 : scanRect.bottom + 24,
           child: Center(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
@@ -312,7 +398,9 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
                   letterSpacing: 0.3,
                 ),
               ),
-            ).animate(key: ValueKey(_didSucceed)).fadeIn(duration: 200.ms),
+            )
+                .animate(key: ValueKey(_didSucceed))
+                .fadeIn(duration: motion.duration(AppMotion.fast)),
           ),
         ),
       ],
@@ -329,13 +417,15 @@ class _ScanOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
+      duration: motion.duration(AppMotion.fast),
       child: CustomPaint(
         painter: _OverlayPainter(
           scanRect: scanRect,
-          dimColor:
-              didSucceed ? Colors.black.withValues(alpha: 0.25) : Colors.black.withValues(alpha: 0.55),
+          dimColor: didSucceed
+              ? Colors.black.withValues(alpha: 0.25)
+              : Colors.black.withValues(alpha: 0.55),
         ),
         child: const SizedBox.expand(),
       ),
@@ -385,11 +475,13 @@ class _ScanCornerBrackets extends StatelessWidget {
     return CustomPaint(
       painter: _BracketPainter(
         scanRect: scanRect,
-        color: didSucceed ? const Color(0xff4CAF50) : Color.lerp(
-          const Color(0xffFDB623).withValues(alpha: 0.7),
-          const Color(0xffFDB623),
-          breathe,
-        )!,
+        color: didSucceed
+            ? const Color(0xff4CAF50)
+            : Color.lerp(
+                const Color(0xffFDB623).withValues(alpha: 0.7),
+                const Color(0xffFDB623),
+                breathe,
+              )!,
         strokeWidth: 3.5,
         bracketLength: 28,
       ),
@@ -497,7 +589,7 @@ class _ScanControlBar extends ConsumerWidget {
             _ControlButton(
               icon: Icons.photo_library_rounded,
               onTap: () {
-                HapticFeedback.lightImpact();
+                AppHaptics.light(context);
                 onGallery();
               },
             ),
@@ -511,12 +603,10 @@ class _ScanControlBar extends ConsumerWidget {
               builder: (context, state, _) {
                 final isOn = state.torchState == TorchState.on;
                 return _ControlButton(
-                  icon: isOn
-                      ? Icons.flash_on_rounded
-                      : Icons.flash_off_rounded,
+                  icon: isOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
                   color: isOn ? const Color(0xffFDB623) : Colors.white,
                   onTap: () {
-                    HapticFeedback.lightImpact();
+                    AppHaptics.light(context);
                     controller.toggleTorch();
                     ref
                         .read(telemetryServiceProvider)
@@ -533,7 +623,7 @@ class _ScanControlBar extends ConsumerWidget {
             _ControlButton(
               icon: Icons.flip_camera_ios_rounded,
               onTap: () {
-                HapticFeedback.lightImpact();
+                AppHaptics.light(context);
                 controller.switchCamera();
                 ref
                     .read(telemetryServiceProvider)

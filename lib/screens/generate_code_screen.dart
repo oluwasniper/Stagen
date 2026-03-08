@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../providers/qr_providers.dart';
 import '../services/telemetry_service.dart';
+import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
@@ -190,6 +191,9 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
       return;
     }
 
+    AppHaptics.medium(context);
+    AppSounds.click();
+
     ref.read(telemetryServiceProvider).track(
       TelemetryEvents.qrGenerated,
       properties: {'qr_type': widget.type.type.name},
@@ -215,6 +219,8 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
+
     return BackgroundScreenWidget(
       screenTitle: widget.type.label,
       body: SingleChildScrollView(
@@ -252,14 +258,17 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(20.0),
-                        child: SvgPicture.asset(
-                          widget.type.svgData,
-                          colorFilter: const ColorFilter.mode(
-                            Color(0xffFDB623),
-                            BlendMode.srcIn,
+                        child: Hero(
+                          tag: 'qr_icon_${widget.type.type.name}',
+                          child: SvgPicture.asset(
+                            widget.type.svgData,
+                            colorFilter: const ColorFilter.mode(
+                              Color(0xffFDB623),
+                              BlendMode.srcIn,
+                            ),
+                            width: 70,
+                            height: 70,
                           ),
-                          width: 70,
-                          height: 70,
                         ),
                       ),
                       Padding(
@@ -303,12 +312,12 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
                 ),
               )
                   .animate()
-                  .fadeIn(duration: const Duration(milliseconds: 500))
+                  .fadeIn(duration: motion.duration(AppMotion.slow))
                   .slideY(
                     begin: 0.05,
                     end: 0,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeOut,
+                    duration: motion.duration(AppMotion.slow),
+                    curve: motion.curve(AppMotion.enter),
                   ),
             ],
           ),

@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../utils/app_asset.dart';
+import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
@@ -22,6 +23,7 @@ class OpenFileScreen extends StatefulWidget {
 class _OpenFileScreenState extends State<OpenFileScreen> {
   @override
   Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
     final record = widget.record;
     final data = record?.data ?? 'No data';
     final qrType = record?.qrType ?? 'Unknown';
@@ -123,6 +125,8 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
                               onPressed: () {
+                                AppHaptics.light(context);
+                                AppSounds.click();
                                 AppGoRouter.router.push(
                                   AppPath.historyShowQR,
                                   extra: record,
@@ -146,12 +150,12 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
               ),
             )
                 .animate()
-                .fadeIn(duration: const Duration(milliseconds: 400))
+                .fadeIn(duration: motion.duration(AppMotion.medium))
                 .slideY(
-                  begin: -0.1,
+                  begin: motion.reduceMotion ? 0 : -0.1,
                   end: 0,
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.easeOut,
+                  duration: motion.duration(AppMotion.medium),
+                  curve: motion.curve(AppMotion.enter),
                 ),
             const SizedBox(height: 60),
             Center(
@@ -164,6 +168,8 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                         onTap: record == null
                             ? null
                             : () async {
+                                AppHaptics.light(context);
+                                AppSounds.click();
                                 await SharePlus.instance
                                     .share(ShareParams(text: record.data));
                               },
@@ -175,8 +181,8 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    const Color(0xff000000).withValues(alpha: 0.25),
+                                color: const Color(0xff000000)
+                                    .withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -204,6 +210,8 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                     children: [
                       InkWell(
                         onTap: () {
+                          AppHaptics.light(context);
+                          AppSounds.click();
                           Clipboard.setData(ClipboardData(text: data));
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -219,8 +227,8 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                             borderRadius: BorderRadius.circular(6),
                             boxShadow: [
                               BoxShadow(
-                                color:
-                                    const Color(0xff000000).withValues(alpha: 0.25),
+                                color: const Color(0xff000000)
+                                    .withValues(alpha: 0.25),
                                 offset: const Offset(0, 4),
                                 blurRadius: 4,
                               ),
@@ -248,15 +256,15 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
             )
                 .animate()
                 .fadeIn(
-                  delay: const Duration(milliseconds: 300),
-                  duration: const Duration(milliseconds: 400),
+                  delay: motion.delay(AppMotion.fast),
+                  duration: motion.duration(AppMotion.medium),
                 )
                 .slideY(
-                  begin: 0.2,
+                  begin: motion.reduceMotion ? 0 : 0.2,
                   end: 0,
-                  delay: const Duration(milliseconds: 300),
-                  duration: const Duration(milliseconds: 400),
-                  curve: Curves.easeOut,
+                  delay: motion.delay(AppMotion.fast),
+                  duration: motion.duration(AppMotion.medium),
+                  curve: motion.curve(AppMotion.enter),
                 ),
           ],
         ),

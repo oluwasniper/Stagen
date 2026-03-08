@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/auth_provider.dart';
 import '../utils/app_asset.dart';
+import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 
@@ -59,6 +60,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final iconSize = MediaQuery.sizeOf(context).width * 0.38;
+    final motion = AppMotion.of(context);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -86,10 +88,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                   .scale(
                     begin: const Offset(0.5, 0.5),
                     end: const Offset(1.0, 1.0),
-                    duration: 650.ms,
-                    curve: Curves.elasticOut,
+                    duration: motion.duration(AppMotion.slow),
+                    curve: motion.curve(AppMotion.spring),
                   )
-                  .fade(begin: 0, end: 1, duration: 300.ms),
+                  .fade(
+                    begin: 0,
+                    end: 1,
+                    duration: motion.duration(AppMotion.medium),
+                  ),
 
               const SizedBox(height: 24),
 
@@ -107,11 +113,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                   .slideY(
                     begin: 0.4,
                     end: 0,
-                    delay: 300.ms,
-                    duration: 500.ms,
-                    curve: Curves.easeOutCubic,
+                    delay: motion.delay(AppMotion.fast),
+                    duration: motion.duration(AppMotion.slow),
+                    curve: motion.curve(AppMotion.emphasized),
                   )
-                  .fade(begin: 0, end: 1, delay: 300.ms, duration: 400.ms),
+                  .fade(
+                    begin: 0,
+                    end: 1,
+                    delay: motion.delay(AppMotion.fast),
+                    duration: motion.duration(AppMotion.medium),
+                  ),
 
               const SizedBox(height: 8),
 
@@ -126,8 +137,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                 ),
               )
                   .animate()
-                  .fade(begin: 0, end: 1, delay: 520.ms, duration: 450.ms)
-                  .then(delay: 500.ms)
+                  .fade(
+                    begin: 0,
+                    end: 1,
+                    delay: motion.delay(const Duration(milliseconds: 520)),
+                    duration:
+                        motion.duration(const Duration(milliseconds: 450)),
+                  )
+                  .then(delay: motion.delay(AppMotion.slow))
                   .callback(callback: (_) => _onAnimationComplete()),
             ],
           ),
