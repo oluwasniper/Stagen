@@ -2,6 +2,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/auth_service.dart';
+import '../services/appwrite_client.dart';
 import '../services/telemetry_service.dart';
 import '../utils/error_localizer.dart';
 import 'qr_providers.dart';
@@ -91,6 +92,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
     initComplete = _init();
   }
 
+  AuthNotifier.misconfigured(String message, Ref ref)
+      : _authService = _PlaceholderAuthService(),
+        _ref = ref,
+        super(AuthState(status: AuthStatus.unauthenticated, error: message)) {
+    initComplete = Future.value();
+  }
+
   TelemetryService get _telemetry => _ref.read(telemetryServiceProvider);
 
   /// Check for existing session on startup.
@@ -109,9 +117,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> signInAnonymously() async {
     state = state.copyWith(status: AuthStatus.loading);
     try {
-      // Always clear any stale local session first, then create fresh
+      // Always clear any stale local session first, then create fresh.
       await _authService.logout();
-      await _authService.createAnonymousSession();
+      try {
+        await _authService.createAnonymousSession();
+      } catch (e) {
+        // If Appwrite still reports a session exists, force-clear and retry.
+        if (appwriteErrorType(e) == 'user_session_already_exists') {
+          await _authService.logout();
+          await _authService.createAnonymousSession();
+        } else {
+          rethrow;
+        }
+      }
       final user = await _authService.getCurrentUser();
       state = AuthState(status: AuthStatus.authenticated, user: user);
       try {
@@ -199,21 +217,60 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Sign out and clear state.
   Future<void> signOut() async {
-    _telemetry.track(TelemetryEvents.authSignout);
-    await _authService.logout();
+    final previousUser = state.user;
+    state = state.copyWith(
+      status: AuthStatus.loading,
+      error: null,
+      errorType: null,
+    );
+
     try {
-      _telemetry.reset();
+      _telemetry.track(TelemetryEvents.authSignout);
     } catch (_) {}
-    state = const AuthState(status: AuthStatus.unauthenticated);
-    // Invalidate history providers so they re-fetch on next sign-in
-    _ref.invalidate(scannedHistoryProvider);
-    _ref.invalidate(generatedHistoryProvider);
+
+    try {
+      await _authService.logout();
+      try {
+        _telemetry.reset();
+      } catch (_) {}
+      state = const AuthState(status: AuthStatus.unauthenticated);
+      // Invalidate history providers so they re-fetch on next sign-in
+      _ref.invalidate(scannedHistoryProvider);
+      _ref.invalidate(generatedHistoryProvider);
+    } catch (e) {
+      try {
+        _telemetry.track(
+          TelemetryEvents.authError,
+          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'},
+        );
+      } catch (_) {}
+
+      final currentUser = await _authService.getCurrentUser();
+      state = AuthState(
+        status: currentUser == null
+            ? AuthStatus.unauthenticated
+            : AuthStatus.authenticated,
+        user: currentUser ?? previousUser,
+        error: e.toString(),
+        errorType: appwriteErrorType(e),
+      );
+    }
   }
+}
+
+// ─── Placeholder (used when Appwrite is not configured) ───
+
+class _PlaceholderAuthService extends AuthService {
+  _PlaceholderAuthService() : super(client: client);
 }
 
 // ─── Provider ───
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final authService = ref.watch(authServiceProvider);
-  return AuthNotifier(authService, ref);
+  try {
+    final authService = ref.watch(authServiceProvider);
+    return AuthNotifier(authService, ref);
+  } on StateError catch (e) {
+    return AuthNotifier.misconfigured(e.message, ref);
+  }
 });

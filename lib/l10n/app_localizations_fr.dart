@@ -73,6 +73,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get telephoneQR => 'Téléphone';
 
   @override
+  String get smsQR => 'SMS';
+
+  @override
+  String get telegramQR => 'Telegram';
+
+  @override
+  String get linkedinQR => 'LinkedIn';
+
+  @override
   String get generateCode => 'Générer un code';
 
   @override
@@ -318,6 +327,53 @@ class AppLocalizationsFr extends AppLocalizations {
   String get phoneNumberHint => '+55xxxxxxxxx';
 
   @override
+  String get smsNumberLabel => 'Numéro SMS';
+
+  @override
+  String get smsNumberHint => 'Entrez le numéro du destinataire';
+
+  @override
+  String get smsMessageLabel => 'Message SMS';
+
+  @override
+  String get smsMessageHint => 'Entrez le message (facultatif)';
+
+  @override
+  String get telegramUsernameLabel => 'Nom d\'utilisateur Telegram';
+
+  @override
+  String get telegramUsernameHint =>
+      'Entrez le nom d\'utilisateur ou @identifiant';
+
+  @override
+  String get linkedinProfileLabel => 'Profil LinkedIn';
+
+  @override
+  String get linkedinProfileHint =>
+      'Entrez l\'URL du profil ou le nom d\'utilisateur';
+
+  @override
+  String get validationSmsNumberRequired => 'Le numéro SMS est requis';
+
+  @override
+  String get validationSmsNumberInvalid => 'Entrez un numéro SMS valide';
+
+  @override
+  String get validationTelegramRequired =>
+      'Le nom d\'utilisateur Telegram est requis';
+
+  @override
+  String get validationTelegramInvalid =>
+      'Entrez un nom d\'utilisateur Telegram ou un lien t.me valide';
+
+  @override
+  String get validationLinkedinRequired => 'Le profil LinkedIn est requis';
+
+  @override
+  String get validationLinkedinInvalid =>
+      'Entrez une URL ou un nom d\'utilisateur LinkedIn valide';
+
+  @override
   String get locationUseCurrentLocation => 'Utiliser la position actuelle';
 
   @override
@@ -525,4 +581,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get failedToShare => 'Échec du partage';
+
+  @override
+  String get unableToOpenContent => 'Impossible d\'ouvrir ce contenu';
+
+  @override
+  String get noInternet => 'Pas de connexion internet';
 }

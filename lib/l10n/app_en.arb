@@ -91,6 +91,18 @@
     "@telephoneQR":{
         "description": "Telephone details to be converted to QR code"
     },
+    "smsQR": "SMS",
+    "@smsQR":{
+        "description": "SMS details to be converted to QR code"
+    },
+    "telegramQR": "Telegram",
+    "@telegramQR":{
+        "description": "Telegram details to be converted to QR code"
+    },
+    "linkedinQR": "LinkedIn",
+    "@linkedinQR":{
+        "description": "LinkedIn details to be converted to QR code"
+    },
 
     "generateCode": "Generate a Code",
     "@generateCode":{
@@ -489,6 +501,62 @@
     "@phoneNumberHint" :{
         "description": "Hint for the phone number input"
     },
+    "smsNumberLabel": "SMS Number",
+    "@smsNumberLabel": {
+        "description": "Label for the SMS recipient number input"
+    },
+    "smsNumberHint": "Enter recipient number",
+    "@smsNumberHint": {
+        "description": "Hint for the SMS recipient number input"
+    },
+    "smsMessageLabel": "SMS Message",
+    "@smsMessageLabel": {
+        "description": "Label for the SMS message body input"
+    },
+    "smsMessageHint": "Enter message (optional)",
+    "@smsMessageHint": {
+        "description": "Hint for the SMS message body input"
+    },
+    "telegramUsernameLabel": "Telegram Username",
+    "@telegramUsernameLabel": {
+        "description": "Label for Telegram username input"
+    },
+    "telegramUsernameHint": "Enter username or @handle",
+    "@telegramUsernameHint": {
+        "description": "Hint for Telegram username input"
+    },
+    "linkedinProfileLabel": "LinkedIn Profile",
+    "@linkedinProfileLabel": {
+        "description": "Label for LinkedIn profile input"
+    },
+    "linkedinProfileHint": "Enter profile URL or username",
+    "@linkedinProfileHint": {
+        "description": "Hint for LinkedIn profile input"
+    },
+    "validationSmsNumberRequired": "SMS number is required",
+    "@validationSmsNumberRequired": {
+        "description": "Validation error when SMS number is missing"
+    },
+    "validationSmsNumberInvalid": "Enter a valid SMS number",
+    "@validationSmsNumberInvalid": {
+        "description": "Validation error when SMS number format is invalid"
+    },
+    "validationTelegramRequired": "Telegram username is required",
+    "@validationTelegramRequired": {
+        "description": "Validation error when Telegram username is missing"
+    },
+    "validationTelegramInvalid": "Enter a valid Telegram username or t.me link",
+    "@validationTelegramInvalid": {
+        "description": "Validation error when Telegram input is invalid"
+    },
+    "validationLinkedinRequired": "LinkedIn profile is required",
+    "@validationLinkedinRequired": {
+        "description": "Validation error when LinkedIn profile is missing"
+    },
+    "validationLinkedinInvalid": "Enter a valid LinkedIn profile URL or username",
+    "@validationLinkedinInvalid": {
+        "description": "Validation error when LinkedIn input is invalid"
+    },
     "locationUseCurrentLocation": "Use Current Location",
     "@locationUseCurrentLocation": {
         "description": "Button label to use the device current location"
@@ -755,5 +823,13 @@
     "failedToShare": "Failed to share",
     "@failedToShare": {
         "description": "Error message shown when sharing fails"
+    },
+    "unableToOpenContent": "Unable to open this content",
+    "@unableToOpenContent": {
+        "description": "Error message shown when scanned content cannot be opened"
+    },
+    "noInternet": "No internet connection",
+    "@noInternet": {
+        "description": "Banner shown when the device has no internet connection"
     }
 }

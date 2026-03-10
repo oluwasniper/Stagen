@@ -1,123 +1,51 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import 'l10n/app_localizations.dart';
 import 'utils/app_asset.dart';
+import 'utils/app_motion.dart';
 
-class BottomNavigationPage extends StatefulWidget {
-  const BottomNavigationPage({
-    super.key,
-
-    /// {@template navigation_shell}
-    /// Required parameter that holds the [NavigationShell] instance.
-    /// The [NavigationShell] is responsible for managing the navigation state
-    /// and transitions between different routes in the application.
-    ///
-    /// Used by the bottom navigation bar to handle route transitions and
-    /// maintain navigation history.
-    /// {@endtemplate}
-    required this.navigationShell,
-  });
+class BottomNavigationPage extends StatelessWidget {
+  const BottomNavigationPage({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
   @override
-  State<BottomNavigationPage> createState() => _BottomNavigationPageState();
-}
-
-class _BottomNavigationPageState extends State<BottomNavigationPage> {
-  /// Handler for when a bottom navigation item is tapped.
-  ///
-  /// Takes an [index] parameter which represents the index of the tapped item
-  /// in the bottom navigation bar. This index corresponds to the position
-  /// of the item in the navigation items list, starting from 0.
-  void _onItemTapped(int index) {
-    widget.navigationShell.goBranch(
-      index,
-      initialLocation: index == widget.navigationShell.currentIndex,
-    );
-  }
-
-  int _selectedIndex = 1;
-
-  /// A list of [CustomNavBarItem] objects representing the navigation menu items.
-  ///
-  /// Each item in the list contains information needed to display and handle
-  /// navigation bar elements, such as icons, labels, and associated pages/routes.
-  /// The order of items in this list determines their display order in the
-  /// navigation bar from left to right.
-  late List<CustomNavBarItem> _navItems;
-
-  @override
-  void initState() {
-    super.initState();
-    // _navItems = [
-    //   CustomNavBarItem(
-    //       svgData: AppAsset.generateIconSvg,
-    //       label: AppLocalizations.of(context)!.generate),
-    //   CustomNavBarItem(
-    //       svgData: AppAsset.scanIconSvg,
-    //       label: AppLocalizations.of(context)!.scan),
-    //   CustomNavBarItem(
-    //       svgData: AppAsset.historyIconSvg,
-    //       label: AppLocalizations.of(context)!.history),
-    // ];
-  }
-
-  @override
-  void didUpdateWidget(covariant BottomNavigationPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.navigationShell != widget.navigationShell) {
-      _selectedIndex = widget.navigationShell.currentIndex;
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _navItems = [
-      CustomNavBarItem(
-          svgData: AppAsset.generateIconSvg,
-          label: AppLocalizations.of(context).generate),
-      CustomNavBarItem(
-          svgData: AppAsset.scanIconSvg,
-          label: AppLocalizations.of(context).scan),
-      CustomNavBarItem(
-          svgData: AppAsset.historyIconSvg,
-          label: AppLocalizations.of(context).history),
-    ];
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final selectedIndex = navigationShell.currentIndex;
+    final navItems = [
+      CustomNavBarItem(
+        svgData: AppAsset.generateIconSvg,
+        label: AppLocalizations.of(context).generate,
+      ),
+      CustomNavBarItem(
+        svgData: AppAsset.scanIconSvg,
+        label: AppLocalizations.of(context).scan,
+      ),
+      CustomNavBarItem(
+        svgData: AppAsset.historyIconSvg,
+        label: AppLocalizations.of(context).history,
+      ),
+    ];
+
     return Scaffold(
-      body: widget.navigationShell,
-
-      /// Allows the [Scaffold]'s body to extend behind the [BottomNavigationBar].
-      ///
-      /// When set to true, the body of the scaffold will be positioned behind the bottom navigation bar,
-      /// creating a floating effect. This is particularly useful when implementing translucent or
-      /// transparent navigation bars, or when using [FloatingActionButton] that overlaps with the
-      /// bottom navigation bar.
+      body: navigationShell,
       extendBody: true,
-
-      /// A custom floating navigation bar widget positioned at the bottom of the screen.
-      ///
-      /// This widget creates a floating navigation bar that serves as the main navigation
-      /// component for the application. Unlike the standard [BottomNavigationBar], this
-      /// custom implementation provides a floating appearance and can be styled according
-      /// to specific design requirements.
-
       bottomNavigationBar: CustomFloatingNavBar(
-        selectedIndex: _selectedIndex,
+        selectedIndex: selectedIndex,
         onItemSelected: (index) {
-          setState(() {
-            _selectedIndex = index;
-            _onItemTapped(index);
-          });
+          if (index != selectedIndex) {
+            AppHaptics.selection(context);
+          }
+          navigationShell.goBranch(
+            index,
+            initialLocation: index == selectedIndex,
+          );
         },
-        items: _navItems,
+        items: navItems,
       ),
     );
   }
@@ -137,122 +65,65 @@ class CustomFloatingNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final safeBottom = MediaQuery.of(context).viewPadding.bottom;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
+      padding: EdgeInsets.fromLTRB(36, 18, 36, 16 + safeBottom),
       child: SizedBox(
-        height: 105,
+        height: 90 + safeBottom,
         child: Stack(
-          /// Specifies the clipping behavior of this container's contents.
-          ///
-          /// When set to [Clip.none], no clipping occurs, allowing child widgets to draw
-          /// outside of this container's bounds. This is useful when you want effects
-          /// like shadows or glows to extend beyond the container's boundaries.
           clipBehavior: Clip.none,
           children: [
-            // Main Navigation Bar
+            // Main bar with blur
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: Container(
-                height: 70,
-                decoration: BoxDecoration(
-                  // color: Theme.of(context).primaryColor,
-                  color: Color(0xff333333),
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(22),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                  child: Container(
+                    height: 70,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff2A2A2A).withValues(alpha: 0.88),
+                      borderRadius: BorderRadius.circular(22),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        width: 0.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.35),
+                          blurRadius: 24,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                  /// Generates a list of widgets dynamically.
-                  ///
-                  /// Uses [List.generate] to create a collection of widgets based on a specified length.
-                  /// Each element in the list is created by the generator function provided as a parameter.
-                  /// This is commonly used for creating repeating UI elements with varying content.
-                  children: List.generate(
-                    items.length,
-
-                    /// Builds a bottom navigation item or spacing based on the index.
-                    /// Returns a [Widget] that is either:
-                    /// - A navigation item built by [_buildNavItem] for all indices except 1
-                    /// - A [SizedBox] with width 60 when index is 1
-                    ///
-                    /// This is commonly used in bottom navigation bars to create spacing
-                    /// between navigation items, typically for accommodating a center FAB.
-                    ///
-                    /// @param index The index position in the bottom navigation bar
-                    /// @return A [Widget] representing either a nav item or spacing
-                    (index) =>
-                        index != 1 ? _buildNavItem(index) : SizedBox(width: 60),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(items.length, (index) {
+                        if (index == 1) return const SizedBox(width: 72);
+                        return _buildNavItem(context, index);
+                      }),
+                    ),
                   ),
                 ),
               ),
             ),
-            // Floating Scan Button
-            /// A custom-styled circular button positioned at the bottom center of the navigation bar.
-            ///
-            /// This widget is rendered only when there are multiple navigation items (items.length > 1).
-            /// It creates a floating action button-like element with the following features:
-            ///
-            /// * Positioned 35 logical pixels from the bottom
-            /// * Circular shape with 70x70 dimensions
-            /// * Contains an SVG icon from the second navigation item (items[1])
-            /// * Changes color based on selection state:
-            ///   - Selected: #FDB623 (amber)
-            ///   - Unselected: Theme's primary color
-            /// * Includes a subtle shadow effect
-            /// * SVG icon color changes to white70 when unselected
-            ///
-            /// The button responds to tap gestures by calling [onItemSelected] with index 1.
+
+            // Center FAB scan button
             if (items.length > 1)
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 35,
+                bottom: 30,
                 child: Center(
-                  child: AnimatedScale(
-                    scale: selectedIndex == 1 ? 1.1 : 1.0,
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.easeOutBack,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(35),
-                      onTap: () => onItemSelected(1),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        height: 70,
-                        width: 70,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: selectedIndex == 1
-                              ? Color(0xffFDB623)
-                              : Color(0xff333333),
-                          borderRadius: BorderRadius.circular(35),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: SvgPicture.asset(
-                          items[1].svgData,
-                          colorFilter: selectedIndex != 1
-                              ? const ColorFilter.mode(
-                                  Colors.white70, BlendMode.srcIn)
-                              : null,
-                          width: 30,
-                        ),
-                      ),
-                    ),
+                  child: _ScanFAB(
+                    isSelected: selectedIndex == 1,
+                    semanticsLabel: items[1].label,
+                    svgData: items[1].svgData,
+                    onTap: () => onItemSelected(1),
                   ),
                 ),
               ),
@@ -262,70 +133,185 @@ class CustomFloatingNavBar extends StatelessWidget {
     );
   }
 
-  // Simplified _buildNavItem for non-search items
-  /// Builds a single navigation item for the bottom navigation bar.
-  ///
-  /// [index] The index of the navigation item in the items list.
-  ///
-  /// Returns a custom-styled [InkWell] widget that represents a navigation item with:
-  /// - An SVG icon that changes color based on selection state
-  /// - A text label below the icon
-  /// - A bottom indicator bar that appears when selected
-  ///
-  /// The navigation item's appearance changes based on [selectedIndex]:
-  /// - Selected state: Gold color (#FDB623) for icon, text and indicator
-  /// - Unselected state: White70 color for icon and text, transparent indicator
-  ///
-  /// The layout includes:
-  /// - Horizontal padding of 20
-  /// - Vertical padding of 5
-  /// - Icon width of 30
-  /// - Text size of 17
-  /// - Bottom indicator height of 4 and width of 60
-  Widget _buildNavItem(int index) {
+  Widget _buildNavItem(BuildContext context, int index) {
     final item = items[index];
     final isSelected = selectedIndex == index;
+    final motion = AppMotion.of(context);
 
-    return InkWell(
+    return GestureDetector(
       onTap: () => onItemSelected(index),
+      behavior: HitTestBehavior.opaque,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             AnimatedScale(
-              scale: isSelected ? 1.15 : 1.0,
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeOutBack,
-              child: SvgPicture.asset(
-                item.svgData,
-                colorFilter: isSelected
-                    ? const ColorFilter.mode(Color(0xffFDB623), BlendMode.srcIn)
-                    : const ColorFilter.mode(Colors.white70, BlendMode.srcIn),
-                width: 30,
+              scale: isSelected ? 1.18 : 1.0,
+              duration: motion.duration(AppMotion.medium),
+              curve: motion.curve(AppMotion.spring),
+              child: Semantics(
+                selected: isSelected,
+                button: true,
+                label: item.label,
+                child: SvgPicture.asset(
+                  item.svgData,
+                  colorFilter: ColorFilter.mode(
+                    isSelected ? const Color(0xffFDB623) : Colors.white60,
+                    BlendMode.srcIn,
+                  ),
+                  width: 26,
+                ),
               ),
             ),
+            const SizedBox(height: 3),
             AnimatedDefaultTextStyle(
-              duration: const Duration(milliseconds: 250),
+              duration: motion.duration(AppMotion.fast),
               style: TextStyle(
-                color: isSelected ? Color(0xffFDB623) : Colors.white70,
-                fontSize: isSelected ? 17 : 16,
-                fontWeight: FontWeight.w500,
+                color: isSelected ? const Color(0xffFDB623) : Colors.white54,
+                fontSize: isSelected ? 11.5 : 11,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                letterSpacing: 0.2,
               ),
               child: Text(item.label),
             ),
-            Spacer(),
+            const Spacer(),
             AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              height: 4,
-              width: isSelected ? 60 : 0,
+              duration: motion.duration(AppMotion.medium),
+              curve: motion.curve(AppMotion.standard),
+              height: 3,
+              width: isSelected ? 22 : 0,
               decoration: BoxDecoration(
-                color: isSelected ? Color(0xffFDB623) : Colors.transparent,
-                borderRadius: BorderRadius.circular(4),
+                color: const Color(0xffFDB623),
+                borderRadius: BorderRadius.circular(2),
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: const Color(0xffFDB623).withValues(alpha: 0.5),
+                          blurRadius: 6,
+                          spreadRadius: 1,
+                        )
+                      ]
+                    : null,
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ScanFAB extends StatefulWidget {
+  final bool isSelected;
+  final String svgData;
+  final String semanticsLabel;
+  final VoidCallback onTap;
+
+  const _ScanFAB({
+    required this.isSelected,
+    required this.svgData,
+    required this.semanticsLabel,
+    required this.onTap,
+  });
+
+  @override
+  State<_ScanFAB> createState() => _ScanFABState();
+}
+
+class _ScanFABState extends State<_ScanFAB>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _pressController;
+  late Animation<double> _pressScale;
+
+  @override
+  void initState() {
+    super.initState();
+    _pressController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 120),
+      reverseDuration: const Duration(milliseconds: 200),
+    );
+    _pressScale = Tween<double>(begin: 1.0, end: 0.92).animate(
+      CurvedAnimation(parent: _pressController, curve: Curves.easeIn),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pressController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
+
+    return GestureDetector(
+      onTapDown: (_) {
+        if (!motion.reduceMotion) {
+          _pressController.forward();
+        }
+      },
+      onTapUp: (_) {
+        if (!motion.reduceMotion) {
+          _pressController.reverse();
+        }
+        widget.onTap();
+      },
+      onTapCancel: () {
+        if (!motion.reduceMotion) {
+          _pressController.reverse();
+        }
+      },
+      child: AnimatedBuilder(
+        animation: _pressController,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: motion.reduceMotion
+                ? 1.0
+                : _pressScale.value * (widget.isSelected ? 1.08 : 1.0),
+            child: child,
+          );
+        },
+        child: Semantics(
+          selected: widget.isSelected,
+          button: true,
+          label: widget.semanticsLabel,
+          child: Container(
+            height: 68,
+            width: 68,
+            decoration: BoxDecoration(
+              gradient: widget.isSelected
+                  ? const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color(0xffFDC93A), Color(0xffFDB623)],
+                    )
+                  : null,
+              color: widget.isSelected ? null : const Color(0xff333333),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: widget.isSelected
+                      ? const Color(0xffFDB623).withValues(alpha: 0.45)
+                      : Colors.black.withValues(alpha: 0.3),
+                  blurRadius: widget.isSelected ? 16 : 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Center(
+              child: SvgPicture.asset(
+                widget.svgData,
+                colorFilter: ColorFilter.mode(
+                  widget.isSelected ? Colors.black : Colors.white70,
+                  BlendMode.srcIn,
+                ),
+                width: 28,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -336,8 +322,5 @@ class CustomNavBarItem {
   final String svgData;
   final String label;
 
-  CustomNavBarItem({
-    required this.svgData,
-    required this.label,
-  });
+  CustomNavBarItem({required this.svgData, required this.label});
 }

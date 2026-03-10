@@ -40,6 +40,14 @@ ClassifiedExternalText classifyExternalText(String input) {
     );
   }
 
+  if (lower.startsWith('smsto:') || lower.startsWith('sms:')) {
+    final payload = _parseSmsPayload(text);
+    return ClassifiedExternalText(
+      type: QROptionType.sms,
+      prefill: payload,
+    );
+  }
+
   final uri = Uri.tryParse(text);
   if (uri != null && uri.hasScheme) {
     final scheme = uri.scheme.toLowerCase();
@@ -62,6 +70,16 @@ ClassifiedExternalText classifyExternalText(String input) {
         prefill: {
           if (coords.isNotEmpty) 'latitude': coords[0],
           if (coords.length > 1) 'longitude': coords[1],
+        },
+      );
+    }
+    if (scheme == 'sms' || scheme == 'smsto') {
+      return ClassifiedExternalText(
+        type: QROptionType.sms,
+        prefill: {
+          if (uri.path.isNotEmpty) 'smsNumber': uri.path,
+          if (uri.queryParameters['body']?.isNotEmpty == true)
+            'smsMessage': uri.queryParameters['body']!,
         },
       );
     }
@@ -92,6 +110,26 @@ ClassifiedExternalText classifyExternalText(String input) {
           prefill: {'instagram': pathSegments.first},
         );
       }
+      if ((host == 't.me' ||
+              host.endsWith('.t.me') ||
+              host == 'telegram.me' ||
+              host.endsWith('.telegram.me')) &&
+          pathSegments.isNotEmpty) {
+        return ClassifiedExternalText(
+          type: QROptionType.telegram,
+          prefill: {'telegram': pathSegments.first},
+        );
+      }
+      if ((host == 'linkedin.com' || host.endsWith('.linkedin.com')) &&
+          pathSegments.isNotEmpty) {
+        final handle = pathSegments.length > 1 && pathSegments.first == 'in'
+            ? pathSegments[1]
+            : '';
+        return ClassifiedExternalText(
+          type: QROptionType.linkedin,
+          prefill: {'linkedin': handle.isNotEmpty ? handle : text},
+        );
+      }
       return ClassifiedExternalText(
         type: QROptionType.website,
         prefill: {'website': text},
@@ -110,6 +148,22 @@ ClassifiedExternalText classifyExternalText(String input) {
     return ClassifiedExternalText(
       type: QROptionType.telephone,
       prefill: {'telephone': text},
+    );
+  }
+
+  final telegramMatch = _telegramRegex.firstMatch(text);
+  if (telegramMatch != null) {
+    return ClassifiedExternalText(
+      type: QROptionType.telegram,
+      prefill: {'telegram': telegramMatch.group(1) ?? ''},
+    );
+  }
+
+  final linkedInMatch = _linkedInRegex.firstMatch(text);
+  if (linkedInMatch != null) {
+    return ClassifiedExternalText(
+      type: QROptionType.linkedin,
+      prefill: {'linkedin': linkedInMatch.group(1) ?? ''},
     );
   }
 
@@ -135,6 +189,40 @@ ClassifiedExternalText classifyExternalText(String input) {
     type: QROptionType.text,
     prefill: {'text': text},
   );
+}
+
+Map<String, String> _parseSmsPayload(String input) {
+  final normalized = input.trim();
+  final bodySeparator = normalized.indexOf('?');
+  final mainPart =
+      bodySeparator == -1 ? normalized : normalized.substring(0, bodySeparator);
+  final queryPart =
+      bodySeparator == -1 ? '' : normalized.substring(bodySeparator + 1);
+
+  final withoutScheme = mainPart.replaceFirst(
+    RegExp(r'^sms(to)?:', caseSensitive: false),
+    '',
+  );
+  final colonIndex = withoutScheme.indexOf(':');
+
+  String number = withoutScheme;
+  String message = '';
+  if (colonIndex != -1) {
+    number = withoutScheme.substring(0, colonIndex);
+    message = withoutScheme.substring(colonIndex + 1);
+  }
+
+  if (queryPart.isNotEmpty) {
+    final qp = Uri.splitQueryString(queryPart);
+    if ((qp['body'] ?? '').trim().isNotEmpty) {
+      message = qp['body']!.trim();
+    }
+  }
+
+  return {
+    if (number.trim().isNotEmpty) 'smsNumber': number.trim(),
+    if (message.trim().isNotEmpty) 'smsMessage': message.trim(),
+  };
 }
 
 String? _extractWifiValue(String source, String key) {
@@ -221,6 +309,14 @@ String? _lineValue(List<String> lines, String key) {
 final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 final _phoneRegex = RegExp(r'^\+?[0-9][0-9\-\s().]{5,}$');
 final _domainRegex = RegExp(r'^(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}([/?#].*)?$');
+final _telegramRegex = RegExp(
+  r'^(?:https?://)?(?:t\.me|telegram\.me)/([A-Za-z0-9_]{3,})/?$',
+  caseSensitive: false,
+);
+final _linkedInRegex = RegExp(
+  r'^(?:https?://)?(?:[a-z]+\.)?linkedin\.com/in/([A-Za-z0-9_-]+)/?$',
+  caseSensitive: false,
+);
 final _coordRegex = RegExp(
   r'^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$',
 );

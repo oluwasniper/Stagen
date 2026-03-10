@@ -73,6 +73,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get telephoneQR => 'Telefone';
 
   @override
+  String get smsQR => 'SMS';
+
+  @override
+  String get telegramQR => 'Telegram';
+
+  @override
+  String get linkedinQR => 'LinkedIn';
+
+  @override
   String get generateCode => 'Gerar um Código';
 
   @override
@@ -318,6 +327,51 @@ class AppLocalizationsPt extends AppLocalizations {
   String get phoneNumberHint => '+55xxxxxxxxx';
 
   @override
+  String get smsNumberLabel => 'Número SMS';
+
+  @override
+  String get smsNumberHint => 'Digite o número do destinatário';
+
+  @override
+  String get smsMessageLabel => 'Mensagem SMS';
+
+  @override
+  String get smsMessageHint => 'Digite a mensagem (opcional)';
+
+  @override
+  String get telegramUsernameLabel => 'Usuário do Telegram';
+
+  @override
+  String get telegramUsernameHint => 'Digite usuário ou @usuario';
+
+  @override
+  String get linkedinProfileLabel => 'Perfil do LinkedIn';
+
+  @override
+  String get linkedinProfileHint => 'Digite a URL do perfil ou usuário';
+
+  @override
+  String get validationSmsNumberRequired => 'O número SMS é obrigatório';
+
+  @override
+  String get validationSmsNumberInvalid => 'Digite um número SMS válido';
+
+  @override
+  String get validationTelegramRequired =>
+      'O usuário do Telegram é obrigatório';
+
+  @override
+  String get validationTelegramInvalid =>
+      'Digite um usuário do Telegram ou link t.me válido';
+
+  @override
+  String get validationLinkedinRequired => 'O perfil do LinkedIn é obrigatório';
+
+  @override
+  String get validationLinkedinInvalid =>
+      'Digite uma URL ou usuário do LinkedIn válido';
+
+  @override
   String get locationUseCurrentLocation => 'Usar localização atual';
 
   @override
@@ -525,4 +579,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get failedToShare => 'Falha ao compartilhar';
+
+  @override
+  String get unableToOpenContent => 'Não foi possível abrir este conteúdo';
+
+  @override
+  String get noInternet => 'Sem conexão com a internet';
 }

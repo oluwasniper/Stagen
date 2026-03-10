@@ -4,6 +4,7 @@
 ///   flutter run \
 ///     --dart-define=APPWRITE_ENDPOINT=https://fra.cloud.appwrite.io/v1 \
 ///     --dart-define=APPWRITE_PROJECT_ID=your_project_id \
+///     --dart-define=APPWRITE_PROJECT_NAME=your_project_name \
 ///     --dart-define=POSTHOG_API_KEY=phc_your_key \
 ///     --dart-define=POSTHOG_HOST=https://us.i.posthog.com
 ///
@@ -32,7 +33,8 @@ class AppConfig {
         .trim();
     if (raw.isEmpty) return '';
 
-    final sanitized = _stripWrappingQuotes(raw).replaceFirst(RegExp(r'/+$'), '');
+    final sanitized =
+        _stripWrappingQuotes(raw).replaceFirst(RegExp(r'/+$'), '');
     if (sanitized.isEmpty) return '';
     if (sanitized.endsWith('/v1')) return sanitized;
     return '$sanitized/v1';
@@ -59,6 +61,11 @@ class AppConfig {
     defaultValue: '',
   );
 
+  static const String appwriteProjectName = String.fromEnvironment(
+    'APPWRITE_PROJECT_NAME',
+    defaultValue: '',
+  );
+
   static const String posthogApiKey = String.fromEnvironment(
     'POSTHOG_API_KEY',
     defaultValue: '',
@@ -69,6 +76,16 @@ class AppConfig {
   static const String posthogHost = String.fromEnvironment(
     'POSTHOG_HOST',
     defaultValue: 'https://us.i.posthog.com',
+  );
+
+  static const String appStoreUrl = String.fromEnvironment(
+    'APP_STORE_URL',
+    defaultValue: 'https://apps.apple.com',
+  );
+
+  static const String privacyPolicyUrl = String.fromEnvironment(
+    'PRIVACY_POLICY_URL',
+    defaultValue: 'https://example.com/privacy',
   );
 
   static String _stripWrappingQuotes(String value) {

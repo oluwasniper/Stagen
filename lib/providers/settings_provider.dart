@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:posthog_flutter/posthog_flutter.dart';
 
 import '../l10n/l10n.dart';
+import '../utils/app_motion.dart';
 
 /// Shared storage key for the analytics opt-in setting.
 /// Exposed so other services (e.g. TelemetryService) can read the same key
@@ -27,8 +28,8 @@ class SettingsState {
   final bool analyticsEnabled;
 
   const SettingsState({
-    this.vibrate = false,
-    this.beep = false,
+    this.vibrate = true,
+    this.beep = true,
     this.analyticsEnabled = false,
   });
 
@@ -54,12 +55,18 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
       final vibrate = await _storage.read(key: _Keys.vibrate);
       final beep = await _storage.read(key: _Keys.beep);
       final analytics = await _storage.read(key: _Keys.analytics);
-      // Default false (opt-out); only explicitly stored 'true' enables it.
+      final vibrateEnabled = vibrate != 'false';
+      final beepEnabled = beep != 'false';
+      // Privacy-first default: analytics is enabled only when explicitly opted-in.
       final analyticsEnabled = analytics == 'true';
       state = SettingsState(
-        vibrate: vibrate == 'true',
-        beep: beep == 'true',
+        vibrate: vibrateEnabled,
+        beep: beepEnabled,
         analyticsEnabled: analyticsEnabled,
+      );
+      AppFeedbackPreferences.configure(
+        vibrate: vibrateEnabled,
+        beep: beepEnabled,
       );
       // Apply persisted consent state to the PostHog SDK on startup so the
       // PosthogObserver respects the user's previous choice immediately.
@@ -83,6 +90,7 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
         name: 'SettingsNotifier',
       );
       state = const SettingsState(analyticsEnabled: false);
+      AppFeedbackPreferences.configure(vibrate: true, beep: true);
       try {
         await Posthog().disable();
       } catch (_) {}
@@ -91,11 +99,13 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
 
   Future<void> toggleVibrate(bool value) async {
     state = state.copyWith(vibrate: value);
+    AppFeedbackPreferences.configure(vibrate: value, beep: state.beep);
     await _storage.write(key: _Keys.vibrate, value: value.toString());
   }
 
   Future<void> toggleBeep(bool value) async {
     state = state.copyWith(beep: value);
+    AppFeedbackPreferences.configure(vibrate: state.vibrate, beep: value);
     await _storage.write(key: _Keys.beep, value: value.toString());
   }
 

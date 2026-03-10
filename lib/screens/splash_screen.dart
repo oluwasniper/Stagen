@@ -1,72 +1,153 @@
-import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../l10n/app_localizations.dart';
 import '../providers/auth_provider.dart';
+import '../utils/app_asset.dart';
+import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
-import '../widgets/splash_logo_widget.dart';
 
-class SplashScreen extends ConsumerWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    /// AnnotatedRegion is used to set the system UI overlay style
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+}
 
-    return AnnotatedRegion(
-      /// SystemChrome.setEnabledSystemUIMode is used to set the system UI mode
-      value: SystemChrome.setEnabledSystemUIMode(
+class _SplashScreenState extends ConsumerState<SplashScreen> {
+  bool _animationDone = false;
+  bool _authDone = false;
 
-          /// Manual mode for controlling system UI (status bar and navigation bar).
-          /// This gives full control over system chrome settings and visibility.
-          /// Use this with [SystemChrome.setSystemUIMode] and [SystemChrome.setEnabledSystemUIMode].
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Color(0xffFDB623),
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Color(0xffFDB623),
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
+    _startAuth();
+  }
 
-          SystemUiMode.manual,
-          overlays: [
-            SystemUiOverlay.top,
-          ]),
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle(
-          /// statusBarColor is used to set the color of the status bar
-          statusBarColor: Color(0xffFDB623),
+  Future<void> _startAuth() async {
+    final authNotifier = ref.read(authProvider.notifier);
+    await authNotifier.initComplete;
+    if (!mounted) return;
+    setState(() => _authDone = true);
+    _maybeNavigate();
+  }
 
-          /// statusBarIconBrightness is used to set the brightness of the status bar icons
-          statusBarIconBrightness: Brightness.dark,
+  void _onAnimationComplete() {
+    if (!mounted) return;
+    setState(() => _animationDone = true);
+    _maybeNavigate();
+  }
 
-          /// systemNavigationBarColor is used to set the color of the system navigation bar
-          systemNavigationBarColor: Color(0xffFDB623),
+  void _maybeNavigate() {
+    if (!_animationDone || !_authDone) return;
+    final auth = ref.read(authProvider);
+    if (auth.isAuthenticated) {
+      AppGoRouter.router.go(AppPath.home);
+    } else {
+      AppGoRouter.router.go(AppPath.onboarding);
+    }
+  }
 
-          /// systemNavigationBarIconBrightness is used to set the brightness of the system navigation bar icons
-          systemNavigationBarIconBrightness: Brightness.dark,
-        ),
+  @override
+  Widget build(BuildContext context) {
+    final iconSize = MediaQuery.sizeOf(context).width * 0.38;
+    final motion = AppMotion.of(context);
 
-        /// FlutterSplashScreen is used to show the splash screen
-        child: FlutterSplashScreen(
-          /// SplashLogoWidget is used to show the logo on the splash screen
-          splashScreenBody: SplashLogoWidget(),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Color(0xffFDB623),
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Color(0xffFDB623),
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        backgroundColor: const Color(0xffFDB623),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // App icon — spring scale + fade
+              Image.asset(
+                AppAsset.icon,
+                height: iconSize,
+                width: iconSize,
+                filterQuality: FilterQuality.high,
+                semanticLabel:
+                    '${AppLocalizations.of(context).appName} App Icon',
+              )
+                  .animate()
+                  .scale(
+                    begin: const Offset(0.5, 0.5),
+                    end: const Offset(1.0, 1.0),
+                    duration: motion.duration(AppMotion.slow),
+                    curve: motion.curve(AppMotion.spring),
+                  )
+                  .fade(
+                    begin: 0,
+                    end: 1,
+                    duration: motion.duration(AppMotion.medium),
+                  ),
 
-          /// backgroundColor is used to set the background color of the splash screen
-          backgroundColor: Color(0xffFDB623),
+              const SizedBox(height: 24),
 
-          /// duration is used to set the duration of the splash screen
-          duration: Duration(seconds: 3),
+              // App name — slide up + fade
+              Text(
+                AppLocalizations.of(context).appName,
+                style: const TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                  letterSpacing: 1.5,
+                ),
+              )
+                  .animate()
+                  .slideY(
+                    begin: 0.4,
+                    end: 0,
+                    delay: motion.delay(AppMotion.fast),
+                    duration: motion.duration(AppMotion.slow),
+                    curve: motion.curve(AppMotion.emphasized),
+                  )
+                  .fade(
+                    begin: 0,
+                    end: 1,
+                    delay: motion.delay(AppMotion.fast),
+                    duration: motion.duration(AppMotion.medium),
+                  ),
 
-          /// onEnd is used to navigate to the next screen after the splash screen ends
-          onEnd: () async {
-            // Wait for auth initialization to finish
-            await ref.read(authProvider.notifier).initComplete;
-            final auth = ref.read(authProvider);
-            if (auth.isAuthenticated) {
-              // Existing session → go straight to home
-              AppGoRouter.router.go(AppPath.home);
-            } else {
-              // No session → onboarding → auth
-              AppGoRouter.router.go(AppPath.onboarding);
-            }
-          },
+              const SizedBox(height: 8),
+
+              // Tagline — last to appear, then triggers navigation
+              Text(
+                'Scan · Generate · Share',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black.withValues(alpha: 0.55),
+                  letterSpacing: 2.2,
+                ),
+              )
+                  .animate()
+                  .fade(
+                    begin: 0,
+                    end: 1,
+                    delay: motion.delay(const Duration(milliseconds: 520)),
+                    duration:
+                        motion.duration(const Duration(milliseconds: 450)),
+                  )
+                  .then(delay: motion.delay(AppMotion.slow))
+                  .callback(callback: (_) => _onAnimationComplete()),
+            ],
+          ),
         ),
       ),
     );

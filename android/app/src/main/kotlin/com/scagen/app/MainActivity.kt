@@ -1,4 +1,4 @@
-package com.example.revolutionary_stuff
+package com.scagen.app
 
 import android.content.Intent
 import android.os.Bundle

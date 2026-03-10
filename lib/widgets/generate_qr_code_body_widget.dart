@@ -40,6 +40,15 @@ class GenerateQRCodeBody extends StatelessWidget {
         return InstagramBody(controller: getController('instagram'));
       case QROptionType.telephone:
         return TelephoneBody(controller: getController('telephone'));
+      case QROptionType.sms:
+        return SmsBodyTextWidget(
+          numberController: getController('smsNumber'),
+          messageController: getController('smsMessage'),
+        );
+      case QROptionType.telegram:
+        return TelegramBody(controller: getController('telegram'));
+      case QROptionType.linkedin:
+        return LinkedInBody(controller: getController('linkedin'));
       case QROptionType.wifi:
         return WifiBodyTextWidget(
           networkController: getController('network'),
@@ -179,6 +188,68 @@ class TelephoneBody extends StatelessWidget {
     return OneTextWidget(
       labelText: AppLocalizations.of(context).phoneNumberLabel,
       hintText: AppLocalizations.of(context).phoneNumberHint,
+      controller: controller,
+    );
+  }
+}
+
+class SmsBodyTextWidget extends StatelessWidget {
+  final TextEditingController numberController;
+  final TextEditingController messageController;
+
+  const SmsBodyTextWidget({
+    super.key,
+    required this.numberController,
+    required this.messageController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        KTextField(
+          labelText: AppLocalizations.of(context).smsNumberLabel,
+          hintText: AppLocalizations.of(context).smsNumberHint,
+          autoFocus: true,
+          controller: numberController,
+        ),
+        const SizedBox(height: 20),
+        KTextField(
+          labelText: AppLocalizations.of(context).smsMessageLabel,
+          hintText: AppLocalizations.of(context).smsMessageHint,
+          maxLines: 3,
+          controller: messageController,
+        ),
+      ],
+    );
+  }
+}
+
+class TelegramBody extends StatelessWidget {
+  final TextEditingController controller;
+  const TelegramBody({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return OneTextWidget(
+      labelText: AppLocalizations.of(context).telegramUsernameLabel,
+      hintText: AppLocalizations.of(context).telegramUsernameHint,
+      controller: controller,
+    );
+  }
+}
+
+class LinkedInBody extends StatelessWidget {
+  final TextEditingController controller;
+  const LinkedInBody({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return OneTextWidget(
+      labelText: AppLocalizations.of(context).linkedinProfileLabel,
+      hintText: AppLocalizations.of(context).linkedinProfileHint,
       controller: controller,
     );
   }

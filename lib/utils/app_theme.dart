@@ -15,6 +15,26 @@ class GlobalThemData {
       highlightColor: Colors.transparent,
       focusColor: focusColor,
       useMaterial3: true,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
+        },
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.transparent,
+        foregroundColor: colorScheme.onSurface,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: colorScheme.surfaceContainerHighest,
+        contentTextStyle: TextStyle(color: colorScheme.onSurface),
+      ),
       textTheme: TextTheme(
         displayLarge: TextStyle(
           fontSize: 96,
@@ -90,8 +110,8 @@ class GlobalThemData {
           letterSpacing: 0.25,
         ),
       ),
-      fontFamily: 'Itim',
-      fontFamilyFallback: <String>['Itim', 'Inter'],
+      fontFamily: 'Inter',
+      fontFamilyFallback: <String>['Inter'],
     );
   }
 
