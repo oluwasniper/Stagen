@@ -48,16 +48,20 @@ flutter run --dart-define-from-file=.env
 
 1. **Fork** the repository and clone your fork.
 2. Create a branch from `main` with a descriptive name:
+
    ```bash
    git checkout -b fix/scanner-crash
    git checkout -b feat/export-csv
    ```
+
 3. Make your changes (see conventions below).
 4. Run the analyzer and tests before pushing:
+
    ```bash
    flutter analyze
    flutter test
    ```
+
 5. Open a pull request against `main`.
 
 ---
@@ -65,7 +69,7 @@ flutter run --dart-define-from-file=.env
 ## Code Conventions
 
 | Area | Convention |
-|---|---|
+| --- | --- |
 | State management | `flutter_riverpod` — `StateNotifier` for mutable state, `Provider` for services |
 | Inside notifiers | `_ref.read(provider)` — never `watch` |
 | Routing | `go_router`; path constants in `lib/utils/route/app_path.dart`, name constants in `lib/utils/route/app_name.dart` |
@@ -87,9 +91,11 @@ The app supports English, Spanish, French, and Portuguese via Flutter's `gen-l10
 - `app_en.arb` is the source of truth — add new strings there first.
 - Add the corresponding translations to the other ARB files in the same PR.
 - After editing ARB files, regenerate the localization classes:
+
   ```bash
   flutter gen-l10n
   ```
+
 - Do not edit `lib/l10n/app_localizations*.dart` directly — these are generated.
 
 If you are not able to provide a translation, add the English string as a placeholder and note it in your PR description.
@@ -124,6 +130,12 @@ Open a [GitHub issue](https://github.com/oluwasniper/Stagen/issues) and include:
 ## Feature Requests
 
 Open a [GitHub issue](https://github.com/oluwasniper/Stagen/issues) with the `enhancement` label. Describe the use case and the problem it solves. Discussion is welcome before implementation begins.
+
+---
+
+## Code of Conduct
+
+All contributors are expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md). Please read it before participating.
 
 ---
 
