@@ -86,7 +86,8 @@ class _ShowQrScreenState extends State<ShowQrScreen>
   bool _isShareTempQrFile(String fileName) {
     final normalized = fileName.toLowerCase();
     return normalized.endsWith('_qr.png') ||
-        RegExp(r'_qr_\d+\.png$').hasMatch(normalized);
+        RegExp(r'_qr_\d+\.png$').hasMatch(normalized) ||
+        RegExp(r'^qr_code_\d+\.png$').hasMatch(normalized);
   }
 
   String _tempShareFileName(String qrType) {
