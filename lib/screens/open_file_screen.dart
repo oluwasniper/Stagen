@@ -210,6 +210,7 @@ class _OpenFileScreenState extends State<OpenFileScreen> {
                     children: [
                       InkWell(
                         onTap: () {
+                          if (record == null) return;
                           AppHaptics.light(context);
                           AppSounds.click();
                           Clipboard.setData(ClipboardData(text: data));
