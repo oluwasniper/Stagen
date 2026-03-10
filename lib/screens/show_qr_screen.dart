@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer' as dev;
 import 'dart:io';
 import 'dart:typed_data';
@@ -24,9 +25,80 @@ class ShowQrScreen extends StatefulWidget {
   State<ShowQrScreen> createState() => _ShowQrScreenState();
 }
 
-class _ShowQrScreenState extends State<ShowQrScreen> {
+class _ShowQrScreenState extends State<ShowQrScreen>
+    with WidgetsBindingObserver {
+  static const Duration _staleShareFileMaxAge = Duration(hours: 24);
   final _qrKey = GlobalKey();
   bool _copied = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    unawaited(_cleanupStaleQrShareFiles());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      unawaited(_cleanupStaleQrShareFiles());
+    }
+  }
+
+  Future<void> _cleanupStaleQrShareFiles() async {
+    try {
+      final tempDir = await getTemporaryDirectory();
+      final shareDir = Directory('${tempDir.path}/qr_share');
+      if (!await shareDir.exists()) return;
+
+      final cutoff = DateTime.now().subtract(_staleShareFileMaxAge);
+      await for (final entity in shareDir.list(followLinks: false)) {
+        if (entity is! File) continue;
+        final fileName = entity.uri.pathSegments.last;
+        if (!_isShareTempQrFile(fileName)) continue;
+        final modifiedAt = (await entity.stat()).modified;
+        if (modifiedAt.isAfter(cutoff)) continue;
+        try {
+          await entity.delete();
+        } catch (e, st) {
+          dev.log(
+            '[ShowQrScreen] stale temp file cleanup failed: $e',
+            stackTrace: st,
+            name: 'ShowQrScreen',
+          );
+        }
+      }
+    } catch (e, st) {
+      dev.log(
+        '[ShowQrScreen] temp file cleanup failed: $e',
+        stackTrace: st,
+        name: 'ShowQrScreen',
+      );
+    }
+  }
+
+  bool _isShareTempQrFile(String fileName) {
+    final normalized = fileName.toLowerCase();
+    return normalized.endsWith('_qr.png') ||
+        RegExp(r'_qr_\d+\.png$').hasMatch(normalized);
+  }
+
+  String _tempShareFileName(String qrType) {
+    final sanitizedType = qrType
+        .trim()
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+        .replaceAll(RegExp(r'_+'), '_')
+        .replaceAll(RegExp(r'^_|_$'), '');
+    final safeType = sanitizedType.isEmpty ? 'qr' : sanitizedType;
+    return '${safeType}_qr_${DateTime.now().microsecondsSinceEpoch}.png';
+  }
 
   Future<Uint8List?> _captureQrImage() async {
     final boundary =
@@ -42,7 +114,6 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
   }
 
   Future<void> _shareQrImage(String qrType) async {
-    File? file;
     try {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
@@ -51,9 +122,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
       if (!await shareDir.exists()) {
         await shareDir.create(recursive: true);
       }
-      file = File(
-        '${shareDir.path}/qr_code_${DateTime.now().microsecondsSinceEpoch}.png',
-      );
+      final file = File('${shareDir.path}/${_tempShareFileName(qrType)}');
       await file.writeAsBytes(bytes);
       await SharePlus.instance.share(
         ShareParams(
@@ -68,12 +137,6 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context).failedToShare)),
       );
-    } finally {
-      if (file != null) {
-        try {
-          await file.delete();
-        } catch (_) {}
-      }
     }
   }
 
