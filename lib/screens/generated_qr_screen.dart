@@ -72,7 +72,13 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
       final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/qr_code.png');
+      final shareDir = Directory('${tempDir.path}/qr_share');
+      if (!await shareDir.exists()) {
+        await shareDir.create(recursive: true);
+      }
+      final file = File(
+        '${shareDir.path}/qr_code_${DateTime.now().microsecondsSinceEpoch}.png',
+      );
       await file.writeAsBytes(bytes);
       await SharePlus.instance.share(
         ShareParams(
@@ -261,7 +267,7 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
                     AppGoRouter.router.go(AppPath.generateHome);
                   },
                   icon: const Icon(Icons.grid_view_rounded, size: 20),
-                  label: const Text('Back to Generate'),
+                  label: Text(l10n.backToGenerate),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xffFDB623),
                     side:
