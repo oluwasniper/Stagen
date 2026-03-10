@@ -436,8 +436,7 @@ class _LanguageChip extends StatelessWidget {
                 final locale = entry.value;
                 final isSelected =
                     locale.languageCode == currentLocale.languageCode;
-                final name = L10n.languageNames[locale.languageCode] ??
-                    locale.languageCode;
+                final name = L10n.displayNameOf(locale);
 
                 return ListTile(
                   leading: AnimatedContainer(

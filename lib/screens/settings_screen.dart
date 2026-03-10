@@ -85,8 +85,7 @@ class SettingsScreen extends ConsumerWidget {
                 final locale = entry.value;
                 final isSelected =
                     locale.languageCode == currentLocale.languageCode;
-                final name = L10n.languageNames[locale.languageCode] ??
-                    locale.languageCode;
+                final name = L10n.displayNameOf(locale);
 
                 return ListTile(
                   leading: AnimatedContainer(
@@ -156,8 +155,7 @@ class SettingsScreen extends ConsumerWidget {
     final motion = AppMotion.of(context);
     final settings = ref.watch(settingsProvider);
     final currentLocale = ref.watch(localeProvider);
-    final langName =
-        L10n.languageNames[currentLocale.languageCode] ?? 'English';
+    final langName = L10n.displayNameOf(currentLocale);
     final auth = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
 

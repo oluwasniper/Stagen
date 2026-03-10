@@ -19,4 +19,8 @@ class L10n {
     'fr': 'Français',
     'es': 'Español',
   };
+
+  static String displayNameOf(Locale locale) {
+    return languageNames[locale.languageCode] ?? locale.languageCode;
+  }
 }
