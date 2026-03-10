@@ -146,6 +146,18 @@
     "@qrCodeDetected":{
         "description": "Scanner success banner when a QR is detected"
     },
+    "openGallery": "Open gallery",
+    "@openGallery": {
+        "description": "Accessibility label and tooltip for opening the image gallery from scanner controls"
+    },
+    "toggleTorch": "Toggle torch",
+    "@toggleTorch": {
+        "description": "Accessibility label and tooltip for toggling the scanner flashlight"
+    },
+    "switchCamera": "Switch camera",
+    "@switchCamera": {
+        "description": "Accessibility label and tooltip for switching between front and rear cameras in scanner controls"
+    },
 
     "create": "Create",
     "@create":{

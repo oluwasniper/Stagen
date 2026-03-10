@@ -306,6 +306,24 @@ abstract class AppLocalizations {
   /// **'✓  QR Code Detected'**
   String get qrCodeDetected;
 
+  /// Accessibility label and tooltip for opening the image gallery from scanner controls
+  ///
+  /// In en, this message translates to:
+  /// **'Open gallery'**
+  String get openGallery;
+
+  /// Accessibility label and tooltip for toggling the scanner flashlight
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle torch'**
+  String get toggleTorch;
+
+  /// Accessibility label and tooltip for switching between front and rear cameras in scanner controls
+  ///
+  /// In en, this message translates to:
+  /// **'Switch camera'**
+  String get switchCamera;
+
   /// Tab to create a QR code
   ///
   /// In en, this message translates to:

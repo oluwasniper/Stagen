@@ -39,6 +39,9 @@
     "generate": "Générer",
     "scan": "Balayer",
     "qrCodeDetected": "✓  QR code détecté",
+    "openGallery": "Ouvrir la galerie",
+    "toggleTorch": "Activer la lampe torche",
+    "switchCamera": "Changer de caméra",
     "create": "Créer",
 
     

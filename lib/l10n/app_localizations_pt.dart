@@ -114,6 +114,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get qrCodeDetected => '✓  QR code detectado';
 
   @override
+  String get openGallery => 'Abrir galeria';
+
+  @override
+  String get toggleTorch => 'Alternar lanterna';
+
+  @override
+  String get switchCamera => 'Trocar câmera';
+
+  @override
   String get create => 'Criar';
 
   @override
