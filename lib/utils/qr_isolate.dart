@@ -41,7 +41,7 @@ abstract final class QRIsolate {
       _pendingRequests[id] = completer;
       port.send({'id': id, 'data': data});
 
-      return completer.future.timeout(
+      return await completer.future.timeout(
         _requestTimeout,
         onTimeout: () {
           _pendingRequests.remove(id);
@@ -149,61 +149,62 @@ abstract final class QRIsolate {
   }
 
   static QRClassification _classifyInIsolate(String data) {
-    final lower = data.toLowerCase().trimLeft();
+    final trimmed = data.trimLeft();
+    final lower = trimmed.toLowerCase();
 
     if (lower.startsWith('http://') || lower.startsWith('https://')) {
-      return QRClassification(type: QRDataType.url, displayData: data);
+      return QRClassification(type: QRDataType.url, displayData: trimmed);
     }
     if (lower.startsWith('mailto:')) {
       return QRClassification(
         type: QRDataType.email,
-        displayData: data.substring(7),
+        displayData: trimmed.substring(7),
       );
     }
     if (lower.startsWith('tel:')) {
       return QRClassification(
         type: QRDataType.phone,
-        displayData: data.substring(4),
+        displayData: trimmed.substring(4),
       );
     }
     if (lower.startsWith('smsto:') || lower.startsWith('sms:')) {
       return QRClassification(
         type: QRDataType.sms,
-        displayData: _parseSmsTarget(data) ?? data,
+        displayData: _parseSmsTarget(trimmed) ?? trimmed,
       );
     }
     if (lower.startsWith('wifi:')) {
       return QRClassification(
         type: QRDataType.wifi,
-        displayData: _parseWifiSsid(data) ?? data,
+        displayData: _parseWifiSsid(trimmed) ?? trimmed,
       );
     }
     if (lower.startsWith('begin:vcard')) {
       return QRClassification(
         type: QRDataType.contact,
-        displayData: _parseVCardName(data) ?? data,
+        displayData: _parseVCardName(trimmed) ?? trimmed,
       );
     }
     if (lower.startsWith('begin:vevent')) {
       return QRClassification(
         type: QRDataType.event,
-        displayData: _parseVEventSummary(data) ?? data,
+        displayData: _parseVEventSummary(trimmed) ?? trimmed,
       );
     }
     if (lower.startsWith('geo:')) {
       return QRClassification(
         type: QRDataType.location,
-        displayData: data.substring(4),
+        displayData: trimmed.substring(4),
       );
     }
     // Phone number heuristic
-    final stripped = data.replaceAll(RegExp(r'[\s\-().+]'), '');
+    final stripped = trimmed.replaceAll(RegExp(r'[\s\-().+]'), '');
     if (stripped.length >= 7 &&
         stripped.length <= 15 &&
         RegExp(r'^\d+$').hasMatch(stripped)) {
-      return QRClassification(type: QRDataType.phone, displayData: data);
+      return QRClassification(type: QRDataType.phone, displayData: trimmed);
     }
-    return QRClassification(type: QRDataType.text, displayData: data);
+    return QRClassification(type: QRDataType.text, displayData: trimmed);
   }
 
   static String? _parseWifiSsid(String data) {
