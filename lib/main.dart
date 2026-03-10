@@ -207,6 +207,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       properties: {
         'error_type': error.runtimeType.toString(),
         'error_fingerprint': errorFingerprint,
+        'source': source,
+        'fatal': fatal,
       },
     );
 
