@@ -159,7 +159,7 @@ abstract class AppLocalizations {
   /// Onboarding page 3 subtitle
   ///
   /// In en, this message translates to:
-  /// **'All your scanned and generated QR codes stored securely and synced across devices.'**
+  /// **'All your scanned and generated QR codes are stored securely and synced across devices.'**
   String get onboardingPage3Subtitle;
 
   /// Error message when page is not found

@@ -38,7 +38,7 @@
     "@onboardingPage3Title":{
         "description": "Onboarding page 3 title"
     },
-    "onboardingPage3Subtitle": "All your scanned and generated QR codes stored securely and synced across devices.",
+    "onboardingPage3Subtitle": "All your scanned and generated QR codes are stored securely and synced across devices.",
     "@onboardingPage3Subtitle":{
         "description": "Onboarding page 3 subtitle"
     },
