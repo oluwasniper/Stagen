@@ -169,7 +169,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 _currentPage == _totalPages - 1
                                     ? AppLocalizations.of(context)
                                         .onboardingSkipButton
-                                    : 'Next',
+                                    : AppLocalizations.of(context)
+                                        .onboardingNext,
                                 style: const TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w600,
@@ -194,14 +195,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   String _localTitle(BuildContext context, int page) {
-    // Reuse existing keys; pages 1/2 fall back gracefully
-    return page == 1 ? 'Generate QR Codes' : 'Track Your History';
+    final l10n = AppLocalizations.of(context);
+    return page == 1 ? l10n.onboardingPage2Title : l10n.onboardingPage3Title;
   }
 
   String _localSub(BuildContext context, int page) {
+    final l10n = AppLocalizations.of(context);
     return page == 1
-        ? 'Create QR codes for text, Wi-Fi, contacts, events and more — in seconds.'
-        : 'All your scanned and generated QR codes stored securely and synced across devices.';
+        ? l10n.onboardingPage2Subtitle
+        : l10n.onboardingPage3Subtitle;
   }
 }
 

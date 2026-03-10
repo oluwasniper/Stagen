@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer' as dev;
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -32,7 +33,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
   bool _hasNavigated = false;
   bool _didSucceed = false;
   bool _isProcessing = false;
-  bool _reduceMotion = false;
+  bool? _reduceMotion;
 
   // Scanning line animation
   late AnimationController _scanLineController;
@@ -80,11 +81,11 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final reduceMotion = AppMotion.of(context).reduceMotion;
-    if (_reduceMotion == reduceMotion) return;
-    _reduceMotion = reduceMotion;
+    final newReduceMotion = AppMotion.of(context).reduceMotion;
+    if (_reduceMotion == newReduceMotion) return;
+    _reduceMotion = newReduceMotion;
 
-    if (_reduceMotion) {
+    if (newReduceMotion) {
       _scanLineController.stop();
       _scanLineController.value = 0.5;
       _breatheController.stop();
@@ -166,6 +167,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
     try {
       // Classify off the main thread — no jank during scan detection.
       final classification = await QRIsolate.classify(data);
+      if (!mounted) return;
 
       ref.read(telemetryServiceProvider).track(
         TelemetryEvents.qrScanned,
@@ -184,8 +186,10 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
 
       // Brief delay so user sees the success flash.
       await Future.delayed(const Duration(milliseconds: 350));
+      if (!mounted) return;
 
       await _safeStopScanner();
+      if (!mounted) return;
       await AppGoRouter.router.push(AppPath.scannedQRResult);
     } catch (e, st) {
       dev.log('[ScanHomeScreen] scan handling failed: $e', stackTrace: st);
@@ -248,11 +252,16 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
   Widget build(BuildContext context) {
     final motion = AppMotion.of(context);
     final size = MediaQuery.of(context).size;
-    final scanWindowSize = size.width - 80.0;
-    final scanWindowTop = (size.height - scanWindowSize) / 2 - 40;
+    final shortestSide = math.min(size.width, size.height);
+    final scanWindowSize =
+        (shortestSide - 80.0).clamp(160.0, shortestSide).toDouble();
+    final scanWindowLeft = (size.width - scanWindowSize) / 2;
+    final maxTop = math.max(0.0, size.height - scanWindowSize);
+    final scanWindowTop =
+        ((size.height - scanWindowSize) / 2 - 40).clamp(0.0, maxTop).toDouble();
 
     final scanRect = Rect.fromLTWH(
-      40,
+      scanWindowLeft,
       scanWindowTop,
       scanWindowSize,
       scanWindowSize,
@@ -377,7 +386,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
         Positioned(
           left: 20,
           right: 20,
-          bottom: scanRect.top > 200 ? scanRect.top - 60 : scanRect.bottom + 24,
+          top: scanRect.top > 200 ? scanRect.top - 60 : scanRect.bottom + 24,
           child: Center(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
@@ -387,7 +396,7 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
               ),
               child: Text(
                 _didSucceed
-                    ? '✓  QR Code Detected'
+                    ? AppLocalizations.of(context).qrCodeDetected
                     : AppLocalizations.of(context).scan,
                 style: TextStyle(
                   color: _didSucceed
@@ -588,6 +597,7 @@ class _ScanControlBar extends ConsumerWidget {
           children: [
             _ControlButton(
               icon: Icons.photo_library_rounded,
+              label: 'Open gallery',
               onTap: () {
                 AppHaptics.light(context);
                 onGallery();
@@ -605,6 +615,7 @@ class _ScanControlBar extends ConsumerWidget {
                 return _ControlButton(
                   icon: isOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
                   color: isOn ? const Color(0xffFDB623) : Colors.white,
+                  label: 'Toggle torch',
                   onTap: () {
                     AppHaptics.light(context);
                     controller.toggleTorch();
@@ -622,6 +633,7 @@ class _ScanControlBar extends ConsumerWidget {
             ),
             _ControlButton(
               icon: Icons.flip_camera_ios_rounded,
+              label: 'Switch camera',
               onTap: () {
                 AppHaptics.light(context);
                 controller.switchCamera();
@@ -640,24 +652,31 @@ class _ScanControlBar extends ConsumerWidget {
 class _ControlButton extends StatelessWidget {
   final IconData icon;
   final Color color;
+  final String? label;
   final VoidCallback onTap;
 
   const _ControlButton({
     required this.icon,
     this.color = Colors.white,
+    this.label,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+    return Semantics(
+      button: true,
+      label: label,
       child: SizedBox(
         width: 80,
         height: 52,
         child: Center(
-          child: Icon(icon, color: color, size: 24),
+          child: IconButton(
+            tooltip: label,
+            onPressed: onTap,
+            icon: Icon(icon, color: color, size: 24),
+            splashRadius: 22,
+          ),
         ),
       ),
     );

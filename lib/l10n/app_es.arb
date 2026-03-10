@@ -6,6 +6,11 @@
     "onboardingHeader": "Empezar",
     "onboardingSubHeader": "Ve y disfruta de nuestras funciones de forma gratuita y haz tu vida más fácil con nosotros.",
     "onboardingSkipButton": "Vamos",
+    "onboardingNext": "Siguiente",
+    "onboardingPage2Title": "Genera códigos QR",
+    "onboardingPage2Subtitle": "Crea códigos QR para texto, Wi‑Fi, contactos, eventos y más en segundos.",
+    "onboardingPage3Title": "Consulta tu historial",
+    "onboardingPage3Subtitle": "Todos tus códigos QR escaneados y generados se guardan de forma segura y se sincronizan entre dispositivos.",
 
     "errorText": "Error: Página no encontrada",
     "errorOR": "O",
@@ -34,6 +39,7 @@
     "history": "Historial",
     "generate": "Generar",
     "scan": "Escanear",
+    "qrCodeDetected": "✓  Código QR detectado",
     "create": "Crear",
 
     "settings": "Ajustes",
@@ -55,6 +61,8 @@
     "shareBtn": "Compartir",
     "copyBtn": "Copiar",
     "openBtn": "Abrir",
+    "backToGenerate": "Volver a generar",
+    "scanAnother": "Escanear otro",
 
     "qrCode": "Código QR",
     "generatedLabel": "Generado",
@@ -234,5 +242,6 @@
     "shareAnalyticsSubtitle": "Ayuda a mejorar Scagen compartiendo datos de uso anónimos",
     "failedToShare": "Error al compartir",
     "unableToOpenContent": "No se puede abrir este contenido",
-    "noInternet": "Sin conexión a internet"
+    "noInternet": "Sin conexión a internet",
+    "scanGenerateShare": "Escanear · Generar · Compartir"
 }

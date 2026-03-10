@@ -132,6 +132,36 @@ abstract class AppLocalizations {
   /// **'Let\'s Go'**
   String get onboardingSkipButton;
 
+  /// Button label to move to the next onboarding page
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNext;
+
+  /// Onboarding page 2 title
+  ///
+  /// In en, this message translates to:
+  /// **'Generate QR Codes'**
+  String get onboardingPage2Title;
+
+  /// Onboarding page 2 subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Create QR codes for text, Wi-Fi, contacts, events and more in seconds.'**
+  String get onboardingPage2Subtitle;
+
+  /// Onboarding page 3 title
+  ///
+  /// In en, this message translates to:
+  /// **'Track Your History'**
+  String get onboardingPage3Title;
+
+  /// Onboarding page 3 subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'All your scanned and generated QR codes stored securely and synced across devices.'**
+  String get onboardingPage3Subtitle;
+
   /// Error message when page is not found
   ///
   /// In en, this message translates to:
@@ -270,6 +300,12 @@ abstract class AppLocalizations {
   /// **'Scan'**
   String get scan;
 
+  /// Scanner success banner when a QR is detected
+  ///
+  /// In en, this message translates to:
+  /// **'✓  QR Code Detected'**
+  String get qrCodeDetected;
+
   /// Tab to create a QR code
   ///
   /// In en, this message translates to:
@@ -377,6 +413,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open'**
   String get openBtn;
+
+  /// Button label to return to QR generation home
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Generate'**
+  String get backToGenerate;
+
+  /// Button label to return to scan home
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Another'**
+  String get scanAnother;
 
   /// The QR code
   ///
@@ -1211,6 +1259,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No internet connection'**
   String get noInternet;
+
+  /// Tagline shown on the splash screen
+  ///
+  /// In en, this message translates to:
+  /// **'Scan · Generate · Share'**
+  String get scanGenerateShare;
 }
 
 class _AppLocalizationsDelegate
