@@ -29,23 +29,24 @@ import 'utils/route/app_path.dart';
 final DateTime _appLaunchStartedAt = DateTime.now();
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  FlutterError.onError = (details) {
-    FlutterError.presentError(details);
-    Zone.current.handleUncaughtError(
-      details.exception,
-      details.stack ?? StackTrace.current,
-    );
-  };
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await Future.wait([
-    initPostHog(),
-    Hive.initFlutter(),
-  ]);
-  await OfflineHistoryService.instance.init();
-
-  runZonedGuarded(
-    () {
+  final bootstrap = runZonedGuarded<Future<void>>(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      FlutterError.onError = (details) {
+        FlutterError.presentError(details);
+        Zone.current.handleUncaughtError(
+          details.exception,
+          details.stack ?? StackTrace.current,
+        );
+      };
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
+      await Future.wait([
+        initPostHog(),
+        Hive.initFlutter(),
+      ]);
+      await OfflineHistoryService.instance.init();
       runApp(
         const ProviderScope(
           child: MyApp(),
@@ -56,6 +57,9 @@ Future<void> main() async {
       log('[main] uncaught zone error: $error', stackTrace: stackTrace);
     },
   );
+  if (bootstrap != null) {
+    await bootstrap;
+  }
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -99,7 +103,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       telemetryReader: () => ref.read(telemetryServiceProvider),
     )..start();
 
-    _backgroundSyncService = BackgroundSyncService(ref)..start();
+    _backgroundSyncService = ref.read(backgroundSyncServiceProvider)..start();
 
     _pushNotificationService = PushNotificationService(
       telemetryReader: () => ref.read(telemetryServiceProvider),
@@ -197,19 +201,32 @@ class _MyAppState extends ConsumerState<MyApp> {
     required String source,
     required bool fatal,
   }) {
-    final message = error.toString();
+    final errorFingerprint = _errorFingerprint(error, stackTrace);
     _trackTelemetry(
       TelemetryEvents.appException,
       properties: {
-        'source': source,
-        'fatal': fatal,
         'error_type': error.runtimeType.toString(),
-        'message':
-            message.length > 280 ? '${message.substring(0, 280)}...' : message,
+        'error_fingerprint': errorFingerprint,
       },
     );
 
     log('[MyApp] unhandled error from $source: $error', stackTrace: stackTrace);
+  }
+
+  String _errorFingerprint(Object error, StackTrace stackTrace) {
+    final topFrames = stackTrace
+        .toString()
+        .split('\n')
+        .take(3)
+        .join('|')
+        .replaceAll(RegExp(r'\d+'), '#');
+    final seed = '${error.runtimeType}|$topFrames';
+    var hash = 0x811c9dc5;
+    for (final codeUnit in seed.codeUnits) {
+      hash ^= codeUnit;
+      hash = (hash * 0x01000193) & 0xffffffff;
+    }
+    return hash.toRadixString(16).padLeft(8, '0');
   }
 
   void _trackTelemetry(

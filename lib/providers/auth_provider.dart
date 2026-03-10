@@ -1,8 +1,8 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../services/auth_service.dart';
-import '../services/appwrite_client.dart';
 import '../services/telemetry_service.dart';
 import '../utils/error_localizer.dart';
 import 'qr_providers.dart';
@@ -93,7 +93,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   AuthNotifier.misconfigured(String message, Ref ref)
-      : _authService = _PlaceholderAuthService(),
+      : _authService = _PlaceholderAuthService(message),
         _ref = ref,
         super(AuthState(status: AuthStatus.unauthenticated, error: message)) {
     initComplete = Future.value();
@@ -245,7 +245,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
         );
       } catch (_) {}
 
-      final currentUser = await _authService.getCurrentUser();
+      models.User? currentUser;
+      try {
+        currentUser = await _authService.getCurrentUser();
+      } catch (_) {
+        currentUser = previousUser;
+      }
       state = AuthState(
         status: currentUser == null
             ? AuthStatus.unauthenticated
@@ -261,7 +266,44 @@ class AuthNotifier extends StateNotifier<AuthState> {
 // ─── Placeholder (used when Appwrite is not configured) ───
 
 class _PlaceholderAuthService extends AuthService {
-  _PlaceholderAuthService() : super(client: client);
+  _PlaceholderAuthService(this._message) : super(client: Client());
+
+  final String _message;
+
+  StateError get _misconfiguredError => StateError(_message);
+
+  @override
+  Future<models.User?> getCurrentUser() async => null;
+
+  @override
+  Future<void> logout() async {}
+
+  @override
+  Future<models.Session> createAnonymousSession() =>
+      Future.error(_misconfiguredError);
+
+  @override
+  Future<models.User> createAccount({
+    required String email,
+    required String password,
+    String? name,
+  }) =>
+      Future.error(_misconfiguredError);
+
+  @override
+  Future<models.Session> createEmailSession({
+    required String email,
+    required String password,
+  }) =>
+      Future.error(_misconfiguredError);
+
+  @override
+  Future<models.User> convertAnonymousToFull({
+    required String email,
+    required String password,
+    String? name,
+  }) =>
+      Future.error(_misconfiguredError);
 }
 
 // ─── Provider ───

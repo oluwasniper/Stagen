@@ -22,6 +22,26 @@
     "@onboardingSkipButton":{
         "description": "Button to skip the onboarding screen"
     },
+    "onboardingNext": "Next",
+    "@onboardingNext":{
+        "description": "Button label to move to the next onboarding page"
+    },
+    "onboardingPage2Title": "Generate QR Codes",
+    "@onboardingPage2Title":{
+        "description": "Onboarding page 2 title"
+    },
+    "onboardingPage2Subtitle": "Create QR codes for text, Wi-Fi, contacts, events and more in seconds.",
+    "@onboardingPage2Subtitle":{
+        "description": "Onboarding page 2 subtitle"
+    },
+    "onboardingPage3Title": "Track Your History",
+    "@onboardingPage3Title":{
+        "description": "Onboarding page 3 title"
+    },
+    "onboardingPage3Subtitle": "All your scanned and generated QR codes stored securely and synced across devices.",
+    "@onboardingPage3Subtitle":{
+        "description": "Onboarding page 3 subtitle"
+    },
 
     "errorText": "Error: Page not found",
     "@errorText":{
@@ -122,6 +142,10 @@
     "@scan":{
         "description": "Tab to scan a QR code"
     },
+    "qrCodeDetected": "✓  QR Code Detected",
+    "@qrCodeDetected":{
+        "description": "Scanner success banner when a QR is detected"
+    },
 
     "create": "Create",
     "@create":{
@@ -213,6 +237,14 @@
     "openBtn": "Open",
     "@openBtn" :{
         "description": "Button to open a scanned URL"
+    },
+    "backToGenerate": "Back to Generate",
+    "@backToGenerate" :{
+        "description": "Button label to return to QR generation home"
+    },
+    "scanAnother": "Scan Another",
+    "@scanAnother" :{
+        "description": "Button label to return to scan home"
     },
 
     "qrCode": "QR Code",
@@ -831,5 +863,9 @@
     "noInternet": "No internet connection",
     "@noInternet": {
         "description": "Banner shown when the device has no internet connection"
+    },
+    "scanGenerateShare": "Scan · Generate · Share",
+    "@scanGenerateShare": {
+        "description": "Tagline shown on the splash screen"
     }
 }

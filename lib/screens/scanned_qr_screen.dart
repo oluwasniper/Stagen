@@ -311,7 +311,7 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
                     AppGoRouter.router.go(AppPath.home);
                   },
                   icon: const Icon(Icons.qr_code_scanner_rounded, size: 20),
-                  label: const Text('Scan Another'),
+                  label: Text(l10n.scanAnother),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: const Color(0xffFDB623),
                     side:

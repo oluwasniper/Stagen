@@ -24,12 +24,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Color(0xffFDB623),
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Color(0xffFDB623),
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ));
     _startAuth();
   }
 
@@ -128,7 +122,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
               // Tagline — last to appear, then triggers navigation
               Text(
-                'Scan · Generate · Share',
+                AppLocalizations.of(context).scanGenerateShare,
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w400,

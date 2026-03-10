@@ -25,6 +25,23 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingSkipButton => 'Vamos';
 
   @override
+  String get onboardingNext => 'Siguiente';
+
+  @override
+  String get onboardingPage2Title => 'Genera códigos QR';
+
+  @override
+  String get onboardingPage2Subtitle =>
+      'Crea códigos QR para texto, Wi‑Fi, contactos, eventos y más en segundos.';
+
+  @override
+  String get onboardingPage3Title => 'Consulta tu historial';
+
+  @override
+  String get onboardingPage3Subtitle =>
+      'Todos tus códigos QR escaneados y generados se guardan de forma segura y se sincronizan entre dispositivos.';
+
+  @override
   String get errorText => 'Error: Página no encontrada';
 
   @override
@@ -94,6 +111,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scan => 'Escanear';
 
   @override
+  String get qrCodeDetected => '✓  Código QR detectado';
+
+  @override
   String get create => 'Crear';
 
   @override
@@ -147,6 +167,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get openBtn => 'Abrir';
+
+  @override
+  String get backToGenerate => 'Volver a generar';
+
+  @override
+  String get scanAnother => 'Escanear otro';
 
   @override
   String get qrCode => 'Código QR';
@@ -593,4 +619,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noInternet => 'Sin conexión a internet';
+
+  @override
+  String get scanGenerateShare => 'Escanear · Generar · Compartir';
 }

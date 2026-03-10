@@ -213,6 +213,7 @@ class SmsBodyTextWidget extends StatelessWidget {
           labelText: AppLocalizations.of(context).smsNumberLabel,
           hintText: AppLocalizations.of(context).smsNumberHint,
           autoFocus: true,
+          keyboardType: TextInputType.phone,
           controller: numberController,
         ),
         const SizedBox(height: 20),

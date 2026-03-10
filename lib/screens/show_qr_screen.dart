@@ -41,12 +41,19 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
     }
   }
 
-  Future<void> _shareQrImage(BuildContext context, String qrType) async {
+  Future<void> _shareQrImage(String qrType) async {
+    File? file;
     try {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
       final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/qr_code.png');
+      final shareDir = Directory('${tempDir.path}/qr_share');
+      if (!await shareDir.exists()) {
+        await shareDir.create(recursive: true);
+      }
+      file = File(
+        '${shareDir.path}/qr_code_${DateTime.now().microsecondsSinceEpoch}.png',
+      );
       await file.writeAsBytes(bytes);
       await SharePlus.instance.share(
         ShareParams(
@@ -57,15 +64,20 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
     } catch (e, st) {
       dev.log('[ShowQrScreen] share failed: $e',
           stackTrace: st, name: 'ShowQrScreen');
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context).failedToShare)),
-        );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context).failedToShare)),
+      );
+    } finally {
+      if (file != null) {
+        try {
+          await file.delete();
+        } catch (_) {}
       }
     }
   }
 
-  Future<void> _copyQrImage(BuildContext context) async {
+  Future<void> _copyQrImage() async {
     if (_copied) return;
     try {
       final bytes = await _captureQrImage();
@@ -205,9 +217,10 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
               children: [
                 _ActionButton(
                   icon: _copied ? Icons.check_rounded : Icons.copy_rounded,
-                  label: _copied ? l10n.snackbarCopiedToClipboard : l10n.copyBtn,
+                  label:
+                      _copied ? l10n.snackbarCopiedToClipboard : l10n.copyBtn,
                   confirmed: _copied,
-                  onTap: () => _copyQrImage(context),
+                  onTap: _copyQrImage,
                 ),
                 const SizedBox(width: 40),
                 _ActionButton(
@@ -216,7 +229,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                   onTap: () {
                     AppHaptics.light(context);
                     AppSounds.click();
-                    _shareQrImage(context, qrType);
+                    _shareQrImage(qrType);
                   },
                 ),
               ],
@@ -339,7 +352,8 @@ class _ActionButtonState extends State<_ActionButton>
                 child: Icon(
                   widget.icon,
                   key: ValueKey(widget.icon),
-                  color: widget.confirmed ? Colors.white : const Color(0xff1A1A1A),
+                  color:
+                      widget.confirmed ? Colors.white : const Color(0xff1A1A1A),
                   size: 22,
                 ),
               ),

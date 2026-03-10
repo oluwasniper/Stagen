@@ -248,6 +248,7 @@ class _ScanFABState extends State<_ScanFAB>
     final motion = AppMotion.of(context);
 
     return GestureDetector(
+      onTap: () => widget.onTap(),
       onTapDown: (_) {
         if (!motion.reduceMotion) {
           _pressController.forward();
@@ -257,7 +258,6 @@ class _ScanFABState extends State<_ScanFAB>
         if (!motion.reduceMotion) {
           _pressController.reverse();
         }
-        widget.onTap();
       },
       onTapCancel: () {
         if (!motion.reduceMotion) {

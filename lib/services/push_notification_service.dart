@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
@@ -80,20 +81,22 @@ class PushNotificationService {
 
   void _handleOpenedNotification(Map<String, Object?> payload) {
     final target = payload['target']?.toString();
-    switch (target) {
-      case 'scan':
-        AppGoRouter.router.go(AppPath.home);
-        break;
-      case 'generate':
-        AppGoRouter.router.go(AppPath.generateHome);
-        break;
-      case 'history':
-        AppGoRouter.router.go(AppPath.history);
-        break;
-      default:
-        // Keep current screen when payload target is unknown.
-        break;
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      switch (target) {
+        case 'scan':
+          AppGoRouter.router.go(AppPath.home);
+          break;
+        case 'generate':
+          AppGoRouter.router.go(AppPath.generateHome);
+          break;
+        case 'history':
+          AppGoRouter.router.go(AppPath.history);
+          break;
+        default:
+          // Keep current screen when payload target is unknown.
+          break;
+      }
+    });
   }
 
   Map<String, Object?> _asMap(dynamic value) {

@@ -121,14 +121,17 @@ ClassifiedExternalText classifyExternalText(String input) {
         );
       }
       if ((host == 'linkedin.com' || host.endsWith('.linkedin.com')) &&
-          pathSegments.isNotEmpty) {
-        final handle = pathSegments.length > 1 && pathSegments.first == 'in'
-            ? pathSegments[1]
-            : '';
-        return ClassifiedExternalText(
-          type: QROptionType.linkedin,
-          prefill: {'linkedin': handle.isNotEmpty ? handle : text},
-        );
+          pathSegments.length >= 2) {
+        final root = pathSegments.first.toLowerCase();
+        if (root == 'in' || root == 'pub') {
+          final handle = pathSegments[1].trim();
+          if (handle.isNotEmpty) {
+            return ClassifiedExternalText(
+              type: QROptionType.linkedin,
+              prefill: {'linkedin': handle},
+            );
+          }
+        }
       }
       return ClassifiedExternalText(
         type: QROptionType.website,
@@ -193,23 +196,27 @@ ClassifiedExternalText classifyExternalText(String input) {
 
 Map<String, String> _parseSmsPayload(String input) {
   final normalized = input.trim();
-  final bodySeparator = normalized.indexOf('?');
-  final mainPart =
-      bodySeparator == -1 ? normalized : normalized.substring(0, bodySeparator);
-  final queryPart =
-      bodySeparator == -1 ? '' : normalized.substring(bodySeparator + 1);
-
-  final withoutScheme = mainPart.replaceFirst(
+  final withoutScheme = normalized.replaceFirst(
     RegExp(r'^sms(to)?:', caseSensitive: false),
     '',
   );
   final colonIndex = withoutScheme.indexOf(':');
 
-  String number = withoutScheme;
+  String number = '';
   String message = '';
+  String queryPart = '';
+
   if (colonIndex != -1) {
     number = withoutScheme.substring(0, colonIndex);
     message = withoutScheme.substring(colonIndex + 1);
+  } else {
+    final bodySeparator = withoutScheme.indexOf('?');
+    final mainPart = bodySeparator == -1
+        ? withoutScheme
+        : withoutScheme.substring(0, bodySeparator);
+    queryPart =
+        bodySeparator == -1 ? '' : withoutScheme.substring(bodySeparator + 1);
+    number = mainPart;
   }
 
   if (queryPart.isNotEmpty) {

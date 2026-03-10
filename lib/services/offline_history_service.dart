@@ -20,8 +20,7 @@ class OfflineHistoryService {
 
   Future<void> init() async {
     const secureStorage = FlutterSecureStorage();
-    var encryptionKeyString =
-        await secureStorage.read(key: _encryptionKeyName);
+    var encryptionKeyString = await secureStorage.read(key: _encryptionKeyName);
 
     if (encryptionKeyString == null) {
       final key = Hive.generateSecureKey();
@@ -44,7 +43,8 @@ class OfflineHistoryService {
     );
   }
 
-  Future<LocalQRRecord> addPendingCreate(QRRecord record, {String? userId}) async {
+  Future<LocalQRRecord> addPendingCreate(QRRecord record,
+      {String? userId}) async {
     final local = LocalQRRecord(
       localId: _newLocalId(),
       remoteId: null,
@@ -67,10 +67,7 @@ class OfflineHistoryService {
   }) {
     final records = _box.values
         .where(
-          (r) =>
-              r.type == type &&
-              r.userId == userId &&
-              !r.pendingDelete,
+          (r) => r.type == type && r.userId == userId && !r.pendingDelete,
         )
         .toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
@@ -119,10 +116,7 @@ class OfflineHistoryService {
   }) async {
     return _box.values
         .where(
-          (r) =>
-              r.type == type &&
-              r.userId == userId &&
-              r.pendingDelete,
+          (r) => r.type == type && r.userId == userId && r.pendingDelete,
         )
         .toList();
   }
@@ -138,6 +132,7 @@ class OfflineHistoryService {
   }) async {
     final record = _box.get(localId);
     if (record == null) return;
+    if (record.pendingDelete || !record.pendingCreate) return;
     await _box.put(
       localId,
       record.copyWith(
@@ -152,7 +147,8 @@ class OfflineHistoryService {
     await _box.delete(localId);
   }
 
-  Future<void> upsertFromRemote(QRRecord remote, {required String userId}) async {
+  Future<void> upsertFromRemote(QRRecord remote,
+      {required String userId}) async {
     final existing = _box.values.where((r) => r.remoteId == remote.id).toList();
     if (existing.isNotEmpty) {
       final current = existing.first;

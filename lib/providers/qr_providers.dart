@@ -118,20 +118,22 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
     }
   }
 
-  Future<void> deleteRecord(String localId) async {
-    if (!mounted) return;
+  Future<bool> deleteRecord(String localId) async {
+    if (!mounted) return false;
     try {
       await _offline.markPendingDelete(localId);
-      if (!mounted) return;
+      if (!mounted) return false;
       _setDataState();
       if (_userId != null) {
         await _syncWithRemote();
-        if (!mounted) return;
+        if (!mounted) return false;
       }
       _setDataState();
+      return true;
     } catch (e, st) {
-      if (!mounted) return;
+      if (!mounted) return false;
       state = AsyncValue.error(e, st);
+      return false;
     }
   }
 
