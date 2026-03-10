@@ -29,7 +29,7 @@ A free, open-source Flutter app for QR code scanning and generation.
 
 ```bash
 git clone https://github.com/oluwasniper/Stagen.git
-cd scagen
+cd Stagen
 flutter pub get
 ```
 
@@ -146,7 +146,7 @@ To make the Wi-Fi picker/connected-SSID fallback work reliably on iPhone, comple
 
 Scagen accepts text via custom URL scheme:
 
-```
+```text
 scagen://process-text?text=<urlencoded text>
 ```
 
