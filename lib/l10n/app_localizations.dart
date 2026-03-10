@@ -159,7 +159,7 @@ abstract class AppLocalizations {
   /// Onboarding page 3 subtitle
   ///
   /// In en, this message translates to:
-  /// **'All your scanned and generated QR codes stored securely and synced across devices.'**
+  /// **'All your scanned and generated QR codes are stored securely and synced across devices.'**
   String get onboardingPage3Subtitle;
 
   /// Error message when page is not found
@@ -305,6 +305,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'✓  QR Code Detected'**
   String get qrCodeDetected;
+
+  /// Accessibility label and tooltip for opening the image gallery from scanner controls
+  ///
+  /// In en, this message translates to:
+  /// **'Open gallery'**
+  String get openGallery;
+
+  /// Accessibility label and tooltip for toggling the scanner flashlight
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle torch'**
+  String get toggleTorch;
+
+  /// Accessibility label and tooltip for switching between front and rear cameras in scanner controls
+  ///
+  /// In en, this message translates to:
+  /// **'Switch camera'**
+  String get switchCamera;
 
   /// Tab to create a QR code
   ///

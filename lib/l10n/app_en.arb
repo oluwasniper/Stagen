@@ -38,7 +38,7 @@
     "@onboardingPage3Title":{
         "description": "Onboarding page 3 title"
     },
-    "onboardingPage3Subtitle": "All your scanned and generated QR codes stored securely and synced across devices.",
+    "onboardingPage3Subtitle": "All your scanned and generated QR codes are stored securely and synced across devices.",
     "@onboardingPage3Subtitle":{
         "description": "Onboarding page 3 subtitle"
     },
@@ -145,6 +145,18 @@
     "qrCodeDetected": "✓  QR Code Detected",
     "@qrCodeDetected":{
         "description": "Scanner success banner when a QR is detected"
+    },
+    "openGallery": "Open gallery",
+    "@openGallery": {
+        "description": "Accessibility label and tooltip for opening the image gallery from scanner controls"
+    },
+    "toggleTorch": "Toggle torch",
+    "@toggleTorch": {
+        "description": "Accessibility label and tooltip for toggling the scanner flashlight"
+    },
+    "switchCamera": "Switch camera",
+    "@switchCamera": {
+        "description": "Accessibility label and tooltip for switching between front and rear cameras in scanner controls"
     },
 
     "create": "Create",

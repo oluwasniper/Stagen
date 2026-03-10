@@ -321,7 +321,7 @@ final _telegramRegex = RegExp(
   caseSensitive: false,
 );
 final _linkedInRegex = RegExp(
-  r'^(?:https?://)?(?:[a-z]+\.)?linkedin\.com/in/([A-Za-z0-9_-]+)/?$',
+  r'^(?:https?://)?(?:[a-z]+\.)?linkedin\.com/(?:in|pub)/([A-Za-z0-9_-]+)/?$',
   caseSensitive: false,
 );
 final _coordRegex = RegExp(

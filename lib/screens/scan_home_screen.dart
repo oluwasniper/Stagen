@@ -253,8 +253,9 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
     final motion = AppMotion.of(context);
     final size = MediaQuery.of(context).size;
     final shortestSide = math.min(size.width, size.height);
+    final safeLower = math.min(160.0, shortestSide);
     final scanWindowSize =
-        (shortestSide - 80.0).clamp(160.0, shortestSide).toDouble();
+        (shortestSide - 80.0).clamp(safeLower, shortestSide).toDouble();
     final scanWindowLeft = (size.width - scanWindowSize) / 2;
     final maxTop = math.max(0.0, size.height - scanWindowSize);
     final scanWindowTop =
@@ -580,6 +581,7 @@ class _ScanControlBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -597,7 +599,7 @@ class _ScanControlBar extends ConsumerWidget {
           children: [
             _ControlButton(
               icon: Icons.photo_library_rounded,
-              label: 'Open gallery',
+              label: l10n.openGallery,
               onTap: () {
                 AppHaptics.light(context);
                 onGallery();
@@ -615,7 +617,7 @@ class _ScanControlBar extends ConsumerWidget {
                 return _ControlButton(
                   icon: isOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
                   color: isOn ? const Color(0xffFDB623) : Colors.white,
-                  label: 'Toggle torch',
+                  label: l10n.toggleTorch,
                   onTap: () {
                     AppHaptics.light(context);
                     controller.toggleTorch();
@@ -633,7 +635,7 @@ class _ScanControlBar extends ConsumerWidget {
             ),
             _ControlButton(
               icon: Icons.flip_camera_ios_rounded,
-              label: 'Switch camera',
+              label: l10n.switchCamera,
               onTap: () {
                 AppHaptics.light(context);
                 controller.switchCamera();

@@ -39,7 +39,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingPage3Subtitle =>
-      'All your scanned and generated QR codes stored securely and synced across devices.';
+      'All your scanned and generated QR codes are stored securely and synced across devices.';
 
   @override
   String get errorText => 'Error: Page not found';
@@ -112,6 +112,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get qrCodeDetected => '✓  QR Code Detected';
+
+  @override
+  String get openGallery => 'Open gallery';
+
+  @override
+  String get toggleTorch => 'Toggle torch';
+
+  @override
+  String get switchCamera => 'Switch camera';
 
   @override
   String get create => 'Create';

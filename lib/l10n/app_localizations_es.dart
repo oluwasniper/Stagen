@@ -114,6 +114,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get qrCodeDetected => '✓  Código QR detectado';
 
   @override
+  String get openGallery => 'Abrir galería';
+
+  @override
+  String get toggleTorch => 'Alternar linterna';
+
+  @override
+  String get switchCamera => 'Cambiar cámara';
+
+  @override
   String get create => 'Crear';
 
   @override

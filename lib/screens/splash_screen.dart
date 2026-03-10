@@ -123,11 +123,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               // Tagline — last to appear, then triggers navigation
               Text(
                 AppLocalizations.of(context).scanGenerateShare,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: Colors.black.withValues(alpha: 0.55),
-                  letterSpacing: 2.2,
+                  letterSpacing: 1.2,
                 ),
               )
                   .animate()

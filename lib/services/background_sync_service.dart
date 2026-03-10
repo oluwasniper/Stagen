@@ -10,7 +10,11 @@ import '../providers/qr_providers.dart';
 import 'telemetry_service.dart';
 
 final backgroundSyncServiceProvider = Provider<BackgroundSyncService>((ref) {
-  return BackgroundSyncService(ref);
+  final service = BackgroundSyncService(ref);
+  ref.onDispose(() {
+    unawaited(service.stop());
+  });
+  return service;
 });
 
 /// Periodically synchronizes local history with the backend while the app is
@@ -29,6 +33,7 @@ class BackgroundSyncService with WidgetsBindingObserver {
 
   static const Duration _periodicInterval = Duration(minutes: 4);
   static const Duration _minSyncGap = Duration(seconds: 45);
+  static const Duration _fetchTimeout = Duration(seconds: 15);
 
   void start() {
     WidgetsBinding.instance.addObserver(this);
@@ -114,10 +119,11 @@ class BackgroundSyncService with WidgetsBindingObserver {
       Object? firstError;
 
       try {
-        await _ref
-            .read(scannedHistoryProvider.notifier)
-            .fetchRecords(silent: true)
-            .timeout(const Duration(seconds: 15));
+        await _runCancelableFetch(
+          notifier: _ref.read(scannedHistoryProvider.notifier),
+          trigger: trigger,
+          label: 'scanned',
+        );
         scannedSynced = true;
       } catch (e, st) {
         firstError ??= e;
@@ -129,10 +135,11 @@ class BackgroundSyncService with WidgetsBindingObserver {
       }
 
       try {
-        await _ref
-            .read(generatedHistoryProvider.notifier)
-            .fetchRecords(silent: true)
-            .timeout(const Duration(seconds: 15));
+        await _runCancelableFetch(
+          notifier: _ref.read(generatedHistoryProvider.notifier),
+          trigger: trigger,
+          label: 'generated',
+        );
         generatedSynced = true;
       } catch (e, st) {
         firstError ??= e;
@@ -180,6 +187,41 @@ class BackgroundSyncService with WidgetsBindingObserver {
       );
     } finally {
       _syncInFlight = false;
+    }
+  }
+
+  Future<void> _runCancelableFetch({
+    required QRRecordListNotifier notifier,
+    required String trigger,
+    required String label,
+  }) async {
+    final cancellationToken = FetchCancellationToken();
+    Timer? timeoutTimer;
+    final timeoutCompleter = Completer<void>();
+    final fetchFuture = notifier.fetchRecords(
+      silent: true,
+      cancellationToken: cancellationToken,
+    );
+
+    timeoutTimer = Timer(_fetchTimeout, () {
+      cancellationToken.cancel();
+      notifier.cancelInFlightFetch();
+      if (timeoutCompleter.isCompleted) return;
+      timeoutCompleter.completeError(
+        TimeoutException(
+          '[BackgroundSyncService] $label sync timed out ($trigger)',
+          _fetchTimeout,
+        ),
+      );
+    });
+
+    try {
+      await Future.any<void>([
+        fetchFuture,
+        timeoutCompleter.future,
+      ]);
+    } finally {
+      timeoutTimer.cancel();
     }
   }
 }

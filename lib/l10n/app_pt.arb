@@ -40,6 +40,9 @@
     "generate": "Gerar",
     "scan": "Digitalizar",
     "qrCodeDetected": "✓  QR code detectado",
+    "openGallery": "Abrir galeria",
+    "toggleTorch": "Alternar lanterna",
+    "switchCamera": "Trocar câmera",
     "create": "Criar",
 
     "settings": "Configurações",
