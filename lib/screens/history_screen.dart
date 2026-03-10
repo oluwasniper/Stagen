@@ -201,13 +201,15 @@ class _HistoryListView extends ConsumerWidget {
                 record: record,
                 index: index,
                 onDelete: record.id != null
-                    ? () {
+                    ? () async {
                         AppHaptics.medium(context);
                         AppSounds.click();
                         ref
                             .read(telemetryServiceProvider)
                             .track(TelemetryEvents.historyItemDeleted);
-                        ref.read(provider.notifier).deleteRecord(record.id!);
+                        return ref
+                            .read(provider.notifier)
+                            .deleteRecord(record.id!);
                       }
                     : null,
                 onTap: () {
@@ -237,7 +239,7 @@ class _HistoryListView extends ConsumerWidget {
 class _HistoryTile extends StatelessWidget {
   final QRRecord record;
   final int index;
-  final VoidCallback? onDelete;
+  final Future<bool> Function()? onDelete;
   final VoidCallback onTap;
 
   const _HistoryTile({
@@ -250,7 +252,8 @@ class _HistoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final motion = AppMotion.of(context);
-    final dateStr = DateFormat('dd MMM yyyy, h:mm a').format(record.createdAt);
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final dateStr = DateFormat.yMMMd(locale).add_jm().format(record.createdAt);
 
     final tile = Dismissible(
       key: ValueKey(record.id ?? record.data),
@@ -270,8 +273,7 @@ class _HistoryTile extends StatelessWidget {
       ),
       confirmDismiss: (_) async {
         if (onDelete == null) return false;
-        onDelete!();
-        return true;
+        return await onDelete!();
       },
       child: GestureDetector(
         onTap: onTap,

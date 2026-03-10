@@ -9,12 +9,16 @@ import '../providers/auth_provider.dart';
 import '../providers/qr_providers.dart';
 import 'telemetry_service.dart';
 
+final backgroundSyncServiceProvider = Provider<BackgroundSyncService>((ref) {
+  return BackgroundSyncService(ref);
+});
+
 /// Periodically synchronizes local history with the backend while the app is
 /// in foreground and online.
 class BackgroundSyncService with WidgetsBindingObserver {
   BackgroundSyncService(this._ref);
 
-  final WidgetRef _ref;
+  final Ref _ref;
 
   StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
   Timer? _periodicTimer;
@@ -105,10 +109,53 @@ class BackgroundSyncService with WidgetsBindingObserver {
     final watch = Stopwatch()..start();
 
     try {
-      await Future.wait([
-        _ref.read(scannedHistoryProvider.notifier).fetchRecords(silent: true),
-        _ref.read(generatedHistoryProvider.notifier).fetchRecords(silent: true),
-      ]).timeout(const Duration(seconds: 15));
+      var scannedSynced = false;
+      var generatedSynced = false;
+      Object? firstError;
+
+      try {
+        await _ref
+            .read(scannedHistoryProvider.notifier)
+            .fetchRecords(silent: true)
+            .timeout(const Duration(seconds: 15));
+        scannedSynced = true;
+      } catch (e, st) {
+        firstError ??= e;
+        dev.log(
+          '[BackgroundSyncService] scanned sync failed ($trigger): $e',
+          stackTrace: st,
+          name: 'BackgroundSyncService',
+        );
+      }
+
+      try {
+        await _ref
+            .read(generatedHistoryProvider.notifier)
+            .fetchRecords(silent: true)
+            .timeout(const Duration(seconds: 15));
+        generatedSynced = true;
+      } catch (e, st) {
+        firstError ??= e;
+        dev.log(
+          '[BackgroundSyncService] generated sync failed ($trigger): $e',
+          stackTrace: st,
+          name: 'BackgroundSyncService',
+        );
+      }
+
+      if (!scannedSynced || !generatedSynced) {
+        _ref.read(telemetryServiceProvider).track(
+          TelemetryEvents.backgroundSyncFailed,
+          properties: {
+            'trigger': trigger,
+            'duration_ms': watch.elapsedMilliseconds,
+            'error_type':
+                firstError?.runtimeType.toString() ?? 'sync_partial_failure',
+          },
+        );
+        return;
+      }
+
       _lastSyncAt = DateTime.now();
       _ref.read(telemetryServiceProvider).track(
         TelemetryEvents.backgroundSyncCompleted,
