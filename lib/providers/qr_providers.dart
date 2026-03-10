@@ -190,16 +190,13 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
             createdAt: local.createdAt,
           ),
         );
-        if (!mounted || (shouldAbort?.call() ?? false)) return;
         if (saved.id != null) {
           // Only mark synced if the entry is still present locally.
           if (await _offline.isPendingCreate(local.localId)) {
-            if (!mounted || (shouldAbort?.call() ?? false)) return;
             await _offline.markCreateSynced(
               localId: local.localId,
               remoteId: saved.id!,
             );
-            if (!mounted || (shouldAbort?.call() ?? false)) return;
           }
         }
       } catch (_) {
@@ -215,10 +212,8 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
       try {
         if (local.remoteId != null) {
           await _service.deleteQRRecord(local.remoteId!);
-          if (!mounted || (shouldAbort?.call() ?? false)) return;
         }
         await _offline.finalizeDelete(local.localId);
-        if (!mounted || (shouldAbort?.call() ?? false)) return;
       } catch (_) {
         // Keep pending delete for next sync attempt.
       }
