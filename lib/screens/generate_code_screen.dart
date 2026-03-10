@@ -182,11 +182,11 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
     final uri = Uri.tryParse(candidate);
     if (uri != null && uri.hasScheme) {
       final host = uri.host.toLowerCase();
-      if (host == 't.me' || host.endsWith('.t.me')) {
+      if (host == 't.me' || host == 'www.t.me') {
         final segment = _firstNonEmptySegment(uri.pathSegments);
         return segment != null && _telegramHandleRegex.hasMatch(segment);
       }
-      if (host == 'telegram.me' || host.endsWith('.telegram.me')) {
+      if (host == 'telegram.me' || host == 'www.telegram.me') {
         final segment = _firstNonEmptySegment(uri.pathSegments);
         return segment != null && _telegramHandleRegex.hasMatch(segment);
       }
@@ -200,9 +200,7 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
     final uri = Uri.tryParse(candidate);
     if (uri != null && uri.hasScheme) {
       final host = uri.host.toLowerCase();
-      if (!(host == 'linkedin.com' ||
-          host.endsWith('.linkedin.com') ||
-          host == 'www.linkedin.com')) {
+      if (!(host == 'linkedin.com' || host.endsWith('.linkedin.com'))) {
         return false;
       }
       if (uri.pathSegments.length < 2 || uri.pathSegments.first != 'in') {
