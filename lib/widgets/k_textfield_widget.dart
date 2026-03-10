@@ -5,6 +5,7 @@ class KTextField extends StatelessWidget {
   final String hintText;
   final bool? autoFocus;
   final int? maxLines;
+  final TextInputType keyboardType;
   final TextEditingController? controller;
   const KTextField({
     super.key,
@@ -12,6 +13,7 @@ class KTextField extends StatelessWidget {
     required this.hintText,
     this.autoFocus,
     this.maxLines,
+    this.keyboardType = TextInputType.text,
     this.controller,
   });
 
@@ -82,7 +84,7 @@ class KTextField extends StatelessWidget {
           showCursor: true,
           scrollPhysics: BouncingScrollPhysics(),
           cursorWidth: 2,
-          keyboardType: TextInputType.text,
+          keyboardType: keyboardType,
         ),
       ],
     );

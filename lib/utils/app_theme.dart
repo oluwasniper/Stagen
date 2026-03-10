@@ -111,7 +111,7 @@ class GlobalThemData {
         ),
       ),
       fontFamily: 'Inter',
-      fontFamilyFallback: <String>['Inter'],
+      fontFamilyFallback: <String>['Itim', 'Roboto', 'sans-serif'],
     );
   }
 

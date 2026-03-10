@@ -407,13 +407,6 @@ class _LanguageChip extends StatelessWidget {
   final WidgetRef ref;
   const _LanguageChip({required this.ref});
 
-  static const _languageNames = {
-    'en': 'English',
-    'pt': 'Português',
-    'fr': 'Français',
-    'es': 'Español',
-  };
-
   void _showPicker(BuildContext context) {
     final currentLocale = ref.read(localeProvider);
     final motion = AppMotion.of(context);
@@ -443,8 +436,8 @@ class _LanguageChip extends StatelessWidget {
                 final locale = entry.value;
                 final isSelected =
                     locale.languageCode == currentLocale.languageCode;
-                final name =
-                    _languageNames[locale.languageCode] ?? locale.languageCode;
+                final name = L10n.languageNames[locale.languageCode] ??
+                    locale.languageCode;
 
                 return ListTile(
                   leading: AnimatedContainer(
