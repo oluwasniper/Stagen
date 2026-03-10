@@ -39,6 +39,7 @@ class _BackgroundScreenWidgetState
   @override
   Widget build(BuildContext context) {
     final isOnline = ref.watch(connectivityProvider);
+    final showOfflineBanner = isOnline == false;
     final size = MediaQuery.of(context).size;
     final motion = AppMotion.of(context);
 
@@ -183,11 +184,10 @@ class _BackgroundScreenWidgetState
                 AnimatedContainer(
                   duration: motion.duration(AppMotion.fast),
                   curve: motion.curve(AppMotion.standard),
-                  height: isOnline ? 0 : 36,
+                  height: showOfflineBanner ? 36 : 0,
                   color: const Color(0xff2C2C2C),
-                  child: isOnline
-                      ? const SizedBox.shrink()
-                      : Row(
+                  child: showOfflineBanner
+                      ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Icon(
@@ -205,7 +205,8 @@ class _BackgroundScreenWidgetState
                               ),
                             ),
                           ],
-                        ),
+                        )
+                      : const SizedBox.shrink(),
                 ),
                 Expanded(child: widget.body),
               ],
