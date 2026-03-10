@@ -253,8 +253,9 @@ class _ScanHomeScreenState extends ConsumerState<ScanHomeScreen>
     final motion = AppMotion.of(context);
     final size = MediaQuery.of(context).size;
     final shortestSide = math.min(size.width, size.height);
+    final safeLower = math.min(160.0, shortestSide);
     final scanWindowSize =
-        (shortestSide - 80.0).clamp(160.0, shortestSide).toDouble();
+        (shortestSide - 80.0).clamp(safeLower, shortestSide).toDouble();
     final scanWindowLeft = (size.width - scanWindowSize) / 2;
     final maxTop = math.max(0.0, size.height - scanWindowSize);
     final scanWindowTop =

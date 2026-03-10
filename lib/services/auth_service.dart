@@ -13,10 +13,9 @@ class AuthService {
   bool _isNoActiveSessionError(Object error) {
     if (error is! AppwriteException) return false;
     return error.code == 401 ||
-        error.code == 404 ||
         error.type == 'user_unauthorized' ||
         error.type == 'general_unauthorized_scope' ||
-        error.type == 'user_session_not_found';
+        (error.code == 404 && error.type == 'user_session_not_found');
   }
 
   // ─── Session Management ───
