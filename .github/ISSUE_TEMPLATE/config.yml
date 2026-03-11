@@ -3,3 +3,6 @@ contact_links:
   - name: Question or discussion
     url: https://github.com/oluwasniper/Stagen/discussions
     about: For general questions, use GitHub Discussions instead of opening an issue.
+  - name: Security vulnerability report
+    url: mailto:security@scagen.app
+    about: Report suspected vulnerabilities privately via this security contact instead of public Issues/Discussions.
