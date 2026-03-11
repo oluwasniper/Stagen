@@ -117,7 +117,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get openGallery => 'Ouvrir la galerie';
 
   @override
-  String get toggleTorch => 'Activer la lampe torche';
+  String get toggleTorch => 'Basculer la lampe torche';
 
   @override
   String get switchCamera => 'Changer de caméra';
