@@ -23,10 +23,18 @@ assignees: ""
 ## Actual Behavior
 
 <!-- What actually happened. Include error messages or logs if available. -->
+<!-- Redact sensitive details before posting logs (tokens, emails, phone numbers, QR payloads, IDs). -->
 
 ## Screenshots / Screen Recording
 
 <!-- If applicable, attach screenshots or a screen recording. -->
+> [!WARNING]
+> Before attaching logs, screenshots, or videos, remove or redact sensitive data.
+> Common items to redact:
+> - Personal data (names, email addresses, phone numbers, physical addresses)
+> - Credentials/secrets (API keys, access tokens, session IDs, auth headers)
+> - QR contents/payloads and any account-specific identifiers
+> - Payment/account data or anything that could identify a real user
 
 ## Environment
 

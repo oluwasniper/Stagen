@@ -178,12 +178,7 @@
     "authOr": "OU",
     "authContinueAnonymous": "Continuer sans compte",
     "@authContinueAnonymous": {
-        "description": "Bouton pour continuer en mode anonyme",
-        "placeholders": {
-            "error": {
-                "type": "String"
-            }
-        }
+        "description": "Bouton pour continuer en mode anonyme"
     },
     "authLogout": "Déconnexion",
     "authLogoutDesc": "Se déconnecter de votre compte",

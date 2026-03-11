@@ -36,5 +36,6 @@
 - [ ] `flutter analyze` passes with no new warnings
 - [ ] `flutter test` passes
 - [ ] New strings added to `app_en.arb` and all other ARB files (or noted as placeholder)
+- [ ] If any ARB files changed, `flutter gen-l10n` was rerun and generated localization files were committed
 - [ ] No secrets or credentials committed
 - [ ] PR is focused on a single feature or fix
