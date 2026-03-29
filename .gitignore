@@ -54,7 +54,13 @@ app.*.map.json
 .env.*.local
 *.env
 !.env.example
+/android/key.properties
+/android/*.jks
+/android/*.keystore
 
 # VS Code launch.json contains --dart-define values with real secrets.
 # Use .vscode/launch.json.example as the committed template instead.
 .vscode/launch.json
+
+# Cloudflare Wrangler local state
+.wrangler/
