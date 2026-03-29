@@ -2,6 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
 }
 
 def localProperties = new Properties()
@@ -9,6 +10,14 @@ def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
+    }
+}
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
     }
 }
 
@@ -26,6 +35,15 @@ android {
     namespace "com.scagen.app"
     compileSdk flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties.getProperty('keyAlias')
+            keyPassword keystoreProperties.getProperty('keyPassword')
+            storeFile keystoreProperties.getProperty('storeFile') ? rootProject.file(keystoreProperties.getProperty('storeFile')) : null
+            storePassword keystoreProperties.getProperty('storePassword')
+        }
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -51,9 +69,7 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }
