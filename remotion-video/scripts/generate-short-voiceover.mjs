@@ -89,4 +89,7 @@ async function generate() {
   console.log(`✓ Saved ${buf.length} bytes → ${out}`);
 }
 
-generate();
+generate().catch((err) => {
+  console.error("[generate-short-voiceover] generate failed:", err);
+  process.exit(1);
+});

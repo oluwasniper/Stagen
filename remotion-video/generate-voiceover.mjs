@@ -9,6 +9,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // ── Load API key from root .env ───────────────────────────────────────────────
 const envPath = path.resolve(__dirname, "../.env");
+if (!fs.existsSync(envPath)) {
+  console.error(`[generate-voiceover] .env not found at ${envPath}`);
+  process.exit(1);
+}
 const envContent = fs.readFileSync(envPath, "utf8");
 const match = envContent.match(/^ELEVENLABS_API_KEY=(.+)$/m);
 if (!match) {
@@ -80,4 +84,7 @@ async function generate() {
   console.log(`✓ Saved to ${outPath} (${(buffer.byteLength / 1024).toFixed(1)} KB)`);
 }
 
-generate();
+generate().catch((err) => {
+  console.error("[generate-voiceover] generate failed:", err);
+  process.exit(1);
+});

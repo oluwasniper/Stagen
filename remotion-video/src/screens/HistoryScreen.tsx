@@ -57,8 +57,8 @@ export const HistoryScreen: React.FC<{ scale?: number; visibleCount?: number; ac
           style={{
             position: "absolute",
             top: 5 * scale,
-            left: activeTab === "scan" ? 5 * scale : "calc(50% + 5px)",
-            width: "calc(50% - 10px)",
+            left: activeTab === "scan" ? 5 * scale : `calc(50% + ${5 * scale}px)`,
+            width: `calc(50% - ${10 * scale}px)`,
             height: 42 * scale,
             background: BRAND.primary,
             borderRadius: 8 * scale,

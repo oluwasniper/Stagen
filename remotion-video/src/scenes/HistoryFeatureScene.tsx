@@ -12,7 +12,7 @@ export const HistoryFeatureScene: React.FC = () => {
   const textOpacity = interpolate(frame, [18, 42], [0, 1], { extrapolateRight: "clamp" });
 
   // Items appear one by one, staggered
-  const visibleCount = Math.min(5, 1 + Math.floor((frame - 15) / 12));
+  const visibleCount = Math.max(0, Math.min(5, 1 + Math.floor((frame - 15) / 12)));
   // Flip to "Create" tab after frame 80
   const activeTab = frame >= 82 ? "create" : "scan";
 

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/app_notification.dart';
 import '../providers/notification_provider.dart';
+import '../utils/app_router.dart';
+import '../utils/route/app_path.dart';
 
 class NotificationsScreen extends ConsumerWidget {
   const NotificationsScreen({super.key});
@@ -47,8 +49,11 @@ class NotificationsScreen extends ConsumerWidget {
                   notification: notification,
                   onTap: () {
                     ref.read(notificationProvider.notifier).markRead(notification.id);
-                    if (notification.actionRoute != null) {
-                      Navigator.of(context).pop();
+                    final route = notification.actionRoute;
+                    if (route != null &&
+                        route.startsWith('/') &&
+                        !route.contains('://')) {
+                      AppGoRouter.router.push(route);
                     }
                   },
                   onDismiss: () {

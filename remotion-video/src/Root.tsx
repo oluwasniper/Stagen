@@ -52,7 +52,7 @@ const ScagenPromoVideo: React.FC = () => (
     {/* Wipe right-to-left: golden swipe into Scan scene */}
     <TransitionSeries.Transition
       presentation={wipe({ direction: "from-right" })}
-      timing={springTiming({ config: { damping: 200, stiffness: 200, mass: 0.5 }, durationRestThreshold: 0.001 })}
+      timing={springTiming({ durationInFrames: T_WIPE, config: { damping: 200, stiffness: 200, mass: 0.5 }, durationRestThreshold: 0.001 })}
     />
 
     <TransitionSeries.Sequence durationInFrames={SCAN}>
@@ -62,7 +62,7 @@ const ScagenPromoVideo: React.FC = () => (
     {/* Slide left: scene slides out while next slides in */}
     <TransitionSeries.Transition
       presentation={slide({ direction: "from-right" })}
-      timing={springTiming({ config: { damping: 200, stiffness: 200, mass: 0.5 }, durationRestThreshold: 0.001 })}
+      timing={springTiming({ durationInFrames: T_SLIDE, config: { damping: 200, stiffness: 200, mass: 0.5 }, durationRestThreshold: 0.001 })}
     />
 
     <TransitionSeries.Sequence durationInFrames={GENERATE}>
@@ -71,7 +71,7 @@ const ScagenPromoVideo: React.FC = () => (
 
     <TransitionSeries.Transition
       presentation={slide({ direction: "from-right" })}
-      timing={springTiming({ config: { damping: 200, stiffness: 200, mass: 0.5 }, durationRestThreshold: 0.001 })}
+      timing={springTiming({ durationInFrames: T_SLIDE, config: { damping: 200, stiffness: 200, mass: 0.5 }, durationRestThreshold: 0.001 })}
     />
 
     <TransitionSeries.Sequence durationInFrames={HISTORY}>
@@ -80,7 +80,7 @@ const ScagenPromoVideo: React.FC = () => (
 
     <TransitionSeries.Transition
       presentation={slide({ direction: "from-right" })}
-      timing={springTiming({ config: { damping: 200, stiffness: 200, mass: 0.5 }, durationRestThreshold: 0.001 })}
+      timing={springTiming({ durationInFrames: T_SLIDE, config: { damping: 200, stiffness: 200, mass: 0.5 }, durationRestThreshold: 0.001 })}
     />
 
     <TransitionSeries.Sequence durationInFrames={MULTILINGUAL}>

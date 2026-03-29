@@ -8,7 +8,7 @@ const LANGS = [
   { code: "EN", name: "English", flag: "🇺🇸", phrase: "Scan, Generate, Share" },
   { code: "ES", name: "Español", flag: "🇪🇸", phrase: "Escanear · Generar · Compartir" },
   { code: "FR", name: "Français", flag: "🇫🇷", phrase: "Scanner · Générer · Partager" },
-  { code: "PT", name: "Português", flag: "🇧🇷", phrase: "Digitalizar · Gerar · Compartilhar" },
+  { code: "PT-BR", name: "Português", flag: "🇧🇷", phrase: "Digitalizar · Gerar · Compartilhar" },
 ];
 
 export const MultilingualScene: React.FC = () => {

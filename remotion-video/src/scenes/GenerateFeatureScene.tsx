@@ -6,6 +6,7 @@ import { GenerateScreen } from "../screens/GenerateScreen";
 import { GeneratedQRScreen } from "../screens/GeneratedQRScreen";
 
 const QR_TYPES = ["Text", "Website", "Wi-Fi", "Event", "Contact", "Business", "Location", "WhatsApp", "Email", "Twitter", "Instagram", "Telephone"];
+const QR_DISPLAYED = 9;
 
 export const GenerateFeatureScene: React.FC = () => {
   const frame = useCurrentFrame();
@@ -55,7 +56,7 @@ export const GenerateFeatureScene: React.FC = () => {
 
         {/* Type pills */}
         <div style={{ marginTop: 24, display: "flex", flexWrap: "wrap", gap: 8 }}>
-          {QR_TYPES.slice(0, 9).map((type, i) => {
+          {QR_TYPES.slice(0, QR_DISPLAYED).map((type, i) => {
             const pillOpacity = interpolate(frame, [42 + i * 4, 58 + i * 4], [0, 1], { extrapolateRight: "clamp" });
             const isActive = type === currentType;
             return (
@@ -76,7 +77,7 @@ export const GenerateFeatureScene: React.FC = () => {
               </div>
             );
           })}
-          <div style={{ opacity: interpolate(frame, [78, 88], [0, 1], { extrapolateRight: "clamp" }), padding: "6px 14px", color: BRAND.textMuted, fontSize: 13 }}>+6 more</div>
+          <div style={{ opacity: interpolate(frame, [78, 88], [0, 1], { extrapolateRight: "clamp" }), padding: "6px 14px", color: BRAND.textMuted, fontSize: 13 }}}>+{QR_TYPES.length - QR_DISPLAYED} more</div>
         </div>
       </div>
 

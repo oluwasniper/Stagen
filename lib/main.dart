@@ -80,6 +80,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   late final BackgroundSyncService _backgroundSyncService;
   late final PushNotificationService _pushNotificationService;
   late final AppwriteMessagingService _messagingService;
+  ProviderSubscription<AuthState>? _authListener;
   StreamSubscription<String>? _processTextSub;
   String? _activeRoute;
   DateTime? _activeRouteEnteredAt;
@@ -134,7 +135,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     }
 
     // React to future sign-in / sign-out events.
-    ref.listenManual(authProvider, (previous, next) {
+    _authListener = ref.listenManual(authProvider, (previous, next) {
       if (next.isAuthenticated && next.user != null) {
         final userId = next.user!.$id;
         _messagingService.subscribeToUserNotifications(userId);
@@ -334,6 +335,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       );
     }
 
+    _authListener?.close();
+    _messagingService.unsubscribe();
     _performanceService.stop();
     unawaited(_backgroundSyncService.stop());
     unawaited(QRIsolate.dispose());

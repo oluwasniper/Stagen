@@ -135,15 +135,13 @@ class AppwriteService {
         ],
       );
       if (result.documents.isEmpty) break;
-      await Future.wait(
-        result.documents.map(
-          (doc) => _databases.deleteDocument(
-            databaseId: _databaseId,
-            collectionId: collectionId,
-            documentId: doc.$id,
-          ),
-        ),
-      );
+      for (final doc in result.documents) {
+        await _databases.deleteDocument(
+          databaseId: _databaseId,
+          collectionId: collectionId,
+          documentId: doc.$id,
+        );
+      }
     }
   }
 }

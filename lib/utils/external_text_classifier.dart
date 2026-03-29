@@ -10,19 +10,20 @@ class ClassifiedExternalText {
   });
 }
 
-/// Maximum byte length accepted by the classifier.
+/// Maximum number of UTF-16 code units accepted by the classifier.
 ///
 /// QR codes can encode at most ~3 KB of binary data (version 40, 8-bit mode).
-/// 8 KB is a generous ceiling that prevents ReDoS / memory exhaustion from
-/// artificially large payloads injected via other code paths (e.g. deep links).
-const _kMaxInputBytes = 8192;
+/// 8192 code units is a generous ceiling that prevents ReDoS / memory exhaustion
+/// from artificially large payloads injected via other code paths (e.g. deep links).
+/// Note: this limit is in Dart string code units, not bytes.
+const _kMaxInputCodeUnits = 8192;
 
 ClassifiedExternalText classifyExternalText(String input) {
   // Reject oversized payloads before any regex work.
-  if (input.length > _kMaxInputBytes) {
+  if (input.length > _kMaxInputCodeUnits) {
     return ClassifiedExternalText(
       type: QROptionType.text,
-      prefill: {'text': input.substring(0, _kMaxInputBytes)},
+      prefill: {'text': input.substring(0, _kMaxInputCodeUnits)},
     );
   }
 

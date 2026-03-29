@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:uuid/uuid.dart';
 
 enum NotificationType { info, success, warning, error }
 
@@ -60,7 +61,7 @@ class AppNotification {
       orElse: () => NotificationType.info,
     );
     return AppNotification(
-      id: doc['\$id']?.toString() ?? DateTime.now().microsecondsSinceEpoch.toString(),
+      id: doc['\$id']?.toString() ?? const Uuid().v4(),
       title: doc['title']?.toString() ?? '',
       body: doc['body']?.toString() ?? '',
       type: type,
@@ -82,7 +83,7 @@ class AppNotification {
     String? actionRoute,
   }) {
     return AppNotification(
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      id: const Uuid().v4(),
       title: title,
       body: body,
       type: type,

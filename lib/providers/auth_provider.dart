@@ -234,16 +234,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
         ]);
       }
 
-      // 2. Track before resetting identity.
+      // 2. Track deletion intent (errors here must not block the deletion).
       try {
         _telemetry.track(TelemetryEvents.authAccountDeleted);
-        _telemetry.reset();
       } catch (_) {}
 
       // 3. Block account + delete session.
       await _authService.blockAndDeleteAccount();
 
-      // 4. Invalidate cached history.
+      // 4. Reset telemetry identity only after successful deletion.
+      try {
+        _telemetry.reset();
+      } catch (_) {}
+
+      // 5. Invalidate cached history.
       _ref.invalidate(scannedHistoryProvider);
       _ref.invalidate(generatedHistoryProvider);
 

@@ -15,10 +15,15 @@ if (localPropertiesFile.exists()) {
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystorePropertiesFile.withReader('UTF-8') { reader ->
-        keystoreProperties.load(reader)
-    }
+if (!keystorePropertiesFile.exists()) {
+    throw new org.gradle.api.GradleException(
+        "key.properties not found at ${keystorePropertiesFile.absolutePath}.\n" +
+        "Create it with keyAlias, keyPassword, storeFile, and storePassword entries.\n" +
+        "See android/key.properties.example for the required format."
+    )
+}
+keystorePropertiesFile.withReader('UTF-8') { reader ->
+    keystoreProperties.load(reader)
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')

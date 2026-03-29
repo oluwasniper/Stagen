@@ -9,7 +9,7 @@ import { ShortGenerate } from "./ShortGenerate";
 import { ShortCTA } from "./ShortCTA";
 import { ShortCaptions } from "./ShortCaptions";
 
-// 45s total @ 30fps = 1350 frames
+// 825 frames total @ 30fps = ~27.5s
 // YouTube Shorts: 9:16, under 60s
 const T = 20; // transition overlap frames
 

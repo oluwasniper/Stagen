@@ -145,6 +145,7 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
+        scrollable: true,
         title: Text(l10n.openUrlWarningTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,

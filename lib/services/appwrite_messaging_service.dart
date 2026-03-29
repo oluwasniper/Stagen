@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer' as dev;
 
 import 'package:appwrite/appwrite.dart';
@@ -72,6 +73,7 @@ class AppwriteMessagingService {
   final TelemetryService Function() _telemetryReader;
 
   RealtimeSubscription? _realtimeSubscription;
+  StreamSubscription<String>? _tokenRefreshSub;
   String? _currentUserId;
 
   // ── Push token registration ──────────────────────────────────────────────
@@ -136,8 +138,9 @@ class AppwriteMessagingService {
         targetId: 'device_$userId',
       );
 
-      // Refresh token when FCM rotates it.
-      FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+      // Refresh token when FCM rotates it. Cancel any previous listener first.
+      _tokenRefreshSub?.cancel();
+      _tokenRefreshSub = FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
         _registerPushToken(
           userId: userId,
           token: newToken,
@@ -285,10 +288,12 @@ class AppwriteMessagingService {
     }
   }
 
-  /// Cancel the Realtime subscription (call on sign-out).
+  /// Cancel the Realtime subscription and FCM token refresh listener (call on sign-out).
   void unsubscribe() {
     _realtimeSubscription?.close();
     _realtimeSubscription = null;
+    _tokenRefreshSub?.cancel();
+    _tokenRefreshSub = null;
     _currentUserId = null;
   }
 

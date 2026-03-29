@@ -23,7 +23,6 @@ interface TabletShellProps {
   phoneScale: number;
   children: React.ReactNode;         // primary (front) phone screen
   secondaryChildren?: React.ReactNode; // optional back phone
-  secondaryHighlight?: boolean;
 }
 
 const TabletShell: React.FC<TabletShellProps> = ({

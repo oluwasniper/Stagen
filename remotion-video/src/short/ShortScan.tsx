@@ -17,7 +17,8 @@ export const ShortScan: React.FC = () => {
   const subOpacity = interpolate(frame, [34, 50], [0, 1], { extrapolateRight: "clamp" });
 
   const scanProgress = (frame % (fps * 2)) / (fps * 2);
-  const detected = frame >= 55;
+  const detectionThreshold = Math.round(fps * (55 / 30));
+  const detected = frame >= detectionThreshold;
 
   const PHONE_SCALE = 0.72;
 

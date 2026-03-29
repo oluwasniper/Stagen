@@ -4,11 +4,13 @@ import { BRAND } from "../brand";
 
 // Google Play hi-res icon: 512×512 PNG
 // Must be: PNG, 32-bit, no transparency, rounded corners applied by Play Store itself
+const SIZE = 512;
+
 export const StoreIcon: React.FC = () => (
   <div
     style={{
-      width: 512,
-      height: 512,
+      width: SIZE,
+      height: SIZE,
       background: BRAND.primary,
       display: "flex",
       alignItems: "center",
@@ -17,7 +19,11 @@ export const StoreIcon: React.FC = () => (
       overflow: "hidden",
     }}
   >
-    {/* Subtle inner gradient for depth */}
+    <Img
+      src={staticFile("icon.png")}
+      style={{ width: SIZE, height: SIZE, objectFit: "cover" }}
+    />
+    {/* Subtle inner gradient for depth — rendered after Img so it paints on top */}
     <div
       style={{
         position: "absolute",
@@ -26,10 +32,6 @@ export const StoreIcon: React.FC = () => (
           "radial-gradient(ellipse 90% 80% at 50% 30%, rgba(255,255,255,0.18) 0%, transparent 60%)",
         pointerEvents: "none",
       }}
-    />
-    <Img
-      src={staticFile("icon.png")}
-      style={{ width: 512, height: 512, objectFit: "cover" }}
     />
   </div>
 );
