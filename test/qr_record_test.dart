@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:revolutionary_stuff/models/qr_record.dart';
+import 'package:scagen/models/qr_record.dart';
 
 void main() {
   test('QRRecord serializes and deserializes correctly', () {

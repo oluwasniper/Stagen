@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:revolutionary_stuff/utils/qr_isolate.dart';
+import 'package:scagen/utils/qr_isolate.dart';
 
 void main() {
   tearDownAll(() async {
