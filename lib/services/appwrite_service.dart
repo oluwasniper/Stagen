@@ -99,4 +99,51 @@ class AppwriteService {
       documentId: id,
     );
   }
+
+  /// Delete all QR records belonging to [userId].
+  ///
+  /// Fetches in batches of [kFetchLimit] until no documents remain.
+  Future<void> deleteAllUserData(String userId) async {
+    await _deleteAllInCollection(
+      collectionId: _collectionId,
+      userId: userId,
+    );
+  }
+
+  /// Delete all notification documents belonging to [userId].
+  ///
+  /// Called as part of account erasure so no PII lingers after deletion.
+  Future<void> deleteAllUserNotifications(String userId) async {
+    await _deleteAllInCollection(
+      collectionId: 'notifications',
+      userId: userId,
+    );
+  }
+
+  /// Batch-deletes every document in [collectionId] where `userId == userId`.
+  Future<void> _deleteAllInCollection({
+    required String collectionId,
+    required String userId,
+  }) async {
+    while (true) {
+      final result = await _databases.listDocuments(
+        databaseId: _databaseId,
+        collectionId: collectionId,
+        queries: [
+          Query.equal('userId', userId),
+          Query.limit(kFetchLimit),
+        ],
+      );
+      if (result.documents.isEmpty) break;
+      await Future.wait(
+        result.documents.map(
+          (doc) => _databases.deleteDocument(
+            databaseId: _databaseId,
+            collectionId: collectionId,
+            documentId: doc.$id,
+          ),
+        ),
+      );
+    }
+  }
 }

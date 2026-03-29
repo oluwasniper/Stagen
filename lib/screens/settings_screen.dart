@@ -45,6 +45,54 @@ class SettingsScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _confirmDeleteAccount(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.authDeleteAccountConfirmTitle),
+        content: Text(l10n.authDeleteAccountConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(ctx).colorScheme.error,
+            ),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.authDeleteAccountConfirmButton),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    final error = await ref.read(authProvider.notifier).deleteAccount();
+    if (!context.mounted) return;
+
+    if (error == null) {
+      AppGoRouter.router.go(AppPath.auth);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.authDeleteAccountSuccess),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } else {
+      final authState = ref.read(authProvider);
+      final message = localizeApiError(l10n, authState.errorType, authState.error);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
   void _showLanguagePicker(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.read(localeProvider);
     final motion = AppMotion.of(context);
@@ -332,6 +380,16 @@ class SettingsScreen extends ConsumerWidget {
             ),
           );
         },
+      ),
+      const SizedBox(height: 20),
+      SettingsListTile(
+        isSwitched: false,
+        showSwitch: false,
+        title: AppLocalizations.of(context).authDeleteAccount,
+        subtitle: AppLocalizations.of(context).authDeleteAccountDesc,
+        iconData: Icons.delete_forever_rounded,
+        foregroundColor: Theme.of(context).colorScheme.error,
+        onTap: () => _confirmDeleteAccount(context, ref),
       ),
       const SizedBox(height: 20),
     ];
