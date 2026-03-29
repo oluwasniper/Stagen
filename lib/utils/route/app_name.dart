@@ -15,4 +15,5 @@ class PathName {
   static const String showQR = 'showQR';
   static const String generatedQRResult = 'generatedQRResult';
   static const String scannedQRResult = 'scannedQRResult';
+  static const String notifications = 'notifications';
 }

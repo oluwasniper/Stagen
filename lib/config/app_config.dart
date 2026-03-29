@@ -88,6 +88,16 @@ class AppConfig {
     defaultValue: 'https://example.com/privacy',
   );
 
+  /// Appwrite Messaging provider ID for push notifications (FCM or APNs).
+  ///
+  /// Obtain this from Appwrite Console → Messaging → Providers after creating
+  /// your FCM or APNs provider. See the SETUP CHECKLIST in
+  /// lib/services/appwrite_messaging_service.dart for full instructions.
+  static const String messagingProviderId = String.fromEnvironment(
+    'APPWRITE_MESSAGING_PROVIDER_ID',
+    defaultValue: '',
+  );
+
   static String _stripWrappingQuotes(String value) {
     if (value.length < 2) return value;
     final first = value[0];

@@ -1,21 +1,26 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import 'l10n/app_localizations.dart';
+import 'providers/notification_provider.dart';
 import 'utils/app_asset.dart';
 import 'utils/app_motion.dart';
+import 'utils/route/app_path.dart';
 
-class BottomNavigationPage extends StatelessWidget {
+class BottomNavigationPage extends ConsumerWidget {
   const BottomNavigationPage({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = navigationShell.currentIndex;
+    final unreadCount = ref.watch(unreadNotificationCountProvider);
+
     final navItems = [
       CustomNavBarItem(
         svgData: AppAsset.generateIconSvg,
@@ -32,7 +37,16 @@ class BottomNavigationPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      body: navigationShell,
+      body: Stack(
+        children: [
+          navigationShell,
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 8,
+            right: 16,
+            child: _NotificationBellButton(unreadCount: unreadCount),
+          ),
+        ],
+      ),
       extendBody: true,
       bottomNavigationBar: CustomFloatingNavBar(
         selectedIndex: selectedIndex,
@@ -323,4 +337,78 @@ class CustomNavBarItem {
   final String label;
 
   CustomNavBarItem({required this.svgData, required this.label});
+}
+
+/// Floating notification bell with an unread-count badge.
+/// Tapping navigates to the notifications inbox screen.
+class _NotificationBellButton extends StatelessWidget {
+  const _NotificationBellButton({required this.unreadCount});
+
+  final int unreadCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.push(AppPath.notifications),
+      child: Semantics(
+        button: true,
+        label: unreadCount > 0
+            ? '$unreadCount unread notifications'
+            : 'Notifications',
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: const Color(0xff2A2A2A).withValues(alpha: 0.88),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.08),
+                  width: 0.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white70,
+                size: 20,
+              ),
+            ),
+            if (unreadCount > 0)
+              Positioned(
+                top: -2,
+                right: -2,
+                child: Container(
+                  constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: const BoxDecoration(
+                    color: Color(0xffFDB623),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      unreadCount > 99 ? '99+' : '$unreadCount',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w700,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 }
