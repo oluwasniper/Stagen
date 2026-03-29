@@ -115,6 +115,7 @@ class _ShowQrScreenState extends State<ShowQrScreen>
   }
 
   Future<void> _shareQrImage(String qrType) async {
+    File? tempFile;
     try {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
@@ -123,11 +124,11 @@ class _ShowQrScreenState extends State<ShowQrScreen>
       if (!await shareDir.exists()) {
         await shareDir.create(recursive: true);
       }
-      final file = File('${shareDir.path}/${_tempShareFileName(qrType)}');
-      await file.writeAsBytes(bytes);
+      tempFile = File('${shareDir.path}/${_tempShareFileName(qrType)}');
+      await tempFile.writeAsBytes(bytes);
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile(file.path)],
+          files: [XFile(tempFile.path)],
           fileNameOverrides: ['${qrType}_qr.png'],
         ),
       );
@@ -138,6 +139,13 @@ class _ShowQrScreenState extends State<ShowQrScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context).failedToShare)),
       );
+    } finally {
+      // Delete the temp file immediately once the share sheet is dismissed.
+      try {
+        if (tempFile != null && await tempFile.exists()) {
+          await tempFile.delete();
+        }
+      } catch (_) {}
     }
   }
 

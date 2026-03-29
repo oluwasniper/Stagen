@@ -79,15 +79,16 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
   }
 
   Future<void> _shareQrImage() async {
+    File? tempFile;
     try {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
       final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/qr_code.png');
-      await file.writeAsBytes(bytes);
+      tempFile = File('${tempDir.path}/qr_code_${DateTime.now().microsecondsSinceEpoch}.png');
+      await tempFile.writeAsBytes(bytes);
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile(file.path)],
+          files: [XFile(tempFile.path)],
           fileNameOverrides: ['scanned_qr.png'],
         ),
       );
@@ -102,6 +103,13 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
     } catch (e, st) {
       dev.log('[ScannedQRScreen] share failed: $e',
           stackTrace: st, name: 'ScannedQRScreen');
+    } finally {
+      // Delete the temp file immediately once the share sheet is dismissed.
+      try {
+        if (tempFile != null && await tempFile.exists()) {
+          await tempFile.delete();
+        }
+      } catch (_) {}
     }
   }
 
@@ -131,12 +139,49 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
       return;
     }
 
+    // Show a phishing-warning dialog before opening any external URL.
+    final scheme = uri.scheme.toLowerCase();
+    final isInsecureHttp = scheme == 'http';
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.openUrlWarningTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.openUrlWarningBody(value)),
+            if (isInsecureHttp) ...[
+              const SizedBox(height: 12),
+              Text(
+                l10n.openUrlWarningInsecure,
+                style: const TextStyle(color: Colors.orange),
+              ),
+            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.openUrlWarningCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.openUrlWarningConfirm),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+    if (!mounted) return;
+
     AppHaptics.light(context);
     AppSounds.click();
     await launchUrl(uri, mode: LaunchMode.externalApplication);
     ref.read(telemetryServiceProvider).track(
       TelemetryEvents.qrUrlOpened,
-      properties: {'scheme': uri.scheme.toLowerCase()},
+      properties: {'scheme': scheme},
     );
   }
 
