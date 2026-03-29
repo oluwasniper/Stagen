@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Scagen Account Deletion — how to delete your account and data.">
+  <title>Account Deletion — Scagen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --surface:      #1F1929;
+      --surface-high: #2A2138;
+      --surface-low:  #17121f;
+      --primary:      #FF8383;
+      --secondary:    #4D1F7C;
+      --on-surface:   #FFFFFF;
+      --on-surface-2: rgba(255,255,255,0.65);
+      --on-surface-3: rgba(255,255,255,0.35);
+      --border:       rgba(255,255,255,0.08);
+      --error:        #FF5252;
+      --error-bg:     rgba(255,82,82,0.1);
+      --error-border: rgba(255,82,82,0.25);
+      --radius:       16px;
+    }
+
+    body {
+      background: var(--surface-low);
+      color: var(--on-surface);
+      font-family: 'Inter', 'Roboto', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      padding: 0 1rem 5rem;
+    }
+
+    /* ── App bar ── */
+    .appbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--surface-low);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 1.2rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .appbar-icon {
+      width: 32px; height: 32px;
+      background: var(--secondary);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .appbar-icon svg { width: 18px; height: 18px; }
+    .appbar-title { font-size: 1rem; font-weight: 600; color: var(--on-surface); letter-spacing: 0.01em; }
+
+    /* ── Container ── */
+    .container { max-width: 700px; margin: 0 auto; padding-top: 2rem; }
+
+    /* ── Hero ── */
+    .hero { text-align: center; padding: 1.5rem 0 2rem; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      border-radius: 100px;
+      font-size: 0.75rem; font-weight: 600; color: var(--error);
+      padding: 0.3rem 0.85rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(1.7rem, 5vw, 2.4rem);
+      font-weight: 800; letter-spacing: -0.03em;
+      color: var(--on-surface); line-height: 1.2;
+    }
+
+    .hero-sub { color: var(--on-surface-2); font-size: 0.88rem; margin-top: 0.5rem; }
+
+    h2 {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--primary); margin: 2.5rem 0 0.75rem;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface-high);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-danger {
+      background: var(--error-bg);
+      border-color: var(--error-border);
+    }
+
+    /* ── Step indicators ── */
+    .steps { display: flex; flex-direction: column; }
+
+    .step {
+      display: flex; gap: 1rem;
+      position: relative;
+    }
+
+    .step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 16px; top: 36px; bottom: -1px;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .step-num {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--secondary);
+      border: 2px solid rgba(255,131,131,0.3);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.8rem; font-weight: 700;
+      color: var(--primary);
+      margin-top: 0.05rem;
+    }
+
+    .step-body { flex: 1; padding-bottom: 1.5rem; }
+    .step-title { font-weight: 600; font-size: 0.9rem; color: var(--on-surface); margin-bottom: 0.2rem; }
+    .step-sub { font-size: 0.85rem; color: var(--on-surface-2); }
+    .step-sub code {
+      background: var(--surface-high);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.1rem 0.4rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.82rem; color: var(--primary);
+    }
+
+    /* ── What gets deleted tiles ── */
+    .tile-list { display: flex; flex-direction: column; gap: 1px; }
+
+    .tile {
+      background: var(--surface-high);
+      border: 1px solid var(--border);
+      display: flex; align-items: flex-start;
+      gap: 0.9rem; padding: 0.9rem 1.1rem;
+    }
+
+    .tile:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .tile:last-child  { border-radius: 0 0 var(--radius) var(--radius); }
+    .tile:only-child  { border-radius: var(--radius); }
+
+    .tile-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: rgba(255,82,82,0.15);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 0.05rem;
+    }
+
+    .tile-icon svg { width: 16px; height: 16px; }
+    .tile-body { flex: 1; min-width: 0; }
+    .tile-title { font-weight: 600; font-size: 0.9rem; color: var(--on-surface); margin-bottom: 0.2rem; }
+    .tile-sub { font-size: 0.82rem; color: var(--on-surface-2); line-height: 1.5; }
+
+    /* ── Form ── */
+    .form-field { margin-bottom: 1.1rem; }
+
+    label {
+      display: block;
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--on-surface-3);
+      margin-bottom: 0.4rem;
+    }
+
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      background: var(--surface-low);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      color: var(--on-surface);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="email"]:focus,
+    select:focus,
+    textarea:focus { border-color: var(--primary); }
+
+    input[type="email"]::placeholder,
+    textarea::placeholder { color: var(--on-surface-3); }
+
+    select { background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.35)' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; }
+    select option { background: var(--surface-high); color: var(--on-surface); }
+
+    textarea { resize: vertical; min-height: 90px; }
+
+    .confirm-row {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.9rem 1rem;
+      background: var(--surface-high);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 1.2rem;
+      cursor: pointer;
+    }
+
+    .confirm-row input[type="checkbox"] {
+      width: 18px; height: 18px;
+      margin: 2px 0 0;
+      accent-color: var(--primary);
+      flex-shrink: 0; cursor: pointer;
+    }
+
+    .confirm-row span { font-size: 0.85rem; color: var(--on-surface-2); line-height: 1.5; }
+
+    .btn-delete {
+      width: 100%;
+      background: var(--error);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      padding: 0.85rem;
+      font-size: 0.95rem; font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-delete:hover { opacity: 0.85; }
+    .btn-delete:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Success state ── */
+    .success {
+      display: none;
+      text-align: center;
+      padding: 2rem 0 1rem;
+    }
+
+    .success-icon {
+      width: 56px; height: 56px;
+      background: rgba(100,220,130,0.12);
+      border: 1px solid rgba(100,220,130,0.25);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+    }
+
+    .success-icon svg { width: 24px; height: 24px; }
+
+    .success h2 { font-size: 1.2rem; font-weight: 700; color: var(--on-surface); margin-bottom: 0.5rem; }
+    .success p { font-size: 0.88rem; color: var(--on-surface-2); }
+
+    /* ── Prose ── */
+    p { margin-bottom: 0.75rem; color: var(--on-surface-2); }
+    p strong { color: var(--on-surface); }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Contact card ── */
+    .contact-card {
+      background: linear-gradient(135deg, var(--secondary) 0%, #2e1250 100%);
+      border: 1px solid rgba(255,131,131,0.2);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.6rem;
+      margin-top: 1rem;
+    }
+
+    .contact-card .clabel {
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); margin-bottom: 0.3rem;
+    }
+
+    .contact-card .cvalue { font-size: 1rem; font-weight: 600; color: #fff; }
+    .contact-card .cvalue a { color: var(--primary); }
+
+    .divider { height: 1px; background: var(--border); margin: 2rem 0; }
+
+    footer { margin-top: 3rem; text-align: center; font-size: 0.8rem; color: var(--on-surface-3); }
+    footer a { color: var(--on-surface-3); }
+    footer a:hover { color: var(--primary); }
+  </style>
+</head>
+<body>
+
+  <div class="appbar">
+    <div class="appbar-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <path d="M14 14h2v2h-2zM18 14h3M14 18h2M18 18h3v3M14 21h2"/>
+      </svg>
+    </div>
+    <span class="appbar-title">Scagen</span>
+  </div>
+
+  <div class="container">
+
+    <div class="hero">
+      <div class="hero-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        Account Deletion
+      </div>
+      <h1>Delete your<br>account &amp; data.</h1>
+      <p class="hero-sub">You can delete your account in-app or by submitting the form below.</p>
+    </div>
+
+    <!-- In-app method -->
+    <h2>Option 1 &nbsp;— In the App</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Open Settings</div>
+          <div class="step-sub">Tap the settings icon from the bottom navigation bar.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Go to Account</div>
+          <div class="step-sub">Tap <code>Account</code> → <code>Delete Account</code>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Confirm deletion</div>
+          <div class="step-sub">Confirm the prompt. Your session ends immediately and all data is queued for removal.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form method -->
+    <h2>Option 2 &nbsp;— Submit a Request</h2>
+    <div class="card">
+      <div id="form-section">
+        <p style="margin-bottom:1.2rem">No longer have access to the app? Fill in the form below and we'll process your request within 30 days.</p>
+
+        <form id="delete-form" action="https://formspree.io/f/mwvwlkgq" method="POST">
+          <div class="form-field">
+            <label for="email">Email address *</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          </div>
+
+          <div class="form-field">
+            <label for="reason">Reason (optional)</label>
+            <select id="reason" name="reason">
+              <option value="">Select a reason</option>
+              <option value="No longer using the app">No longer using the app</option>
+              <option value="Privacy concerns">Privacy concerns</option>
+              <option value="Switching to another app">Switching to another app</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="message">Additional details (optional)</label>
+            <textarea id="message" name="message" placeholder="Anything else you'd like us to know…"></textarea>
+          </div>
+
+          <input type="hidden" name="_subject" value="Account deletion request — Scagen">
+
+          <label class="confirm-row" for="confirm">
+            <input type="checkbox" id="confirm" name="confirmed" required>
+            <span>I understand this will permanently delete my account and all my data, and cannot be undone.</span>
+          </label>
+
+          <button type="submit" class="btn-delete" id="submit-btn">Delete my account</button>
+        </form>
+      </div>
+
+      <div class="success" id="success-section">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#64DC82" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2>Request received</h2>
+        <p>We'll process your deletion request within 30 days and confirm by email.</p>
+      </div>
+    </div>
+
+    <!-- What gets deleted -->
+    <h2>What Gets Deleted</h2>
+    <div class="tile-list">
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#FF5252" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Your account</div>
+          <div class="tile-sub">Email address, password hash, and session data — permanently removed.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#FF5252" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h2v2h-2zM18 14h3M14 18h2M18 18h3v3M14 21h2"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">QR history</div>
+          <div class="tile-sub">All scanned and generated QR codes synced to your account.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#FF5252" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Push tokens &amp; notifications</div>
+          <div class="tile-sub">Device push tokens and stored in-app notifications.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#FF5252" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Analytics identity</div>
+          <div class="tile-sub">Your PostHog UUID is reset. Aggregated events (no PII) may be retained up to 1 year per our retention policy.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-danger" style="margin-top:0.75rem">
+      <p style="margin:0;font-size:0.88rem;color:rgba(255,82,82,0.9)">
+        <strong style="color:#FF5252">Heads up:</strong> Deletion is permanent and cannot be undone. Local data is cleared when you uninstall the app.
+      </p>
+    </div>
+
+    <h2>Need Help?</h2>
+    <div class="contact-card">
+      <div class="clabel">Contact</div>
+      <div class="cvalue"><a href="mailto:christian@sonofnos.com">christian@sonofnos.com</a></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <footer>
+      &copy; 2026 Scagen &nbsp;·&nbsp;
+      <a href="/">Home</a> &nbsp;·&nbsp;
+      <a href="/privacy-policy">Privacy Policy</a> &nbsp;·&nbsp;
+      <a href="mailto:christian@sonofnos.com">Contact</a>
+    </footer>
+
+  </div>
+
+  <script>
+    const form = document.getElementById('delete-form');
+    const btn  = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = 'Submitting…';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+
+        if (res.ok) {
+          document.getElementById('form-section').style.display = 'none';
+          document.getElementById('success-section').style.display = 'block';
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Delete my account';
+          alert('Something went wrong. Please email christian@sonofnos.com');
+        }
+      } catch {
+        btn.disabled = false;
+        btn.textContent = 'Delete my account';
+        alert('Something went wrong. Please email christian@sonofnos.com');
+      }
+    });
+  </script>
+</body>
+</html>
