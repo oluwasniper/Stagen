@@ -194,6 +194,13 @@
     },
     "authLogout": "Cerrar sesión",
     "authLogoutDesc": "Cerrar sesión de tu cuenta",
+    "cancel": "Cancelar",
+    "authDeleteAccount": "Eliminar cuenta",
+    "authDeleteAccountDesc": "Elimina permanentemente tu cuenta y todos los datos",
+    "authDeleteAccountConfirmTitle": "¿Eliminar cuenta?",
+    "authDeleteAccountConfirmBody": "Esto eliminará permanentemente tu cuenta y todo tu historial de QR. Esta acción no se puede deshacer.",
+    "authDeleteAccountConfirmButton": "Eliminar",
+    "authDeleteAccountSuccess": "Tu cuenta ha sido eliminada",
     "authAccount": "Cuenta",
     "linkAccountTitle": "Vincular cuenta",
     "linkAccountSubtitle": "Actualizar a cuenta con email y contraseña",
@@ -246,5 +253,11 @@
     "failedToShare": "Error al compartir",
     "unableToOpenContent": "No se puede abrir este contenido",
     "noInternet": "Sin conexión a internet",
-    "scanGenerateShare": "Escanear · Generar · Compartir"
+    "scanGenerateShare": "Escanear · Generar · Compartir",
+
+    "openUrlWarningTitle": "¿Abrir este enlace?",
+    "openUrlWarningBody": "Este enlace proviene de un código QR. Asegúrate de confiar en él antes de continuar.\n\n{url}",
+    "openUrlWarningInsecure": "⚠ Este enlace usa HTTP sin cifrar. Tus datos pueden ser visibles para otros.",
+    "openUrlWarningConfirm": "Abrir",
+    "openUrlWarningCancel": "Cancelar"
 }

@@ -486,6 +486,29 @@ class AppLocalizationsPt extends AppLocalizations {
   String get authLogoutDesc => 'Sair da sua conta';
 
   @override
+  String get cancel => 'Cancelar';
+
+  @override
+  String get authDeleteAccount => 'Excluir conta';
+
+  @override
+  String get authDeleteAccountDesc =>
+      'Exclua permanentemente sua conta e todos os dados';
+
+  @override
+  String get authDeleteAccountConfirmTitle => 'Excluir conta?';
+
+  @override
+  String get authDeleteAccountConfirmBody =>
+      'Isso excluirá permanentemente sua conta e todo o histórico de QR. Esta ação não pode ser desfeita.';
+
+  @override
+  String get authDeleteAccountConfirmButton => 'Excluir';
+
+  @override
+  String get authDeleteAccountSuccess => 'Sua conta foi excluída';
+
+  @override
   String get authAccount => 'Conta';
 
   @override
@@ -623,4 +646,22 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get scanGenerateShare => 'Escanear · Gerar · Compartilhar';
+
+  @override
+  String get openUrlWarningTitle => 'Abrir este link?';
+
+  @override
+  String openUrlWarningBody(String url) {
+    return 'Este link veio de um código QR. Certifique-se de confiar nele antes de continuar.\n\n$url';
+  }
+
+  @override
+  String get openUrlWarningInsecure =>
+      '⚠ Este link usa HTTP não criptografado. Seus dados podem estar visíveis para outros.';
+
+  @override
+  String get openUrlWarningConfirm => 'Abrir';
+
+  @override
+  String get openUrlWarningCancel => 'Cancelar';
 }

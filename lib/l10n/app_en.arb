@@ -707,6 +707,34 @@
     "@authLogoutDesc" :{
         "description": "Log out description"
     },
+    "cancel": "Cancel",
+    "@cancel": {
+        "description": "Generic cancel button label"
+    },
+    "authDeleteAccount": "Delete Account",
+    "@authDeleteAccount": {
+        "description": "Delete account button label"
+    },
+    "authDeleteAccountDesc": "Permanently delete your account and all data",
+    "@authDeleteAccountDesc": {
+        "description": "Delete account tile subtitle"
+    },
+    "authDeleteAccountConfirmTitle": "Delete account?",
+    "@authDeleteAccountConfirmTitle": {
+        "description": "Title of the delete account confirmation dialog"
+    },
+    "authDeleteAccountConfirmBody": "This will permanently delete your account and all your QR history. This cannot be undone.",
+    "@authDeleteAccountConfirmBody": {
+        "description": "Body of the delete account confirmation dialog"
+    },
+    "authDeleteAccountConfirmButton": "Delete",
+    "@authDeleteAccountConfirmButton": {
+        "description": "Confirm delete button label in the delete account dialog"
+    },
+    "authDeleteAccountSuccess": "Your account has been deleted",
+    "@authDeleteAccountSuccess": {
+        "description": "Snackbar shown after successful account deletion"
+    },
     "authAccount": "Account",
     "@authAccount" :{
         "description": "Account section header"
@@ -879,5 +907,29 @@
     "scanGenerateShare": "Scan · Generate · Share",
     "@scanGenerateShare": {
         "description": "Tagline shown on the splash screen"
+    },
+
+    "openUrlWarningTitle": "Open this link?",
+    "@openUrlWarningTitle": {
+        "description": "Title of the phishing-warning dialog shown before opening a scanned URL"
+    },
+    "openUrlWarningBody": "This link came from a QR code. Make sure you trust it before continuing.\n\n{url}",
+    "@openUrlWarningBody": {
+        "description": "Body of the phishing-warning dialog",
+        "placeholders": {
+            "url": { "type": "String" }
+        }
+    },
+    "openUrlWarningInsecure": "⚠ This link uses unencrypted HTTP. Your data may be visible to others.",
+    "@openUrlWarningInsecure": {
+        "description": "Extra warning line shown when the URL scheme is http (not https)"
+    },
+    "openUrlWarningConfirm": "Open",
+    "@openUrlWarningConfirm": {
+        "description": "Confirm button in the phishing-warning dialog"
+    },
+    "openUrlWarningCancel": "Cancel",
+    "@openUrlWarningCancel": {
+        "description": "Cancel button in the phishing-warning dialog"
     }
 }

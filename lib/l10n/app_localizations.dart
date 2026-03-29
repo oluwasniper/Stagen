@@ -1038,6 +1038,48 @@ abstract class AppLocalizations {
   /// **'Sign out of your account'**
   String get authLogoutDesc;
 
+  /// Generic cancel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Delete account button label
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get authDeleteAccount;
+
+  /// Delete account tile subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete your account and all data'**
+  String get authDeleteAccountDesc;
+
+  /// Title of the delete account confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account?'**
+  String get authDeleteAccountConfirmTitle;
+
+  /// Body of the delete account confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete your account and all your QR history. This cannot be undone.'**
+  String get authDeleteAccountConfirmBody;
+
+  /// Confirm delete button label in the delete account dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get authDeleteAccountConfirmButton;
+
+  /// Snackbar shown after successful account deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been deleted'**
+  String get authDeleteAccountSuccess;
+
   /// Account section header
   ///
   /// In en, this message translates to:
@@ -1283,6 +1325,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scan · Generate · Share'**
   String get scanGenerateShare;
+
+  /// Title of the phishing-warning dialog shown before opening a scanned URL
+  ///
+  /// In en, this message translates to:
+  /// **'Open this link?'**
+  String get openUrlWarningTitle;
+
+  /// Body of the phishing-warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This link came from a QR code. Make sure you trust it before continuing.\n\n{url}'**
+  String openUrlWarningBody(String url);
+
+  /// Extra warning line shown when the URL scheme is http (not https)
+  ///
+  /// In en, this message translates to:
+  /// **'⚠ This link uses unencrypted HTTP. Your data may be visible to others.'**
+  String get openUrlWarningInsecure;
+
+  /// Confirm button in the phishing-warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get openUrlWarningConfirm;
+
+  /// Cancel button in the phishing-warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get openUrlWarningCancel;
 }
 
 class _AppLocalizationsDelegate

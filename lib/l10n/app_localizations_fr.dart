@@ -489,6 +489,29 @@ class AppLocalizationsFr extends AppLocalizations {
   String get authLogoutDesc => 'Se déconnecter de votre compte';
 
   @override
+  String get cancel => 'Annuler';
+
+  @override
+  String get authDeleteAccount => 'Supprimer le compte';
+
+  @override
+  String get authDeleteAccountDesc =>
+      'Supprimez définitivement votre compte et toutes vos données';
+
+  @override
+  String get authDeleteAccountConfirmTitle => 'Supprimer le compte ?';
+
+  @override
+  String get authDeleteAccountConfirmBody =>
+      'Cela supprimera définitivement votre compte et tout votre historique QR. Cette action est irréversible.';
+
+  @override
+  String get authDeleteAccountConfirmButton => 'Supprimer';
+
+  @override
+  String get authDeleteAccountSuccess => 'Votre compte a été supprimé';
+
+  @override
   String get authAccount => 'Compte';
 
   @override
@@ -625,4 +648,22 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get scanGenerateShare => 'Scanner · Générer · Partager';
+
+  @override
+  String get openUrlWarningTitle => 'Ouvrir ce lien ?';
+
+  @override
+  String openUrlWarningBody(String url) {
+    return 'Ce lien provient d\'un code QR. Assurez-vous d\'y faire confiance avant de continuer.\n\n$url';
+  }
+
+  @override
+  String get openUrlWarningInsecure =>
+      '⚠ Ce lien utilise HTTP non chiffré. Vos données peuvent être visibles par d\'autres.';
+
+  @override
+  String get openUrlWarningConfirm => 'Ouvrir';
+
+  @override
+  String get openUrlWarningCancel => 'Annuler';
 }

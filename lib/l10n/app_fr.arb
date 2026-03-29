@@ -182,6 +182,13 @@
     },
     "authLogout": "Déconnexion",
     "authLogoutDesc": "Se déconnecter de votre compte",
+    "cancel": "Annuler",
+    "authDeleteAccount": "Supprimer le compte",
+    "authDeleteAccountDesc": "Supprimez définitivement votre compte et toutes vos données",
+    "authDeleteAccountConfirmTitle": "Supprimer le compte ?",
+    "authDeleteAccountConfirmBody": "Cela supprimera définitivement votre compte et tout votre historique QR. Cette action est irréversible.",
+    "authDeleteAccountConfirmButton": "Supprimer",
+    "authDeleteAccountSuccess": "Votre compte a été supprimé",
     "authAccount": "Compte",
     "linkAccountTitle": "Lier le compte",
     "linkAccountSubtitle": "Passer à un compte e-mail/mot de passe",
@@ -234,5 +241,11 @@
     "failedToShare": "Échec du partage",
     "unableToOpenContent": "Impossible d'ouvrir ce contenu",
     "noInternet": "Pas de connexion internet",
-    "scanGenerateShare": "Scanner · Générer · Partager"
+    "scanGenerateShare": "Scanner · Générer · Partager",
+
+    "openUrlWarningTitle": "Ouvrir ce lien ?",
+    "openUrlWarningBody": "Ce lien provient d'un code QR. Assurez-vous d'y faire confiance avant de continuer.\n\n{url}",
+    "openUrlWarningInsecure": "⚠ Ce lien utilise HTTP non chiffré. Vos données peuvent être visibles par d'autres.",
+    "openUrlWarningConfirm": "Ouvrir",
+    "openUrlWarningCancel": "Annuler"
 }
