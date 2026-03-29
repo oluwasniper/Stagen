@@ -18,7 +18,7 @@ The utils directory houses various helper functions, extensions, and utility cla
 Import the required utility functions from this directory:
 
 ```dart
-import 'package:revolutionary_stuff/utils/your_utility.dart';
+import 'package:scagen/utils/your_utility.dart';
 ```
 
 ## Contributing
