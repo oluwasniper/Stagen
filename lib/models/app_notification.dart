@@ -5,6 +5,11 @@ enum NotificationType { info, success, warning, error }
 
 enum NotificationSource { local, server }
 
+const int _kNotificationTitleMaxLength = 120;
+const int _kNotificationBodyMaxLength = 500;
+const int _kNotificationActionLabelMaxLength = 64;
+const int _kNotificationActionRouteMaxLength = 256;
+
 /// An in-app notification entry.
 ///
 /// Local notifications are created directly by the app (e.g. "QR saved").
@@ -60,16 +65,29 @@ class AppNotification {
       (e) => e.name == typeStr,
       orElse: () => NotificationType.info,
     );
+    final title = _sanitizeNotificationText(
+      doc['title'],
+      maxLength: _kNotificationTitleMaxLength,
+    );
+    final body = _sanitizeNotificationText(
+      doc['body'],
+      maxLength: _kNotificationBodyMaxLength,
+    );
+    final actionLabel = _sanitizeNotificationText(
+      doc['actionLabel'],
+      maxLength: _kNotificationActionLabelMaxLength,
+    );
+    final actionRoute = _sanitizeRoute(doc['actionRoute']);
     return AppNotification(
       id: doc['\$id']?.toString() ?? const Uuid().v4(),
-      title: doc['title']?.toString() ?? '',
-      body: doc['body']?.toString() ?? '',
+      title: title,
+      body: body,
       type: type,
       source: NotificationSource.server,
       createdAt: DateTime.tryParse(doc['createdAt']?.toString() ?? '') ??
           DateTime.now(),
-      actionLabel: doc['actionLabel']?.toString(),
-      actionRoute: doc['actionRoute']?.toString(),
+      actionLabel: actionLabel.isEmpty ? null : actionLabel,
+      actionRoute: actionRoute,
       isRead: doc['isRead'] == true,
     );
   }
@@ -93,4 +111,28 @@ class AppNotification {
       actionRoute: actionRoute,
     );
   }
+}
+
+String _sanitizeNotificationText(
+  Object? raw, {
+  required int maxLength,
+}) {
+  final normalized = raw
+      ?.toString()
+      .replaceAll('\r\n', '\n')
+      .replaceAll('\r', '\n')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+  if (normalized == null || normalized.isEmpty) return '';
+  if (normalized.length <= maxLength) return normalized;
+  return normalized.substring(0, maxLength);
+}
+
+String? _sanitizeRoute(Object? raw) {
+  final route = _sanitizeNotificationText(
+    raw,
+    maxLength: _kNotificationActionRouteMaxLength,
+  );
+  if (route.isEmpty) return null;
+  return route;
 }

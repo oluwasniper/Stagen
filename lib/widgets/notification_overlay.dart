@@ -27,10 +27,13 @@ class NotificationOverlay extends ConsumerStatefulWidget {
   final Widget child;
 
   @override
-  ConsumerState<NotificationOverlay> createState() => _NotificationOverlayState();
+  ConsumerState<NotificationOverlay> createState() =>
+      _NotificationOverlayState();
 }
 
 class _NotificationOverlayState extends ConsumerState<NotificationOverlay> {
+  static const int _maxActiveBanners = 3;
+
   StreamSubscription<AppNotification>? _sub;
   final List<_BannerEntry> _active = [];
 
@@ -43,7 +46,12 @@ class _NotificationOverlayState extends ConsumerState<NotificationOverlay> {
   void _onBanner(AppNotification notification) {
     if (!mounted) return;
     final entry = _BannerEntry(notification: notification);
-    setState(() => _active.add(entry));
+    setState(() {
+      _active.add(entry);
+      if (_active.length > _maxActiveBanners) {
+        _active.removeRange(0, _active.length - _maxActiveBanners);
+      }
+    });
 
     // Auto-dismiss after 4 seconds.
     Future.delayed(const Duration(seconds: 4), () {
@@ -182,15 +190,15 @@ class _NotificationBannerState extends State<_NotificationBanner>
   Color _accentColor(NotificationType type) => switch (type) {
         NotificationType.success => const Color(0xff22C55E),
         NotificationType.warning => const Color(0xffF59E0B),
-        NotificationType.error   => const Color(0xffEF4444),
-        NotificationType.info    => const Color(0xff3B82F6),
+        NotificationType.error => const Color(0xffEF4444),
+        NotificationType.info => const Color(0xff3B82F6),
       };
 
   IconData _icon(NotificationType type) => switch (type) {
         NotificationType.success => Icons.check_circle_outline,
         NotificationType.warning => Icons.warning_amber_outlined,
-        NotificationType.error   => Icons.error_outline,
-        NotificationType.info    => Icons.info_outline,
+        NotificationType.error => Icons.error_outline,
+        NotificationType.info => Icons.info_outline,
       };
 
   @override
@@ -219,11 +227,13 @@ class _NotificationBannerState extends State<_NotificationBanner>
                     left: BorderSide(color: accent, width: 4),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(_icon(widget.notification.type), color: accent, size: 20),
+                    Icon(_icon(widget.notification.type),
+                        color: accent, size: 20),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Column(
@@ -243,7 +253,8 @@ class _NotificationBannerState extends State<_NotificationBanner>
                             Text(
                               widget.notification.body,
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: colorScheme.onSurface.withValues(alpha: 0.72),
+                                color: colorScheme.onSurface
+                                    .withValues(alpha: 0.72),
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
