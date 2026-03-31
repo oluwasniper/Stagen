@@ -10,6 +10,7 @@ import '../providers/qr_providers.dart';
 import '../services/telemetry_service.dart';
 import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
+import '../utils/qr_payload_sanitizer.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
 import '../widgets/generate_qr_code_body_widget.dart';
@@ -65,28 +66,42 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
       case QROptionType.text:
         return _controllers['text']?.text.trim() ?? '';
       case QROptionType.website:
-        return _controllers['website']?.text.trim() ?? '';
+        return normalizeSingleLineQrField(
+          _controllers['website']?.text.trim() ?? '',
+        );
       case QROptionType.whatsapp:
-        final number = _controllers['whatsapp']?.text.trim() ?? '';
+        final number = normalizeSingleLineQrField(
+          _controllers['whatsapp']?.text.trim() ?? '',
+        );
         return 'https://wa.me/$number';
       case QROptionType.twitter:
-        final user = _controllers['twitter']?.text.trim() ?? '';
+        final user = normalizeSingleLineQrField(
+          _controllers['twitter']?.text.trim() ?? '',
+        );
         return 'https://twitter.com/$user';
       case QROptionType.email:
-        return 'mailto:${_controllers['email']?.text.trim() ?? ''}';
+        return 'mailto:${normalizeSingleLineQrField(_controllers['email']?.text.trim() ?? '')}';
       case QROptionType.instagram:
-        final user = _controllers['instagram']?.text.trim() ?? '';
+        final user = normalizeSingleLineQrField(
+          _controllers['instagram']?.text.trim() ?? '',
+        );
         return 'https://instagram.com/$user';
       case QROptionType.telephone:
-        return 'tel:${_controllers['telephone']?.text.trim() ?? ''}';
+        return 'tel:${normalizeSingleLineQrField(_controllers['telephone']?.text.trim() ?? '')}';
       case QROptionType.sms:
-        final number = _controllers['smsNumber']?.text.trim() ?? '';
-        final message = _controllers['smsMessage']?.text.trim() ?? '';
+        final number = normalizeSingleLineQrField(
+          _controllers['smsNumber']?.text.trim() ?? '',
+        );
+        final message = normalizeSingleLineQrField(
+          _controllers['smsMessage']?.text.trim() ?? '',
+        );
         if (number.isEmpty && message.isEmpty) return '';
         if (message.isEmpty) return 'SMSTO:$number';
         return 'SMSTO:$number:$message';
       case QROptionType.telegram:
-        final telegram = _controllers['telegram']?.text.trim() ?? '';
+        final telegram = normalizeSingleLineQrField(
+          _controllers['telegram']?.text.trim() ?? '',
+        );
         if (telegram.isEmpty) return '';
         if (telegram.startsWith('http://') || telegram.startsWith('https://')) {
           return telegram;
@@ -95,7 +110,9 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
             telegram.startsWith('@') ? telegram.substring(1) : telegram;
         return 'https://t.me/$cleanHandle';
       case QROptionType.linkedin:
-        final linkedIn = _controllers['linkedin']?.text.trim() ?? '';
+        final linkedIn = normalizeSingleLineQrField(
+          _controllers['linkedin']?.text.trim() ?? '',
+        );
         if (linkedIn.isEmpty) return '';
         if (linkedIn.startsWith('http://') || linkedIn.startsWith('https://')) {
           return linkedIn;
@@ -104,40 +121,96 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
             linkedIn.startsWith('@') ? linkedIn.substring(1) : linkedIn;
         return 'https://www.linkedin.com/in/$cleanHandle';
       case QROptionType.wifi:
-        final ssid = _controllers['network']?.text.trim() ?? '';
-        final pass = _controllers['password']?.text.trim() ?? '';
+        final ssid = escapeWifiQrField(
+          _controllers['network']?.text.trim() ?? '',
+        );
+        final pass = escapeWifiQrField(
+          _controllers['password']?.text.trim() ?? '',
+        );
         return 'WIFI:T:WPA;S:$ssid;P:$pass;;';
       case QROptionType.event:
-        final name = _controllers['eventName']?.text.trim() ?? '';
-        final start = _controllers['startDate']?.text.trim() ?? '';
-        final end = _controllers['endDate']?.text.trim() ?? '';
-        final location = _controllers['eventLocation']?.text.trim() ?? '';
-        final desc = _controllers['description']?.text.trim() ?? '';
+        final name = escapeVEventQrText(
+          _controllers['eventName']?.text.trim() ?? '',
+        );
+        final start = normalizeSingleLineQrField(
+          _controllers['startDate']?.text.trim() ?? '',
+        );
+        final end = normalizeSingleLineQrField(
+          _controllers['endDate']?.text.trim() ?? '',
+        );
+        final location = escapeVEventQrText(
+          _controllers['eventLocation']?.text.trim() ?? '',
+        );
+        final desc = escapeVEventQrText(
+          _controllers['description']?.text.trim() ?? '',
+        );
         return 'BEGIN:VEVENT\nSUMMARY:$name\nDTSTART:$start\nDTEND:$end\nLOCATION:$location\nDESCRIPTION:$desc\nEND:VEVENT';
       case QROptionType.contact:
-        final first = _controllers['firstName']?.text.trim() ?? '';
-        final last = _controllers['lastName']?.text.trim() ?? '';
-        final company = _controllers['company']?.text.trim() ?? '';
-        final job = _controllers['job']?.text.trim() ?? '';
-        final phone = _controllers['phone']?.text.trim() ?? '';
-        final email = _controllers['email']?.text.trim() ?? '';
-        final web = _controllers['website']?.text.trim() ?? '';
-        final addr = _controllers['address']?.text.trim() ?? '';
-        final city = _controllers['city']?.text.trim() ?? '';
-        final country = _controllers['country']?.text.trim() ?? '';
+        final first = escapeVCardQrText(
+          _controllers['firstName']?.text.trim() ?? '',
+        );
+        final last = escapeVCardQrText(
+          _controllers['lastName']?.text.trim() ?? '',
+        );
+        final company = escapeVCardQrText(
+          _controllers['company']?.text.trim() ?? '',
+        );
+        final job = escapeVCardQrText(
+          _controllers['job']?.text.trim() ?? '',
+        );
+        final phone = escapeVCardQrText(
+          normalizeSingleLineQrField(_controllers['phone']?.text.trim() ?? ''),
+        );
+        final email = escapeVCardQrText(
+          normalizeSingleLineQrField(_controllers['email']?.text.trim() ?? ''),
+        );
+        final web = escapeVCardQrText(
+          normalizeSingleLineQrField(
+            _controllers['website']?.text.trim() ?? '',
+          ),
+        );
+        final addr = escapeVCardQrText(
+          _controllers['address']?.text.trim() ?? '',
+        );
+        final city = escapeVCardQrText(
+          _controllers['city']?.text.trim() ?? '',
+        );
+        final country = escapeVCardQrText(
+          _controllers['country']?.text.trim() ?? '',
+        );
         return 'BEGIN:VCARD\nVERSION:3.0\nN:$last;$first\nORG:$company\nTITLE:$job\nTEL:$phone\nEMAIL:$email\nURL:$web\nADR:;;$addr;$city;;;$country\nEND:VCARD';
       case QROptionType.business:
-        final company = _controllers['company']?.text.trim() ?? '';
-        final phone = _controllers['phone']?.text.trim() ?? '';
-        final email = _controllers['email']?.text.trim() ?? '';
-        final web = _controllers['website']?.text.trim() ?? '';
-        final addr = _controllers['address']?.text.trim() ?? '';
-        final city = _controllers['city']?.text.trim() ?? '';
-        final country = _controllers['country']?.text.trim() ?? '';
+        final company = escapeVCardQrText(
+          _controllers['company']?.text.trim() ?? '',
+        );
+        final phone = escapeVCardQrText(
+          normalizeSingleLineQrField(_controllers['phone']?.text.trim() ?? ''),
+        );
+        final email = escapeVCardQrText(
+          normalizeSingleLineQrField(_controllers['email']?.text.trim() ?? ''),
+        );
+        final web = escapeVCardQrText(
+          normalizeSingleLineQrField(
+            _controllers['website']?.text.trim() ?? '',
+          ),
+        );
+        final addr = escapeVCardQrText(
+          _controllers['address']?.text.trim() ?? '',
+        );
+        final city = escapeVCardQrText(
+          _controllers['city']?.text.trim() ?? '',
+        );
+        final country = escapeVCardQrText(
+          _controllers['country']?.text.trim() ?? '',
+        );
         return 'BEGIN:VCARD\nVERSION:3.0\nORG:$company\nTEL:$phone\nEMAIL:$email\nURL:$web\nADR:;;$addr;$city;;;$country\nEND:VCARD';
       case QROptionType.location:
-        final lat = _controllers['latitude']?.text.trim() ?? '0';
-        final lng = _controllers['longitude']?.text.trim() ?? '0';
+        final lat = normalizeSingleLineQrField(
+          _controllers['latitude']?.text.trim() ?? '0',
+        );
+        final lng = normalizeSingleLineQrField(
+          _controllers['longitude']?.text.trim() ?? '0',
+        );
         return 'geo:$lat,$lng';
     }
   }

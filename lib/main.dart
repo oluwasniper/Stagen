@@ -297,7 +297,6 @@ class _MyAppState extends ConsumerState<MyApp> {
     final payload = {
       'type': classification.type.name,
       'prefill': classification.prefill,
-      'sourceText': text,
       'source': 'process_text',
     };
 

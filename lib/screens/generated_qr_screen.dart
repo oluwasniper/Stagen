@@ -68,6 +68,7 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
   }
 
   Future<void> _shareQrImage(String label) async {
+    File? file;
     try {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
@@ -76,7 +77,7 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
       if (!await shareDir.exists()) {
         await shareDir.create(recursive: true);
       }
-      final file = File(
+      file = File(
         '${shareDir.path}/qr_code_${DateTime.now().microsecondsSinceEpoch}.png',
       );
       await file.writeAsBytes(bytes);
@@ -97,6 +98,12 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
     } catch (e, st) {
       dev.log('[GeneratedQRScreen] share failed: $e',
           stackTrace: st, name: 'GeneratedQRScreen');
+    } finally {
+      try {
+        if (file != null && await file.exists()) {
+          await file.delete();
+        }
+      } catch (_) {}
     }
   }
 
