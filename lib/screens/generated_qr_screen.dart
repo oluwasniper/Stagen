@@ -103,7 +103,13 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
         if (file != null && await file.exists()) {
           await file.delete();
         }
-      } catch (_) {}
+      } catch (e, st) {
+        dev.log(
+          '[GeneratedQRScreen] temp file cleanup failed: $e',
+          stackTrace: st,
+          name: 'GeneratedQRScreen',
+        );
+      }
     }
   }
 
