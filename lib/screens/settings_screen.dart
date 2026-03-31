@@ -20,32 +20,62 @@ import '../widgets/settings_list_tile.dart';
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  static const String _appUrl = AppConfig.appStoreUrl;
-  static const String _privacyUrl = AppConfig.privacyPolicyUrl;
-
-  Future<void> _rateApp() async {
-    final uri = Uri.parse(_appUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  Future<void> _rateApp(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final uri = AppConfig.appStoreUri;
+    if (uri == null || !await canLaunchUrl(uri)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.unableToOpenContent)),
+        );
+      }
+      return;
     }
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  Future<void> _shareApp() async {
-    final uri = Uri.parse(
-        'https://wa.me/?text=${Uri.encodeComponent('Check out Scagen! $_appUrl')}');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  Future<void> _shareApp(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final appStoreUri = AppConfig.appStoreUri;
+    if (appStoreUri == null) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.unableToOpenContent)),
+        );
+      }
+      return;
     }
+
+    final uri = Uri.https('wa.me', '/', {
+      'text': 'Check out Scagen! ${appStoreUri.toString()}',
+    });
+    if (!await canLaunchUrl(uri)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.unableToOpenContent)),
+        );
+      }
+      return;
+    }
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  Future<void> _openPrivacyPolicy() async {
-    final uri = Uri.parse(_privacyUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  Future<void> _openPrivacyPolicy(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final uri = AppConfig.privacyPolicyUri;
+    if (uri == null || !await canLaunchUrl(uri)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.unableToOpenContent)),
+        );
+      }
+      return;
     }
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  Future<void> _confirmDeleteAccount(BuildContext context, WidgetRef ref) async {
+  Future<void> _confirmDeleteAccount(
+      BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
@@ -83,7 +113,8 @@ class SettingsScreen extends ConsumerWidget {
       );
     } else {
       final authState = ref.read(authProvider);
-      final message = localizeApiError(l10n, authState.errorType, authState.error);
+      final message =
+          localizeApiError(l10n, authState.errorType, authState.error);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
@@ -323,7 +354,7 @@ class SettingsScreen extends ConsumerWidget {
         title: AppLocalizations.of(context).rateUs,
         subtitle: AppLocalizations.of(context).rateUsDesc,
         iconData: Icons.check_circle_rounded,
-        onTap: _rateApp,
+        onTap: () => _rateApp(context),
       ),
       const SizedBox(height: 20),
       SettingsListTile(
@@ -332,7 +363,7 @@ class SettingsScreen extends ConsumerWidget {
         title: AppLocalizations.of(context).shareBtn,
         subtitle: AppLocalizations.of(context).shareDesc,
         iconData: Icons.share_rounded,
-        onTap: _shareApp,
+        onTap: () => _shareApp(context),
       ),
       const SizedBox(height: 20),
       SettingsListTile(
@@ -341,7 +372,7 @@ class SettingsScreen extends ConsumerWidget {
         title: AppLocalizations.of(context).privacyPolicy,
         subtitle: AppLocalizations.of(context).privacyPolicyDesc,
         iconData: Icons.privacy_tip_rounded,
-        onTap: _openPrivacyPolicy,
+        onTap: () => _openPrivacyPolicy(context),
       ),
       const SizedBox(height: 50),
       Text(

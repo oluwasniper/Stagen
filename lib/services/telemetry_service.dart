@@ -71,9 +71,12 @@ abstract final class TelemetryEvents {
   // In-App Notifications
   static const String inAppNotificationShown = 'in_app_notification_shown';
   static const String inAppNotificationTapped = 'in_app_notification_tapped';
-  static const String inAppNotificationDismissed = 'in_app_notification_dismissed';
-  static const String inAppNotificationInboxOpened = 'in_app_notification_inbox_opened';
-  static const String inAppNotificationMarkedRead = 'in_app_notification_marked_read';
+  static const String inAppNotificationDismissed =
+      'in_app_notification_dismissed';
+  static const String inAppNotificationInboxOpened =
+      'in_app_notification_inbox_opened';
+  static const String inAppNotificationMarkedRead =
+      'in_app_notification_marked_read';
   static const String inAppNotificationCleared = 'in_app_notification_cleared';
 }
 
@@ -156,9 +159,17 @@ final telemetryServiceProvider = Provider<TelemetryService>((ref) {
 /// or [SettingsNotifier] are initialised.
 Future<void> initPostHog() async {
   if (AppConfig.posthogApiKey.isEmpty) return;
+  final posthogHostUri = AppConfig.posthogHostUri;
+  if (posthogHostUri == null) {
+    dev.log(
+      '[TelemetryService] invalid POSTHOG_HOST; skipping analytics initialization.',
+      name: 'TelemetryService',
+    );
+    return;
+  }
 
   final config = PostHogConfig(AppConfig.posthogApiKey)
-    ..host = AppConfig.posthogHost
+    ..host = posthogHostUri.toString()
     ..debug = false
     ..captureApplicationLifecycleEvents = false;
 
