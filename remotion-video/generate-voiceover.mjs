@@ -6,6 +6,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ENV_KEY = "ELEVENLABS_API_KEY";
+const MAX_ENV_VALUE_LENGTH = 512;
 
 // ── Load API key from root .env ───────────────────────────────────────────────
 const envPath = path.resolve(__dirname, "../.env");
@@ -16,10 +18,13 @@ if (!fs.existsSync(envPath)) {
 const envContent = fs.readFileSync(envPath, "utf8");
 const match = envContent.match(/^ELEVENLABS_API_KEY=(.+)$/m);
 if (!match) {
-  console.error("ELEVENLABS_API_KEY not found in ../.env");
+  console.error(`${ENV_KEY} not found in ../.env`);
   process.exit(1);
 }
-const API_KEY = match[1].trim();
+const API_KEY = match[1]
+  .trim()
+  .replace(/^['"]|['"]$/g, "")
+  .slice(0, MAX_ENV_VALUE_LENGTH);
 
 // ── Narration script (~52 words, ~23s at calm pace) ──────────────────────────
 // Timed to match the 6 scenes:

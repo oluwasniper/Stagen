@@ -9,6 +9,8 @@ import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
+const ENV_KEY = "ELEVENLABS_API_KEY";
+const MAX_ENV_VALUE_LENGTH = 512;
 
 function loadEnv() {
   const candidates = [
@@ -17,23 +19,22 @@ function loadEnv() {
   ];
   for (const p of candidates) {
     if (existsSync(p)) {
-      readFileSync(p, "utf8")
-        .split("\n")
-        .forEach((line) => {
-          const [k, ...rest] = line.split("=");
-          if (k && rest.length && !process.env[k.trim()]) {
-            process.env[k.trim()] = rest.join("=").trim();
-          }
-        });
+      const match = readFileSync(p, "utf8").match(
+        /^ELEVENLABS_API_KEY=(.+)$/m,
+      );
+      const value = match?.[1]?.trim().replace(/^['"]|['"]$/g, "");
+      if (value && !process.env[ENV_KEY]) {
+        process.env[ENV_KEY] = value.slice(0, MAX_ENV_VALUE_LENGTH);
+      }
     }
   }
 }
 
 loadEnv();
 
-const API_KEY = process.env.ELEVENLABS_API_KEY;
+const API_KEY = process.env[ENV_KEY];
 if (!API_KEY) {
-  console.error("Missing ELEVENLABS_API_KEY. Add it to .env");
+  console.error(`Missing ${ENV_KEY}. Add it to .env`);
   process.exit(1);
 }
 

@@ -362,7 +362,7 @@
         <form id="delete-form" action="https://formspree.io/f/mwvwlkgq" method="POST">
           <div class="form-field">
             <label for="email">Email address *</label>
-            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" maxlength="254" required>
           </div>
 
           <div class="form-field">
@@ -378,7 +378,7 @@
 
           <div class="form-field">
             <label for="message">Additional details (optional)</label>
-            <textarea id="message" name="message" placeholder="Anything else you'd like us to know…"></textarea>
+            <textarea id="message" name="message" placeholder="Anything else you'd like us to know…" maxlength="1000"></textarea>
           </div>
 
           <input type="hidden" name="_subject" value="Account deletion request — Scagen">
@@ -479,6 +479,8 @@
           method: 'POST',
           body: new FormData(form),
           headers: { Accept: 'application/json' },
+          credentials: 'omit',
+          referrerPolicy: 'no-referrer',
         });
 
         if (res.ok) {
