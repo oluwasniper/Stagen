@@ -130,6 +130,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     final authState = ref.read(authProvider);
     if (authState.isAuthenticated && authState.user != null) {
       final userId = authState.user!.$id;
+      unawaited(_messagingService.initFcm(userId));
       _messagingService.subscribeToUserNotifications(userId);
       unawaited(_messagingService.loadExistingNotifications(userId));
     }
@@ -138,6 +139,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     _authListener = ref.listenManual(authProvider, (previous, next) {
       if (next.isAuthenticated && next.user != null) {
         final userId = next.user!.$id;
+        unawaited(_messagingService.initFcm(userId));
         _messagingService.subscribeToUserNotifications(userId);
         unawaited(_messagingService.loadExistingNotifications(userId));
       } else if (!(next.isAuthenticated)) {
