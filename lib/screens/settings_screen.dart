@@ -47,7 +47,7 @@ class SettingsScreen extends ConsumerWidget {
     }
 
     final uri = Uri.https('wa.me', '/', {
-      'text': 'Check out Scagen! ${appStoreUri.toString()}',
+      'text': l10n.shareAppMessage(appStoreUri.toString()),
     });
     if (!await canLaunchUrl(uri)) {
       if (context.mounted) {

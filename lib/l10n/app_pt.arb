@@ -55,6 +55,15 @@
     "rateUsDesc": "Sua melhor recompensa para nós",
     "shareApp": "Compartilhar",
     "shareDesc": "Compartilhe o aplicativo com outras pessoas.",
+    "shareAppMessage": "Confira o Scagen! {url}",
+    "@shareAppMessage": {
+        "description": "Mensagem usada ao compartilhar o link do aplicativo",
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
     "privacyPolicy": "Política de Privacidade",
     "privacyPolicyDesc": "Siga nossas políticas que beneficiam você",
 

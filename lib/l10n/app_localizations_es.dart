@@ -157,6 +157,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shareDesc => 'Compartir aplicación con otras personas.';
 
   @override
+  String shareAppMessage(String url) {
+    return '¡Descubre Scagen! $url';
+  }
+
+  @override
   String get privacyPolicy => 'Política de Privacidad';
 
   @override

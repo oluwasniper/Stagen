@@ -390,6 +390,12 @@ abstract class AppLocalizations {
   /// **'Share app with others.'**
   String get shareDesc;
 
+  /// Message used when sharing the app link
+  ///
+  /// In en, this message translates to:
+  /// **'Check out Scagen! {url}'**
+  String shareAppMessage(String url);
+
   /// Button to view the privacy policy
   ///
   /// In en, this message translates to:

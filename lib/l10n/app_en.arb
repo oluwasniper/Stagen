@@ -213,6 +213,15 @@
     "@shareDesc":{
         "description": "Description to share the app"
     },
+    "shareAppMessage": "Check out Scagen! {url}",
+    "@shareAppMessage": {
+        "description": "Message used when sharing the app link",
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
 
     "privacyPolicy": "Privacy Policy",
     "@privacyPolicy":{
