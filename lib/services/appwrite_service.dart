@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:appwrite/appwrite.dart';
 
 import '../models/qr_record.dart';
