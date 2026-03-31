@@ -11,6 +11,7 @@ import { fileURLToPath } from "url";
 const __dir = dirname(fileURLToPath(import.meta.url));
 const ENV_KEY = "ELEVENLABS_API_KEY";
 const MAX_ENV_VALUE_LENGTH = 512;
+const REQUEST_TIMEOUT_MS = 15_000;
 
 function loadEnv() {
   const candidates = [
@@ -22,7 +23,10 @@ function loadEnv() {
       const match = readFileSync(p, "utf8").match(
         /^ELEVENLABS_API_KEY=(.+)$/m,
       );
-      const value = match?.[1]?.trim().replace(/^['"]|['"]$/g, "");
+      const value = match?.[1]
+        ?.split("#")[0]
+        ?.trim()
+        .replace(/^['"]|['"]$/g, "");
       if (value && !process.env[ENV_KEY]) {
         process.env[ENV_KEY] = value.slice(0, MAX_ENV_VALUE_LENGTH);
       }
@@ -50,7 +54,8 @@ Everything saved offline. Always there when you need it.
 
 Free. Open source. Download Scagen today.`;
 
-// Voice: Adam — deep, warm narrator
+// Reuse Adam for short-form spots so the short and long cuts keep the same
+// narrator identity, with slightly punchier settings below for faster delivery.
 const VOICE_ID = "pNInz6obpgDQGcFmaJgB";
 
 async function generate() {
@@ -65,6 +70,7 @@ async function generate() {
         "Content-Type": "application/json",
         Accept: "audio/mpeg",
       },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       body: JSON.stringify({
         text: SCRIPT,
         model_id: "eleven_turbo_v2_5",
