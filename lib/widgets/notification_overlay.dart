@@ -7,6 +7,7 @@ import '../models/app_notification.dart';
 import '../providers/notification_provider.dart';
 import '../services/in_app_notification_service.dart';
 import '../utils/app_router.dart';
+import '../utils/notification_style.dart';
 import '../utils/route/app_path.dart';
 
 /// Wraps any subtree and shows auto-dismissing notification banners on top.
@@ -137,8 +138,9 @@ class _NotificationOverlayState extends ConsumerState<NotificationOverlay> {
 }
 
 class _BannerEntry {
-  _BannerEntry({required this.notification})
-      : id = DateTime.now().microsecondsSinceEpoch.toString();
+  _BannerEntry({required this.notification}) : id = (_nextId++).toString();
+
+  static int _nextId = 0;
 
   final String id;
   final AppNotification notification;
@@ -187,25 +189,11 @@ class _NotificationBannerState extends State<_NotificationBanner>
     super.dispose();
   }
 
-  Color _accentColor(NotificationType type) => switch (type) {
-        NotificationType.success => const Color(0xff22C55E),
-        NotificationType.warning => const Color(0xffF59E0B),
-        NotificationType.error => const Color(0xffEF4444),
-        NotificationType.info => const Color(0xff3B82F6),
-      };
-
-  IconData _icon(NotificationType type) => switch (type) {
-        NotificationType.success => Icons.check_circle_outline,
-        NotificationType.warning => Icons.warning_amber_outlined,
-        NotificationType.error => Icons.error_outline,
-        NotificationType.info => Icons.info_outline,
-      };
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final accent = _accentColor(widget.notification.type);
+    final accent = NotificationStyle.accentColor(widget.notification.type);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -232,7 +220,7 @@ class _NotificationBannerState extends State<_NotificationBanner>
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(_icon(widget.notification.type),
+                    Icon(NotificationStyle.icon(widget.notification.type),
                         color: accent, size: 20),
                     const SizedBox(width: 10),
                     Expanded(

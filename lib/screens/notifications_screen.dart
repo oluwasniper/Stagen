@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/app_notification.dart';
 import '../providers/notification_provider.dart';
 import '../utils/app_router.dart';
+import '../utils/notification_style.dart';
 
 class NotificationsScreen extends ConsumerWidget {
   const NotificationsScreen({super.key});
@@ -41,13 +42,16 @@ class NotificationsScreen extends ConsumerWidget {
           : ListView.separated(
               padding: const EdgeInsets.symmetric(vertical: 8),
               itemCount: notifications.length,
-              separatorBuilder: (_, __) => const Divider(height: 1, indent: 16, endIndent: 16),
+              separatorBuilder: (_, __) =>
+                  const Divider(height: 1, indent: 16, endIndent: 16),
               itemBuilder: (context, index) {
                 final notification = notifications[index];
                 return _NotificationTile(
                   notification: notification,
                   onTap: () {
-                    ref.read(notificationProvider.notifier).markRead(notification.id);
+                    ref
+                        .read(notificationProvider.notifier)
+                        .markRead(notification.id);
                     final route = notification.actionRoute;
                     if (route != null &&
                         route.startsWith('/') &&
@@ -56,7 +60,9 @@ class NotificationsScreen extends ConsumerWidget {
                     }
                   },
                   onDismiss: () {
-                    ref.read(notificationProvider.notifier).dismiss(notification.id);
+                    ref
+                        .read(notificationProvider.notifier)
+                        .dismiss(notification.id);
                   },
                 );
               },
@@ -69,7 +75,8 @@ class NotificationsScreen extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Clear all notifications?'),
-        content: const Text('This will remove all notifications from your inbox.'),
+        content:
+            const Text('This will remove all notifications from your inbox.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
@@ -137,7 +144,8 @@ class _NotificationTile extends StatelessWidget {
                           child: Text(
                             notification.title,
                             style: theme.textTheme.titleSmall?.copyWith(
-                              fontWeight: isUnread ? FontWeight.w700 : FontWeight.w500,
+                              fontWeight:
+                                  isUnread ? FontWeight.w700 : FontWeight.w500,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -209,12 +217,8 @@ class _TypeIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (icon, color) = switch (type) {
-      NotificationType.success => (Icons.check_circle_outline, const Color(0xff22C55E)),
-      NotificationType.warning => (Icons.warning_amber_outlined, const Color(0xffF59E0B)),
-      NotificationType.error   => (Icons.error_outline, const Color(0xffEF4444)),
-      NotificationType.info    => (Icons.info_outline, const Color(0xff3B82F6)),
-    };
+    final icon = NotificationStyle.icon(type);
+    final color = NotificationStyle.accentColor(type);
     return Icon(icon, color: color, size: 22);
   }
 }
