@@ -156,6 +156,7 @@
     "validationTelegramInvalid": "Digite um usuário do Telegram ou link t.me válido",
     "validationLinkedinRequired": "O perfil do LinkedIn é obrigatório",
     "validationLinkedinInvalid": "Digite uma URL ou usuário do LinkedIn válido",
+    "validationInvalidInput": "Digite um valor válido",
     "locationUseCurrentLocation": "Usar localização atual",
     "locationGettingCurrentLocation": "Obtendo localização...",
     "locationOrDivider": "OU",
@@ -257,5 +258,7 @@
     "openUrlWarningBody": "Este link veio de um código QR. Certifique-se de confiar nele antes de continuar.\n\n{url}",
     "openUrlWarningInsecure": "⚠ Este link usa HTTP não criptografado. Seus dados podem estar visíveis para outros.",
     "openUrlWarningConfirm": "Abrir",
-    "openUrlWarningCancel": "Cancelar"
+    "openUrlWarningCancel": "Cancelar",
+    "authNetworkError": "Erro de rede. Verifique sua conexão com a internet e tente novamente.",
+    "authGenericError": "Algo deu errado. Por favor, tente novamente."
 }

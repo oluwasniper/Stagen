@@ -78,17 +78,16 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   void _showError(String message, [String? errorType]) {
     final l10n = AppLocalizations.of(context);
 
-    // Strip Appwrite exception wrapper for a fallback message
-    String fallback = message;
-    if (fallback.contains('AppwriteException:')) {
-      fallback = fallback.split('AppwriteException:').last.trim();
-      fallback = fallback.replaceAll(RegExp(r'\s*\(\d+\)\s*$'), '');
-      // Remove the error type prefix (e.g. "user_already_exists, ")
-      fallback = fallback.replaceAll(RegExp(r'^[a-z_]+,\s*'), '');
-    }
-    if (fallback.contains('Failed host lookup')) {
-      fallback =
-          'Network error: unable to reach Appwrite host. Check internet/DNS and APPWRITE_ENDPOINT.';
+    // Derive a safe fallback that does NOT expose raw server exception strings.
+    // Network errors get a specific hint; everything else gets a generic message
+    // to avoid leaking Appwrite internals (error types, codes, server text).
+    final String fallback;
+    if (message.contains('Failed host lookup') ||
+        message.contains('SocketException') ||
+        message.contains('NetworkException')) {
+      fallback = l10n.authNetworkError;
+    } else {
+      fallback = l10n.authGenericError;
     }
 
     final localized = localizeApiError(l10n, errorType, fallback);

@@ -888,6 +888,12 @@ abstract class AppLocalizations {
   /// **'Enter a valid LinkedIn profile URL or username'**
   String get validationLinkedinInvalid;
 
+  /// Generic validation error for invalid QR form input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid value'**
+  String get validationInvalidInput;
+
   /// Button label to use the device current location
   ///
   /// In en, this message translates to:
@@ -1361,6 +1367,14 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get openUrlWarningCancel;
+
+  /// In en, this message translates to:
+  /// **'Network error. Check your internet connection and try again.'**
+  String get authNetworkError;
+
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get authGenericError;
 }
 
 class _AppLocalizationsDelegate

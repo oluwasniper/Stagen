@@ -412,6 +412,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Digite uma URL ou usuário do LinkedIn válido';
 
   @override
+  String get validationInvalidInput => 'Digite um valor válido';
+
+  @override
   String get locationUseCurrentLocation => 'Usar localização atual';
 
   @override
@@ -669,4 +672,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get openUrlWarningCancel => 'Cancelar';
+
+  @override
+  String get authNetworkError => 'Erro de rede. Verifique sua conexão com a internet e tente novamente.';
+
+  @override
+  String get authGenericError => 'Algo deu errado. Por favor, tente novamente.';
 }

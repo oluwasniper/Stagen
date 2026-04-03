@@ -610,6 +610,10 @@
     "@validationLinkedinInvalid": {
         "description": "Validation error when LinkedIn input is invalid"
     },
+    "validationInvalidInput": "Enter a valid value",
+    "@validationInvalidInput": {
+        "description": "Generic validation error for invalid QR form input"
+    },
     "locationUseCurrentLocation": "Use Current Location",
     "@locationUseCurrentLocation": {
         "description": "Button label to use the device current location"
@@ -940,5 +944,13 @@
     "openUrlWarningCancel": "Cancel",
     "@openUrlWarningCancel": {
         "description": "Cancel button in the phishing-warning dialog"
+    },
+    "authNetworkError": "Network error. Check your internet connection and try again.",
+    "@authNetworkError": {
+        "description": "Shown when authentication fails due to a network/DNS issue"
+    },
+    "authGenericError": "Something went wrong. Please try again.",
+    "@authGenericError": {
+        "description": "Generic auth error shown when no specific localisation matches"
     }
 }
