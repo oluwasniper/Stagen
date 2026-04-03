@@ -15,15 +15,11 @@ if (localPropertiesFile.exists()) {
 
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
-if (!keystorePropertiesFile.exists()) {
-    throw new RuntimeException(
-        "key.properties not found at ${keystorePropertiesFile.absolutePath}.\n" +
-        "Create it with keyAlias, keyPassword, storeFile, and storePassword entries.\n" +
-        "See android/key.properties.example for the required format."
-    )
-}
-keystorePropertiesFile.withReader('UTF-8') { reader ->
-    keystoreProperties.load(reader)
+def hasKeystore = keystorePropertiesFile.exists()
+if (hasKeystore) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -42,11 +38,13 @@ android {
     ndkVersion = "27.0.12077973"
 
     signingConfigs {
-        release {
-            keyAlias keystoreProperties.getProperty('keyAlias')
-            keyPassword keystoreProperties.getProperty('keyPassword')
-            storeFile keystoreProperties.getProperty('storeFile') ? rootProject.file(keystoreProperties.getProperty('storeFile')) : null
-            storePassword keystoreProperties.getProperty('storePassword')
+        if (hasKeystore) {
+            release {
+                keyAlias keystoreProperties.getProperty('keyAlias')
+                keyPassword keystoreProperties.getProperty('keyPassword')
+                storeFile keystoreProperties.getProperty('storeFile') ? rootProject.file(keystoreProperties.getProperty('storeFile')) : null
+                storePassword keystoreProperties.getProperty('storePassword')
+            }
         }
     }
 
@@ -74,7 +72,23 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            // Only attach the release signing config when a keystore is present.
+            // Without this guard, a missing key.properties causes Gradle to fall
+            // back to the debug key silently — producing a release build signed
+            // with the wrong certificate.
+            if (hasKeystore && signingConfigs.findByName('release') != null) {
+                signingConfig signingConfigs.release
+            }
+            // Shrink and obfuscate the release binary. This reduces the APK size
+            // and makes reverse-engineering significantly harder.
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            // Never attach a release signing config to debug builds.
+            minifyEnabled false
+            shrinkResources false
         }
     }
 }
