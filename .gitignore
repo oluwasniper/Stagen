@@ -52,6 +52,7 @@ app.*.map.json
 .env
 .env.local
 .env.*.local
+.codemagic.env
 *.env
 !.env.example
 /android/key.properties

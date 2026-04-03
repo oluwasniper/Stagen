@@ -49,11 +49,16 @@ workflows:
           fi
       - name: Build AAB
         script: |
+          umask 077
+          cat > .codemagic.env <<EOF
+          APPWRITE_ENDPOINT=$APPWRITE_ENDPOINT
+          APPWRITE_PROJECT_ID=$APPWRITE_PROJECT_ID
+          POSTHOG_API_KEY=$POSTHOG_API_KEY
+          POSTHOG_HOST=$POSTHOG_HOST
+          EOF
+          trap 'rm -f .codemagic.env' EXIT
           flutter build appbundle --release \
-            --dart-define=APPWRITE_ENDPOINT=$APPWRITE_ENDPOINT \
-            --dart-define=APPWRITE_PROJECT_ID=$APPWRITE_PROJECT_ID \
-            --dart-define=POSTHOG_API_KEY=$POSTHOG_API_KEY \
-            --dart-define=POSTHOG_HOST=$POSTHOG_HOST
+            --dart-define-from-file=.codemagic.env
     artifacts:
       - build/app/outputs/bundle/release/app-release.aab
     publishing:
@@ -92,11 +97,16 @@ workflows:
           fi
       - name: Build IPA
         script: |
+          umask 077
+          cat > .codemagic.env <<EOF
+          APPWRITE_ENDPOINT=$APPWRITE_ENDPOINT
+          APPWRITE_PROJECT_ID=$APPWRITE_PROJECT_ID
+          POSTHOG_API_KEY=$POSTHOG_API_KEY
+          POSTHOG_HOST=$POSTHOG_HOST
+          EOF
+          trap 'rm -f .codemagic.env' EXIT
           flutter build ipa --release \
-            --dart-define=APPWRITE_ENDPOINT=$APPWRITE_ENDPOINT \
-            --dart-define=APPWRITE_PROJECT_ID=$APPWRITE_PROJECT_ID \
-            --dart-define=POSTHOG_API_KEY=$POSTHOG_API_KEY \
-            --dart-define=POSTHOG_HOST=$POSTHOG_HOST
+            --dart-define-from-file=.codemagic.env
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:

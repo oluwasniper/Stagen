@@ -3,6 +3,7 @@
     android:label="Scagen"
     android:name="${applicationName}"
     android:icon="@mipmap/ic_launcher"
+    android:usesCleartextTraffic="false"
     android:allowBackup="false"
     android:fullBackupContent="@xml/full_backup_content"
     android:dataExtractionRules="@xml/data_extraction_rules">
