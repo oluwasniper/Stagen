@@ -5,6 +5,29 @@ import '../models/app_notification.dart';
 import '../providers/notification_provider.dart';
 import '../utils/app_router.dart';
 import '../utils/notification_style.dart';
+import '../utils/route/app_path.dart';
+
+/// Mirrors the allowlist in [NotificationOverlay._isAllowedRoute].
+/// Only known internal GoRouter paths are accepted; anything with a scheme
+/// or an unrecognised path is silently dropped to prevent open-redirect.
+bool _isAllowedRoute(String route) {
+  if (!route.startsWith('/') || route.contains('://')) return false;
+  final path = route.split('?').first.split('#').first;
+  return const {
+    AppPath.home,
+    AppPath.history,
+    AppPath.settings,
+    AppPath.generateHome,
+    AppPath.generateCode,
+    AppPath.notifications,
+    AppPath.scannedQR,
+    AppPath.generatedQR,
+    AppPath.showQR,
+    AppPath.historyShowQR,
+    AppPath.nestedHistoryScannedQR,
+    AppPath.nestedHistoryGeneratedQR,
+  }.any((allowed) => path == allowed || path.startsWith('$allowed/'));
+}
 
 class NotificationsScreen extends ConsumerWidget {
   const NotificationsScreen({super.key});
@@ -53,9 +76,7 @@ class NotificationsScreen extends ConsumerWidget {
                         .read(notificationProvider.notifier)
                         .markRead(notification.id);
                     final route = notification.actionRoute;
-                    if (route != null &&
-                        route.startsWith('/') &&
-                        !route.contains('://')) {
+                    if (route != null && _isAllowedRoute(route)) {
                       AppGoRouter.router.push(route);
                     }
                   },
