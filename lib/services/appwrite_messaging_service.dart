@@ -4,8 +4,9 @@ import 'dart:async';
 import 'dart:developer' as dev;
 
 import 'package:appwrite/appwrite.dart';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:uuid/uuid.dart';
 
 import '../config/app_config.dart';
 import '../models/app_notification.dart';
@@ -60,6 +61,16 @@ abstract final class _NotificationCollection {
   static const String collectionId = 'notifications';
 }
 
+// Maximum number of string-value characters accepted from a single Realtime
+// payload before we reject the event. The notification schema allows at most
+// ~2 KB of text (title 120 + body 1024 + labels + route + meta). 8 KB is a
+// generous ceiling that still prevents memory exhaustion from rogue documents.
+const int _kMaxRealtimePayloadValueLength = 8192;
+
+abstract final class _PushTargetStorageKeys {
+  static const String installationId = 'push_installation_id_v1';
+}
+
 class AppwriteMessagingService {
   AppwriteMessagingService({
     required Client client,
@@ -73,10 +84,12 @@ class AppwriteMessagingService {
   final Databases _databases;
   final Realtime _realtime;
   final TelemetryService Function() _telemetryReader;
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   RealtimeSubscription? _realtimeSubscription;
   StreamSubscription<String>? _tokenRefreshSub;
   String? _currentUserId;
+  String? _currentPushTargetId;
 
   // ── Push token registration ──────────────────────────────────────────────
 
@@ -85,23 +98,10 @@ class AppwriteMessagingService {
   /// Call this after the user signs in (or on anonymous session start) once
   /// you have obtained a token from firebase_messaging:
   ///
-  /// ```dart
-  /// final token = await FirebaseMessaging.instance.getToken();
-  /// if (token != null) {
-  ///   await messagingService.registerPushToken(
-  ///     userId: user.$id,
-  ///     token: token,
-  ///     targetId: 'device_${user.$id}', // unique per device/user combo
-  ///   );
-  /// }
-  /// ```
-  ///
-  /// [targetId] must be unique per device. Using `device_<userId>` works for
-  /// single-device users; for multi-device support use a per-installation ID.
   /// Request permission and register the FCM token with Appwrite Messaging.
   ///
   /// Call once after the user is authenticated. Safe to call on every sign-in —
-  /// Appwrite ignores duplicate [targetId] registrations.
+  /// this service derives a stable per-installation target ID and reuses it.
   Future<void> initFcm(String userId) async {
     try {
       // Request permission (iOS prompts user; Android 13+ also prompts).
@@ -134,21 +134,24 @@ class AppwriteMessagingService {
         return;
       }
 
+      final targetId = await _buildPushTargetId(userId);
       await _registerPushToken(
         userId: userId,
         token: token,
-        targetId: 'device_$userId',
+        targetId: targetId,
       );
 
       // Refresh token when FCM rotates it. Cancel any previous listener first.
       _tokenRefreshSub?.cancel();
-      _tokenRefreshSub = FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
-        _registerPushToken(
-          userId: userId,
-          token: newToken,
-          targetId: 'device_$userId',
-        );
-      });
+      _tokenRefreshSub = FirebaseMessaging.instance.onTokenRefresh.listen(
+        (newToken) {
+          _registerPushToken(
+            userId: userId,
+            token: newToken,
+            targetId: targetId,
+          );
+        },
+      );
     } catch (e, st) {
       dev.log(
         '[AppwriteMessagingService] initFcm failed: $e',
@@ -167,6 +170,7 @@ class AppwriteMessagingService {
     required String token,
     required String targetId,
   }) async {
+    _currentPushTargetId = targetId;
     if (AppConfig.messagingProviderId.isEmpty) {
       dev.log(
         '[AppwriteMessagingService] APPWRITE_MESSAGING_PROVIDER_ID is not set — '
@@ -216,6 +220,67 @@ class AppwriteMessagingService {
     }
   }
 
+  Future<String> _buildPushTargetId(String userId) async {
+    final installationId = await _getOrCreateInstallationId();
+    final sanitizedUserId = _sanitizePushTargetComponent(userId);
+    final sanitizedInstallationId =
+        _sanitizePushTargetComponent(installationId);
+    return 'device_${sanitizedUserId}_$sanitizedInstallationId';
+  }
+
+  Future<String> _getOrCreateInstallationId() async {
+    final existing = await _storage.read(
+      key: _PushTargetStorageKeys.installationId,
+    );
+    if (existing != null && existing.isNotEmpty) {
+      return existing;
+    }
+
+    final generated = const Uuid().v4().replaceAll('-', '');
+    await _storage.write(
+      key: _PushTargetStorageKeys.installationId,
+      value: generated,
+    );
+    return generated;
+  }
+
+  String _sanitizePushTargetComponent(String value) {
+    final normalized = value
+        .trim()
+        .replaceAll(RegExp(r'[^A-Za-z0-9._-]+'), '_')
+        .replaceAll(RegExp(r'_+'), '_')
+        .replaceAll(RegExp(r'^_|_$'), '');
+    if (normalized.isEmpty) return 'unknown';
+    return normalized.length <= 64 ? normalized : normalized.substring(0, 64);
+  }
+
+  Future<void> _deleteCurrentPushTarget(String targetId) async {
+    try {
+      await _account.deletePushTarget(targetId: targetId);
+      dev.log(
+        '[AppwriteMessagingService] push target deleted: $targetId',
+        name: 'AppwriteMessagingService',
+      );
+    } on AppwriteException catch (e, st) {
+      final isIgnorable = e.code == 401 ||
+          e.code == 404 ||
+          e.type == 'general_unauthorized_scope';
+      if (isIgnorable) {
+        dev.log(
+          '[AppwriteMessagingService] push target cleanup skipped: ${e.message}',
+          stackTrace: st,
+          name: 'AppwriteMessagingService',
+        );
+        return;
+      }
+      dev.log(
+        '[AppwriteMessagingService] push target cleanup failed: ${e.message}',
+        stackTrace: st,
+        name: 'AppwriteMessagingService',
+      );
+    }
+  }
+
   // ── Realtime in-app notifications ────────────────────────────────────────
 
   /// Subscribe to personalised in-app notifications for [userId].
@@ -247,6 +312,19 @@ class AppwriteMessagingService {
 
           final payload = event.payload;
           if (payload['userId']?.toString() != userId) return;
+
+          // Reject payloads containing oversized string values before parsing.
+          final hasOversizedField = payload.values.any(
+            (v) => v is String && v.length > _kMaxRealtimePayloadValueLength,
+          );
+          if (hasOversizedField) {
+            dev.log(
+              '[AppwriteMessagingService] realtime payload rejected: '
+              'field exceeds $_kMaxRealtimePayloadValueLength chars',
+              name: 'AppwriteMessagingService',
+            );
+            return;
+          }
 
           try {
             final notification = AppNotification.fromAppwrite(
@@ -290,13 +368,21 @@ class AppwriteMessagingService {
     }
   }
 
-  /// Cancel the Realtime subscription and FCM token refresh listener (call on sign-out).
-  void unsubscribe() {
+  /// Cancel the Realtime subscription and FCM token refresh listener.
+  ///
+  /// When [deletePushTarget] is true, attempt to remove the current session's
+  /// Appwrite push target as part of sign-out/account teardown.
+  void unsubscribe({bool deletePushTarget = false}) {
+    final targetId = _currentPushTargetId;
     _realtimeSubscription?.close();
     _realtimeSubscription = null;
     _tokenRefreshSub?.cancel();
     _tokenRefreshSub = null;
     _currentUserId = null;
+    _currentPushTargetId = null;
+    if (deletePushTarget && targetId != null) {
+      unawaited(_deleteCurrentPushTarget(targetId));
+    }
   }
 
   // ── Fetch historical notifications ───────────────────────────────────────
