@@ -1368,10 +1368,14 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get openUrlWarningCancel;
 
+  /// Shown when authentication fails due to a network/DNS issue
+  ///
   /// In en, this message translates to:
   /// **'Network error. Check your internet connection and try again.'**
   String get authNetworkError;
 
+  /// Generic auth error shown when no specific localisation matches
+  ///
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get authGenericError;

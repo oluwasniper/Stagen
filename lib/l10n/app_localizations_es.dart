@@ -682,8 +682,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get openUrlWarningCancel => 'Cancelar';
 
   @override
-  String get authNetworkError => 'Error de red. Comprueba tu conexión a internet e inténtalo de nuevo.';
+  String get authNetworkError =>
+      'Error de red. Comprueba tu conexión a internet e inténtalo de nuevo.';
 
   @override
-  String get authGenericError => 'Algo salió mal. Por favor, inténtalo de nuevo.';
+  String get authGenericError =>
+      'Algo salió mal. Por favor, inténtalo de nuevo.';
 }

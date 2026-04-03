@@ -670,7 +670,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openUrlWarningCancel => 'Cancel';
 
   @override
-  String get authNetworkError => 'Network error. Check your internet connection and try again.';
+  String get authNetworkError =>
+      'Network error. Check your internet connection and try again.';
 
   @override
   String get authGenericError => 'Something went wrong. Please try again.';

@@ -676,8 +676,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get openUrlWarningCancel => 'Annuler';
 
   @override
-  String get authNetworkError => 'Erreur réseau. Vérifiez votre connexion internet et réessayez.';
+  String get authNetworkError =>
+      'Erreur réseau. Vérifiez votre connexion internet et réessayez.';
 
   @override
-  String get authGenericError => 'Une erreur s\'est produite. Veuillez réessayer.';
+  String get authGenericError =>
+      'Une erreur s\'est produite. Veuillez réessayer.';
 }
