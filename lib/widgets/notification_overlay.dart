@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/app_notification.dart';
+import '../providers/auth_provider.dart';
 import '../providers/notification_provider.dart';
 import '../services/in_app_notification_service.dart';
 import '../utils/app_router.dart';
@@ -36,12 +37,21 @@ class _NotificationOverlayState extends ConsumerState<NotificationOverlay> {
   static const int _maxActiveBanners = 3;
 
   StreamSubscription<AppNotification>? _sub;
+  ProviderSubscription<AuthState>? _authSub;
   final List<_BannerEntry> _active = [];
 
   @override
   void initState() {
     super.initState();
     _sub = InAppNotificationService.instance.bannerStream.listen(_onBanner);
+    _authSub = ref.listenManual(authProvider, (previous, next) {
+      final previousUserId = previous?.user?.$id;
+      final nextUserId = next.user?.$id;
+      final shouldClear =
+          previousUserId != nextUserId || previous?.status != next.status;
+      if (!shouldClear || !mounted || _active.isEmpty) return;
+      setState(_active.clear);
+    });
   }
 
   void _onBanner(AppNotification notification) {
@@ -92,6 +102,7 @@ class _NotificationOverlayState extends ConsumerState<NotificationOverlay> {
   @override
   void dispose() {
     _sub?.cancel();
+    _authSub?.close();
     super.dispose();
   }
 

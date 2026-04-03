@@ -137,13 +137,19 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     // React to future sign-in / sign-out events.
     _authListener = ref.listenManual(authProvider, (previous, next) {
+      final previousUserId = previous?.user?.$id;
+      final nextUserId = next.user?.$id;
+      if (previousUserId != nextUserId) {
+        ref.read(notificationProvider.notifier).clearAll();
+      }
+
       if (next.isAuthenticated && next.user != null) {
         final userId = next.user!.$id;
         unawaited(_messagingService.initFcm(userId));
         _messagingService.subscribeToUserNotifications(userId);
         unawaited(_messagingService.loadExistingNotifications(userId));
       } else if (!(next.isAuthenticated)) {
-        _messagingService.unsubscribe();
+        _messagingService.unsubscribe(deletePushTarget: true);
       }
     });
   }
