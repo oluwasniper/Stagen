@@ -1,6 +1,6 @@
 # Models Directory
 
-This directory contains the data models used in the `revolutionary_stuff` project. Each model represents a specific entity and its attributes, which are used throughout the application.
+This directory contains the data models used in the `scagen` project. Each model represents a specific entity and its attributes, which are used throughout the application.
 
 ## Contents
 
@@ -13,9 +13,9 @@ This directory contains the data models used in the `revolutionary_stuff` projec
 To use any of these models, simply import the desired model file into your Dart code:
 
 ```dart
-import 'package:revolutionary_stuff/models/user.dart';
-import 'package:revolutionary_stuff/models/product.dart';
-import 'package:revolutionary_stuff/models/order.dart';
+import 'package:scagen/models/user.dart';
+import 'package:scagen/models/product.dart';
+import 'package:scagen/models/order.dart';
 ```
 
 ## Contributing

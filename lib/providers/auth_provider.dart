@@ -215,6 +215,58 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Delete all user data and block the account, then sign out.
+  ///
+  /// Returns an error string if the operation fails, or null on success.
+  Future<String?> deleteAccount() async {
+    final user = state.user;
+    state = state.copyWith(status: AuthStatus.loading);
+
+    try {
+      // 1. Delete all user data first (while we still have a valid session).
+      //    This covers QR records and in-app notification documents so that
+      //    no PII lingers after the account is blocked (GDPR erasure).
+      if (user != null) {
+        final appwriteService = _ref.read(appwriteServiceProvider);
+        await Future.wait([
+          appwriteService.deleteAllUserData(user.$id),
+          appwriteService.deleteAllUserNotifications(user.$id),
+        ]);
+      }
+
+      // 2. Track deletion intent (errors here must not block the deletion).
+      try {
+        _telemetry.track(TelemetryEvents.authAccountDeleted);
+      } catch (_) {}
+
+      // 3. Block account + delete session.
+      await _authService.blockAndDeleteAccount();
+
+      // 4. Reset telemetry identity only after successful deletion.
+      try {
+        _telemetry.reset();
+      } catch (_) {}
+
+      // 5. Invalidate cached history.
+      _ref.invalidate(scannedHistoryProvider);
+      _ref.invalidate(generatedHistoryProvider);
+
+      state = const AuthState(status: AuthStatus.unauthenticated);
+      return null;
+    } catch (e) {
+      try {
+        _telemetry.track(TelemetryEvents.authError,
+            properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
+      } catch (_) {}
+      state = state.copyWith(
+        status: AuthStatus.authenticated,
+        error: e.toString(),
+        errorType: appwriteErrorType(e),
+      );
+      return e.toString();
+    }
+  }
+
   /// Sign out and clear state.
   Future<void> signOut() async {
     final previousUser = state.user;

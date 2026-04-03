@@ -12,6 +12,7 @@ import '../screens/history_screen.dart';
 import '../screens/onboarding.dart';
 import '../screens/scan_home_screen.dart';
 import '../screens/scanned_qr_screen.dart';
+import '../screens/notifications_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/splash_screen.dart';
 import '../widgets/generate_qr_widget.dart';
@@ -380,6 +381,16 @@ class AppGoRouter {
         name: PathName.settings,
         pageBuilder: (context, state) => getPage(
           child: SettingsScreen(),
+          state: state,
+        ),
+        parentNavigatorKey: mainNavigatorKey,
+      ),
+
+      GoRoute(
+        path: AppPath.notifications,
+        name: PathName.notifications,
+        pageBuilder: (context, state) => getPage(
+          child: const NotificationsScreen(),
           state: state,
         ),
         parentNavigatorKey: mainNavigatorKey,

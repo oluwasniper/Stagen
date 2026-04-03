@@ -21,4 +21,5 @@ class AppPath {
   static const String historyShowQR = '$history$showQR';
   static const String generatedQRResult = '/generatedQRResult';
   static const String scannedQRResult = '/scannedQRResult';
+  static const String notifications = '/notifications';
 }

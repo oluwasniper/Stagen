@@ -17,6 +17,7 @@ import '../providers/qr_providers.dart';
 import '../services/telemetry_service.dart';
 import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
+import '../utils/qr_link_utils.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
 
@@ -68,6 +69,7 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
   }
 
   Future<void> _shareQrImage(String label) async {
+    File? file;
     try {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
@@ -76,14 +78,16 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
       if (!await shareDir.exists()) {
         await shareDir.create(recursive: true);
       }
-      final file = File(
+      file = File(
         '${shareDir.path}/qr_code_${DateTime.now().microsecondsSinceEpoch}.png',
       );
       await file.writeAsBytes(bytes);
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
-          fileNameOverrides: ['${label}_qr.png'],
+          fileNameOverrides: [
+            '${sanitizeShareFileStem(label, fallback: 'generated')}_qr.png',
+          ],
         ),
       );
       if (mounted) {
@@ -97,6 +101,18 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
     } catch (e, st) {
       dev.log('[GeneratedQRScreen] share failed: $e',
           stackTrace: st, name: 'GeneratedQRScreen');
+    } finally {
+      try {
+        if (file != null && await file.exists()) {
+          await file.delete();
+        }
+      } catch (e, st) {
+        dev.log(
+          '[GeneratedQRScreen] temp file cleanup failed: $e',
+          stackTrace: st,
+          name: 'GeneratedQRScreen',
+        );
+      }
     }
   }
 

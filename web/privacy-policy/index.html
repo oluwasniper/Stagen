@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Scagen Privacy Policy — how we collect, use, and protect your data.">
+  <title>Privacy Policy — Scagen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* App dark color scheme */
+      --surface:      #1F1929;
+      --surface-high: #2A2138;
+      --surface-low:  #17121f;
+      --primary:      #FF8383;
+      --secondary:    #4D1F7C;
+      --on-surface:   #FFFFFF;
+      --on-surface-2: rgba(255,255,255,0.65);
+      --on-surface-3: rgba(255,255,255,0.35);
+      --border:       rgba(255,255,255,0.08);
+      --error:        #FF5252;
+      --radius:       16px;
+      --radius-sm:    10px;
+    }
+
+    body {
+      background: var(--surface-low);
+      color: var(--on-surface);
+      font-family: 'Inter', 'Roboto', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      padding: 0 1rem 5rem;
+    }
+
+    /* ── Top app-bar strip ── */
+    .appbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--surface-low);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 1.2rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .appbar-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--secondary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .appbar-icon svg { width: 18px; height: 18px; }
+
+    .appbar-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--on-surface);
+      letter-spacing: 0.01em;
+    }
+
+    /* ── Container ── */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding-top: 2rem;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 1.5rem 0 2rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255,131,131,0.12);
+      border: 1px solid rgba(255,131,131,0.25);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      padding: 0.3rem 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(1.7rem, 5vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--on-surface);
+      line-height: 1.2;
+    }
+
+    .hero-sub {
+      color: var(--on-surface-2);
+      font-size: 0.88rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ── Section headers ── */
+    h2 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin: 2.5rem 0 0.75rem;
+    }
+
+    /* ── Cards (mimic Material surface containers) ── */
+    .card {
+      background: var(--surface-high);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+
+    /* ── List tiles (mimic Flutter ListTile) ── */
+    .tile-list { display: flex; flex-direction: column; gap: 1px; }
+
+    .tile {
+      background: var(--surface-high);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      padding: 0.9rem 1.1rem;
+    }
+
+    .tile:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+    .tile:last-child  { border-radius: 0 0 var(--radius) var(--radius); }
+    .tile:only-child  { border-radius: var(--radius); }
+
+    .tile-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    .tile-icon svg { width: 16px; height: 16px; }
+
+    .tile-body { flex: 1; min-width: 0; }
+
+    .tile-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--on-surface);
+      margin-bottom: 0.2rem;
+    }
+
+    .tile-sub {
+      font-size: 0.82rem;
+      color: var(--on-surface-2);
+      line-height: 1.5;
+    }
+
+    .tile-sub a { color: var(--primary); text-decoration: none; }
+    .tile-sub a:hover { text-decoration: underline; }
+
+    /* ── Chip / badge ── */
+    .chip {
+      display: inline-block;
+      background: rgba(77,31,124,0.4);
+      border: 1px solid rgba(255,131,131,0.2);
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--primary);
+      padding: 0.1rem 0.55rem;
+      margin-left: 0.4rem;
+      vertical-align: middle;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Table ── */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.85rem;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-bottom: 0.75rem;
+    }
+
+    th {
+      background: var(--surface-high);
+      color: var(--on-surface-3);
+      font-weight: 600;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: left;
+      padding: 0.65rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 0.7rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--on-surface-2);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    td strong { color: var(--on-surface); font-weight: 600; }
+
+    /* ── Prose ── */
+    p { margin-bottom: 0.75rem; color: var(--on-surface-2); }
+    p strong { color: var(--on-surface); }
+
+    ul {
+      padding-left: 0;
+      list-style: none;
+      margin-bottom: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    ul li {
+      color: var(--on-surface-2);
+      padding-left: 1.1rem;
+      position: relative;
+      font-size: 0.9rem;
+    }
+
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--primary);
+      opacity: 0.7;
+    }
+
+    ul li strong { color: var(--on-surface); font-weight: 600; }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 2rem 0;
+    }
+
+    /* ── Contact card ── */
+    .contact-card {
+      background: linear-gradient(135deg, var(--secondary) 0%, #2e1250 100%);
+      border: 1px solid rgba(255,131,131,0.2);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.6rem;
+      margin-top: 1rem;
+    }
+
+    .contact-card .label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 0.3rem;
+    }
+
+    .contact-card .value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .contact-card .value a { color: var(--primary); }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--on-surface-3);
+    }
+
+    footer a { color: var(--on-surface-3); }
+    footer a:hover { color: var(--primary); }
+
+    /* ── Mobile table fallback ── */
+    @media (max-width: 480px) {
+      table, thead, tbody, th, td, tr { display: block; }
+      th { display: none; }
+      td {
+        border: none;
+        border-bottom: 1px solid var(--border);
+        padding: 0.5rem 0.7rem;
+      }
+      td::before {
+        display: block;
+        content: attr(data-label);
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--on-surface-3);
+        margin-bottom: 0.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- App bar -->
+  <div class="appbar">
+    <div class="appbar-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <path d="M14 14h2v2h-2zM18 14h3M14 18h2M18 18h3v3M14 21h2"/>
+      </svg>
+    </div>
+    <span class="appbar-title">Scagen</span>
+  </div>
+
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Privacy Policy
+      </div>
+      <h1>Your data,<br>your control.</h1>
+      <p class="hero-sub">Effective 29 March 2026 &nbsp;·&nbsp; Last updated 29 March 2026</p>
+    </div>
+
+    <!-- 1. Who we are -->
+    <h2>01 &nbsp;Who We Are</h2>
+    <div class="card">
+      <p>Scagen is a QR-code scanning and generation app. Any questions about this policy can be sent to
+        <a href="mailto:christian@sonofnos.com">christian@sonofnos.com</a>.</p>
+    </div>
+
+    <!-- 2. What we collect -->
+    <h2>02 &nbsp;What We Collect</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Data</th>
+          <th>Destination</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Category"><strong>Account</strong></td>
+          <td data-label="Data">Email & password hash (registered users) or anonymous session ID (guests)</td>
+          <td data-label="Destination">Appwrite cloud (EU)</td>
+        </tr>
+        <tr>
+          <td data-label="Category"><strong>QR history</strong></td>
+          <td data-label="Data">QR codes you scan or generate, linked to your account ID</td>
+          <td data-label="Destination">Appwrite cloud (EU)</td>
+        </tr>
+        <tr>
+          <td data-label="Category"><strong>Analytics</strong> <span class="chip">opt-in</span></td>
+          <td data-label="Data">App events (screen views, taps, errors), device type, app version. Identified by opaque UUID — never name or email.</td>
+          <td data-label="Destination">PostHog (US)</td>
+        </tr>
+        <tr>
+          <td data-label="Category"><strong>Push token</strong></td>
+          <td data-label="Data">FCM/APNs device token for push notifications</td>
+          <td data-label="Destination">Appwrite + Firebase</td>
+        </tr>
+        <tr>
+          <td data-label="Category"><strong>Preferences</strong></td>
+          <td data-label="Data">Vibration, beep, language, analytics toggle — encrypted on-device only</td>
+          <td data-label="Destination">Your device only</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="card">
+      <p style="margin:0">We do <strong>not</strong> collect your name, phone number, location, or payment information.
+      Contact data imported for QR generation is processed on-device and never stored server-side.</p>
+    </div>
+
+    <!-- 3. Legal bases -->
+    <h2>03 &nbsp;Why We Collect It</h2>
+    <div class="tile-list">
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Contract performance</div>
+          <div class="tile-sub">To create and manage your account and sync your QR history across devices.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Legitimate interests</div>
+          <div class="tile-sub">To maintain app stability, diagnose crashes, and improve performance.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Consent — analytics</div>
+          <div class="tile-sub">Analytics are <strong>off by default</strong>. Enable them in <em>Settings → Privacy → Analytics</em>. Withdraw consent any time — your identity is reset immediately.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Consent — push notifications</div>
+          <div class="tile-sub">You are prompted for permission. Revoke it any time in your device settings.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Analytics -->
+    <h2>04 &nbsp;Analytics in Detail</h2>
+    <div class="card">
+      <p>When opted in, we use <strong>PostHog</strong> to collect anonymised usage events — which screens you visit, which QR types you generate, and performance metrics. We never pass your email or name to PostHog, only an opaque Appwrite user UUID.</p>
+      <p style="margin-bottom:0">On sign-out your PostHog identity is reset so sessions are not linked together. Toggle analytics any time via <em>Settings → Privacy → Analytics</em>.</p>
+    </div>
+
+    <!-- 5. Retention -->
+    <h2>05 &nbsp;Data Retention</h2>
+    <div class="tile-list">
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Account & QR history</div>
+          <div class="tile-sub">Retained while your account is active. Deleting your account removes all data from Appwrite within 30 days.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Analytics events</div>
+          <div class="tile-sub">Retained in PostHog for 1 year, then automatically deleted.</div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Push tokens</div>
+          <div class="tile-sub">Removed from Appwrite when you sign out or uninstall the app.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Third parties -->
+    <h2>06 &nbsp;Third-Party Services</h2>
+    <div class="tile-list">
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Appwrite</div>
+          <div class="tile-sub">Authentication, database, and messaging. EU (Frankfurt). <a href="https://appwrite.io/privacy" target="_blank" rel="noopener">Privacy policy →</a></div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">PostHog <span class="chip">opt-in</span></div>
+          <div class="tile-sub">Product analytics. US cloud. <a href="https://posthog.com/privacy" target="_blank" rel="noopener">Privacy policy →</a></div>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </div>
+        <div class="tile-body">
+          <div class="tile-title">Firebase (Google) &amp; APNs (Apple)</div>
+          <div class="tile-sub">Push notification delivery on Android and iOS. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google →</a> &nbsp;<a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple →</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <p style="margin:0">We do <strong>not</strong> sell your data to any third party. We do not use data brokers or advertising networks.</p>
+    </div>
+
+    <!-- 7. Your rights -->
+    <h2>07 &nbsp;Your Rights</h2>
+    <div class="card">
+      <ul>
+        <li><strong>Access</strong> the personal data we hold about you</li>
+        <li><strong>Correct</strong> inaccurate data</li>
+        <li><strong>Delete</strong> your data — visit <a href="/account-deletion">Account Deletion</a> or email us</li>
+        <li><strong>Restrict or object</strong> to processing</li>
+        <li><strong>Data portability</strong></li>
+        <li><strong>Withdraw consent</strong> at any time via the analytics toggle in Settings</li>
+        <li><strong>Lodge a complaint</strong> with your local data protection authority (EU users: your national DPA)</li>
+      </ul>
+      <p style="margin-top:0.75rem;margin-bottom:0;font-size:0.85rem;color:var(--on-surface-2)">
+        Email <a href="mailto:christian@sonofnos.com">christian@sonofnos.com</a> to exercise any of these rights. We respond within 30 days.
+      </p>
+    </div>
+
+    <!-- 8. Children -->
+    <h2>08 &nbsp;Children</h2>
+    <div class="card">
+      <p style="margin:0">Scagen is not directed at children under 13 (or under 16 in the EU/EEA). We do not knowingly collect data from children. Contact us if you believe a child has provided personal data and we will delete it promptly.</p>
+    </div>
+
+    <!-- 9. Security -->
+    <h2>09 &nbsp;Security</h2>
+    <div class="card">
+      <p style="margin:0">Data in transit is encrypted via TLS. Data at rest in Appwrite is encrypted at the storage level. App preferences are stored using platform encrypted storage (Android Keystore / iOS Secure Enclave). We follow responsible disclosure practices.</p>
+    </div>
+
+    <!-- 10. Changes -->
+    <h2>10 &nbsp;Changes to This Policy</h2>
+    <div class="card">
+      <p style="margin:0">When we update this policy we will update the date above. For material changes we will notify you via an in-app notification. Continued use after changes take effect constitutes acceptance.</p>
+    </div>
+
+    <!-- 11. Contact -->
+    <h2>11 &nbsp;Contact</h2>
+    <div class="contact-card">
+      <div class="label">Privacy enquiries</div>
+      <div class="value"><a href="mailto:christian@sonofnos.com">christian@sonofnos.com</a></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <footer>
+      &copy; 2026 Scagen &nbsp;·&nbsp;
+      <a href="/">Home</a> &nbsp;·&nbsp;
+      <a href="/account-deletion">Account Deletion</a> &nbsp;·&nbsp;
+      <a href="mailto:christian@sonofnos.com">Contact</a>
+    </footer>
+
+  </div>
+</body>
+</html>

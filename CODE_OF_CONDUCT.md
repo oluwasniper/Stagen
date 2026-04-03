@@ -24,7 +24,7 @@ We as contributors and maintainers pledge to make participation in Scagen a hara
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening a [GitHub issue](https://github.com/oluwasniper/Stagen/issues) or contacting the maintainers directly. All reports will be reviewed and investigated promptly and confidentially.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported privately to the maintainers at [conduct@scagen.app](mailto:conduct@scagen.app). All reports submitted through this private channel will be reviewed and investigated promptly and confidentially.
 
 Maintainers have the right to remove, edit, or reject comments, commits, issues, and other contributions that violate this Code of Conduct, and to temporarily or permanently ban contributors for behavior they deem inappropriate.
 

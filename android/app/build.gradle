@@ -2,6 +2,7 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
 }
 
 def localProperties = new Properties()
@@ -9,6 +10,15 @@ def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
+    }
+}
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+def hasKeystore = keystorePropertiesFile.exists()
+if (hasKeystore) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
     }
 }
 
@@ -26,6 +36,17 @@ android {
     namespace "com.scagen.app"
     compileSdk flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
+
+    signingConfigs {
+        if (hasKeystore) {
+            release {
+                keyAlias keystoreProperties.getProperty('keyAlias')
+                keyPassword keystoreProperties.getProperty('keyPassword')
+                storeFile keystoreProperties.getProperty('storeFile') ? rootProject.file(keystoreProperties.getProperty('storeFile')) : null
+                storePassword keystoreProperties.getProperty('storePassword')
+            }
+        }
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -51,9 +72,23 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            // Only attach the release signing config when a keystore is present.
+            // Without this guard, a missing key.properties causes Gradle to fall
+            // back to the debug key silently — producing a release build signed
+            // with the wrong certificate.
+            if (hasKeystore && signingConfigs.findByName('release') != null) {
+                signingConfig signingConfigs.release
+            }
+            // Shrink and obfuscate the release binary. This reduces the APK size
+            // and makes reverse-engineering significantly harder.
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            // Never attach a release signing config to debug builds.
+            minifyEnabled false
+            shrinkResources false
         }
     }
 }

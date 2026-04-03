@@ -89,6 +89,17 @@ class AuthService {
 
   // ─── Sign Out ───
 
+  /// Block and sign out the current user account.
+  ///
+  /// Appwrite's client SDK can only *block* an account (not hard-delete it).
+  /// Blocking prevents all future sign-ins, which satisfies store policy
+  /// requirements. Full erasure of the server record requires a server-side
+  /// function or admin action.
+  Future<void> blockAndDeleteAccount() async {
+    await _account.updateStatus(); // blocks the account
+    await logout(); // clear the local session
+  }
+
   /// Delete the current session (sign out).
   Future<void> logout() async {
     try {

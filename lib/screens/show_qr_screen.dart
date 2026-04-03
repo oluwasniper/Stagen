@@ -15,6 +15,7 @@ import 'package:share_plus/share_plus.dart';
 import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../utils/app_motion.dart';
+import '../utils/qr_link_utils.dart';
 import '../widgets/background_screen_widget.dart';
 
 class ShowQrScreen extends StatefulWidget {
@@ -91,13 +92,7 @@ class _ShowQrScreenState extends State<ShowQrScreen>
   }
 
   String _tempShareFileName(String qrType) {
-    final sanitizedType = qrType
-        .trim()
-        .toLowerCase()
-        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
-        .replaceAll(RegExp(r'_+'), '_')
-        .replaceAll(RegExp(r'^_|_$'), '');
-    final safeType = sanitizedType.isEmpty ? 'qr' : sanitizedType;
+    final safeType = sanitizeShareFileStem(qrType, fallback: 'qr');
     return '${safeType}_qr_${DateTime.now().microsecondsSinceEpoch}.png';
   }
 
@@ -115,6 +110,7 @@ class _ShowQrScreenState extends State<ShowQrScreen>
   }
 
   Future<void> _shareQrImage(String qrType) async {
+    File? tempFile;
     try {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
@@ -123,12 +119,14 @@ class _ShowQrScreenState extends State<ShowQrScreen>
       if (!await shareDir.exists()) {
         await shareDir.create(recursive: true);
       }
-      final file = File('${shareDir.path}/${_tempShareFileName(qrType)}');
-      await file.writeAsBytes(bytes);
+      tempFile = File('${shareDir.path}/${_tempShareFileName(qrType)}');
+      await tempFile.writeAsBytes(bytes);
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile(file.path)],
-          fileNameOverrides: ['${qrType}_qr.png'],
+          files: [XFile(tempFile.path)],
+          fileNameOverrides: [
+            '${sanitizeShareFileStem(qrType, fallback: 'qr')}_qr.png',
+          ],
         ),
       );
     } catch (e, st) {
@@ -138,6 +136,13 @@ class _ShowQrScreenState extends State<ShowQrScreen>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context).failedToShare)),
       );
+    } finally {
+      // Delete the temp file immediately once the share sheet is dismissed.
+      try {
+        if (tempFile != null && await tempFile.exists()) {
+          await tempFile.delete();
+        }
+      } catch (_) {}
     }
   }
 

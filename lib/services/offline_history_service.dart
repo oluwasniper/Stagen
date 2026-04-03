@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
+
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
@@ -252,9 +253,7 @@ class OfflineHistoryService {
 
   LocalQRRecord? getByLocalId(String localId) => _box.get(localId);
 
-  String _newLocalId() {
-    final ts = DateTime.now().microsecondsSinceEpoch;
-    final rand = Random.secure().nextInt(1 << 32).toRadixString(16);
-    return 'local_$ts$rand';
-  }
+  static const _uuid = Uuid();
+
+  String _newLocalId() => 'local_${_uuid.v4()}';
 }

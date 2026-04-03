@@ -44,6 +44,9 @@ class MainActivity : FlutterActivity() {
         if (isDartReady && channel != null) {
             channel?.invokeMethod("onText", text)
         } else {
+            while (pendingTexts.size >= MAX_PENDING_TEXTS) {
+                pendingTexts.removeFirstOrNull()
+            }
             pendingTexts.addLast(text)
         }
     }
@@ -61,10 +64,15 @@ class MainActivity : FlutterActivity() {
             }
 
             else -> null
-        }?.trim()?.takeIf { it.isNotEmpty() }
+        }
+            ?.trim()
+            ?.take(MAX_SHARED_TEXT_LENGTH)
+            ?.takeIf { it.isNotEmpty() }
     }
 
     companion object {
         private const val CHANNEL_NAME = "scagen/process_text"
+        private const val MAX_PENDING_TEXTS = 8
+        private const val MAX_SHARED_TEXT_LENGTH = 8192
     }
 }

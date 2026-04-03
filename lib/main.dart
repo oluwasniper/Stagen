@@ -9,22 +9,27 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 /// to use he l10n, you nee to import the generated file
 import 'l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:revolutionary_stuff/utils/app_theme.dart';
+import 'package:scagen/utils/app_theme.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:revolutionary_stuff/services/app_performance_service.dart';
-import 'package:revolutionary_stuff/services/background_sync_service.dart';
-import 'package:revolutionary_stuff/services/telemetry_service.dart';
-import 'package:revolutionary_stuff/services/offline_history_service.dart';
-import 'package:revolutionary_stuff/services/push_notification_service.dart';
-import 'package:revolutionary_stuff/services/process_text_service.dart';
-import 'package:revolutionary_stuff/utils/external_text_classifier.dart';
-import 'package:revolutionary_stuff/utils/qr_isolate.dart';
+import 'package:scagen/services/app_performance_service.dart';
+import 'package:scagen/services/background_sync_service.dart';
+import 'package:scagen/services/telemetry_service.dart';
+import 'package:scagen/services/offline_history_service.dart';
+import 'package:scagen/services/appwrite_messaging_service.dart';
+import 'package:scagen/services/push_notification_service.dart';
+import 'package:scagen/services/process_text_service.dart';
+import 'package:scagen/utils/external_text_classifier.dart';
+import 'package:scagen/utils/qr_isolate.dart';
 
 import 'l10n/l10n.dart';
+import 'providers/auth_provider.dart';
+import 'providers/notification_provider.dart';
+import 'providers/qr_providers.dart';
 import 'providers/settings_provider.dart';
 import 'utils/app_router.dart';
 import 'utils/route/app_path.dart';
+import 'widgets/notification_overlay.dart';
 
 final DateTime _appLaunchStartedAt = DateTime.now();
 
@@ -74,6 +79,8 @@ class _MyAppState extends ConsumerState<MyApp> {
   late final AppPerformanceService _performanceService;
   late final BackgroundSyncService _backgroundSyncService;
   late final PushNotificationService _pushNotificationService;
+  late final AppwriteMessagingService _messagingService;
+  ProviderSubscription<AuthState>? _authListener;
   StreamSubscription<String>? _processTextSub;
   String? _activeRoute;
   DateTime? _activeRouteEnteredAt;
@@ -108,6 +115,43 @@ class _MyAppState extends ConsumerState<MyApp> {
     _pushNotificationService = PushNotificationService(
       telemetryReader: () => ref.read(telemetryServiceProvider),
     );
+
+    _messagingService = AppwriteMessagingService(
+      client: ref.read(appwriteClientProvider),
+      telemetryReader: () => ref.read(telemetryServiceProvider),
+    );
+
+    // Eagerly initialise the notification inbox provider so it starts
+    // listening to InAppNotificationService before any notifications arrive.
+    ref.read(notificationProvider.notifier);
+
+    // Subscribe Realtime notifications for any already-authenticated user
+    // (e.g. session resumed on cold start).
+    final authState = ref.read(authProvider);
+    if (authState.isAuthenticated && authState.user != null) {
+      final userId = authState.user!.$id;
+      unawaited(_messagingService.initFcm(userId));
+      _messagingService.subscribeToUserNotifications(userId);
+      unawaited(_messagingService.loadExistingNotifications(userId));
+    }
+
+    // React to future sign-in / sign-out events.
+    _authListener = ref.listenManual(authProvider, (previous, next) {
+      final previousUserId = previous?.user?.$id;
+      final nextUserId = next.user?.$id;
+      if (previousUserId != nextUserId) {
+        ref.read(notificationProvider.notifier).clearAll();
+      }
+
+      if (next.isAuthenticated && next.user != null) {
+        final userId = next.user!.$id;
+        unawaited(_messagingService.initFcm(userId));
+        _messagingService.subscribeToUserNotifications(userId);
+        unawaited(_messagingService.loadExistingNotifications(userId));
+      } else if (!(next.isAuthenticated)) {
+        _messagingService.unsubscribe(deletePushTarget: true);
+      }
+    });
   }
 
   void _bindGlobalErrorHandlers() {
@@ -261,7 +305,6 @@ class _MyAppState extends ConsumerState<MyApp> {
     final payload = {
       'type': classification.type.name,
       'prefill': classification.prefill,
-      'sourceText': text,
       'source': 'process_text',
     };
 
@@ -299,6 +342,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       );
     }
 
+    _authListener?.close();
+    _messagingService.unsubscribe();
     _performanceService.stop();
     unawaited(_backgroundSyncService.stop());
     unawaited(QRIsolate.dispose());
@@ -315,6 +360,8 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      builder: (context, child) =>
+          NotificationOverlay(child: child ?? const SizedBox.shrink()),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

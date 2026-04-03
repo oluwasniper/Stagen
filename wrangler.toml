@@ -1,0 +1,11 @@
+# Cloudflare Pages — Scagen
+# Deploy: wrangler pages deploy web/ --project-name=scagen
+# Or connect this repo in Cloudflare Dashboard → Pages → Create project
+
+name = "scagen"
+pages_build_output_dir = "web"
+
+[env.production]
+# Custom domain is configured in Cloudflare Dashboard:
+# Pages → scagen → Custom domains → Add → scagen.sonofnos.com
+# Cloudflare will auto-provision TLS and add the CNAME for you.

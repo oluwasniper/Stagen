@@ -10,6 +10,8 @@ import '../providers/qr_providers.dart';
 import '../services/telemetry_service.dart';
 import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
+import '../utils/qr_link_utils.dart';
+import '../utils/qr_payload_sanitizer.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
 import '../widgets/generate_qr_code_body_widget.dart';
@@ -31,8 +33,6 @@ class GenerateCodeScreen extends ConsumerStatefulWidget {
 class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
   static final RegExp _phoneValidationRegex =
       RegExp(r'^\+?[0-9][0-9\-\s().]{5,}$');
-  static final RegExp _telegramHandleRegex = RegExp(r'^[A-Za-z0-9_]{5,32}$');
-  static final RegExp _linkedInHandleRegex = RegExp(r'^[A-Za-z0-9_-]{3,100}$');
 
   /// Map of field name → controller. Created dynamically by the body widget.
   final Map<String, TextEditingController> _controllers = {};
@@ -65,86 +65,165 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
       case QROptionType.text:
         return _controllers['text']?.text.trim() ?? '';
       case QROptionType.website:
-        return _controllers['website']?.text.trim() ?? '';
+        return buildWebsiteQrPayload(
+          _controllers['website']?.text ?? '',
+        );
       case QROptionType.whatsapp:
-        final number = _controllers['whatsapp']?.text.trim() ?? '';
-        return 'https://wa.me/$number';
+        return buildWhatsAppQrPayload(_controllers['whatsapp']?.text ?? '');
       case QROptionType.twitter:
-        final user = _controllers['twitter']?.text.trim() ?? '';
-        return 'https://twitter.com/$user';
+        return buildTwitterQrPayload(_controllers['twitter']?.text ?? '');
       case QROptionType.email:
-        return 'mailto:${_controllers['email']?.text.trim() ?? ''}';
+        return buildMailtoQrPayload(_controllers['email']?.text ?? '');
       case QROptionType.instagram:
-        final user = _controllers['instagram']?.text.trim() ?? '';
-        return 'https://instagram.com/$user';
+        return buildInstagramQrPayload(_controllers['instagram']?.text ?? '');
       case QROptionType.telephone:
-        return 'tel:${_controllers['telephone']?.text.trim() ?? ''}';
+        return buildTelephoneQrPayload(_controllers['telephone']?.text ?? '');
       case QROptionType.sms:
-        final number = _controllers['smsNumber']?.text.trim() ?? '';
-        final message = _controllers['smsMessage']?.text.trim() ?? '';
-        if (number.isEmpty && message.isEmpty) return '';
-        if (message.isEmpty) return 'SMSTO:$number';
-        return 'SMSTO:$number:$message';
+        return buildSmsQrPayload(
+          numberRaw: _controllers['smsNumber']?.text ?? '',
+          messageRaw: _controllers['smsMessage']?.text ?? '',
+        );
       case QROptionType.telegram:
-        final telegram = _controllers['telegram']?.text.trim() ?? '';
-        if (telegram.isEmpty) return '';
-        if (telegram.startsWith('http://') || telegram.startsWith('https://')) {
-          return telegram;
-        }
-        final cleanHandle =
-            telegram.startsWith('@') ? telegram.substring(1) : telegram;
-        return 'https://t.me/$cleanHandle';
+        return buildTelegramQrPayload(_controllers['telegram']?.text ?? '');
       case QROptionType.linkedin:
-        final linkedIn = _controllers['linkedin']?.text.trim() ?? '';
-        if (linkedIn.isEmpty) return '';
-        if (linkedIn.startsWith('http://') || linkedIn.startsWith('https://')) {
-          return linkedIn;
-        }
-        final cleanHandle =
-            linkedIn.startsWith('@') ? linkedIn.substring(1) : linkedIn;
-        return 'https://www.linkedin.com/in/$cleanHandle';
+        return buildLinkedInQrPayload(_controllers['linkedin']?.text ?? '');
       case QROptionType.wifi:
-        final ssid = _controllers['network']?.text.trim() ?? '';
-        final pass = _controllers['password']?.text.trim() ?? '';
+        final ssid = escapeWifiQrField(
+          _controllers['network']?.text.trim() ?? '',
+        );
+        final pass = escapeWifiQrField(
+          _controllers['password']?.text.trim() ?? '',
+        );
         return 'WIFI:T:WPA;S:$ssid;P:$pass;;';
       case QROptionType.event:
-        final name = _controllers['eventName']?.text.trim() ?? '';
-        final start = _controllers['startDate']?.text.trim() ?? '';
-        final end = _controllers['endDate']?.text.trim() ?? '';
-        final location = _controllers['eventLocation']?.text.trim() ?? '';
-        final desc = _controllers['description']?.text.trim() ?? '';
+        final name = escapeVEventQrText(
+          _controllers['eventName']?.text.trim() ?? '',
+        );
+        final start = normalizeSingleLineQrField(
+          _controllers['startDate']?.text.trim() ?? '',
+        );
+        final end = normalizeSingleLineQrField(
+          _controllers['endDate']?.text.trim() ?? '',
+        );
+        final location = escapeVEventQrText(
+          _controllers['eventLocation']?.text.trim() ?? '',
+        );
+        final desc = escapeVEventQrText(
+          _controllers['description']?.text.trim() ?? '',
+        );
         return 'BEGIN:VEVENT\nSUMMARY:$name\nDTSTART:$start\nDTEND:$end\nLOCATION:$location\nDESCRIPTION:$desc\nEND:VEVENT';
       case QROptionType.contact:
-        final first = _controllers['firstName']?.text.trim() ?? '';
-        final last = _controllers['lastName']?.text.trim() ?? '';
-        final company = _controllers['company']?.text.trim() ?? '';
-        final job = _controllers['job']?.text.trim() ?? '';
-        final phone = _controllers['phone']?.text.trim() ?? '';
-        final email = _controllers['email']?.text.trim() ?? '';
-        final web = _controllers['website']?.text.trim() ?? '';
-        final addr = _controllers['address']?.text.trim() ?? '';
-        final city = _controllers['city']?.text.trim() ?? '';
-        final country = _controllers['country']?.text.trim() ?? '';
+        final first = escapeVCardQrText(
+          _controllers['firstName']?.text.trim() ?? '',
+        );
+        final last = escapeVCardQrText(
+          _controllers['lastName']?.text.trim() ?? '',
+        );
+        final company = escapeVCardQrText(
+          _controllers['company']?.text.trim() ?? '',
+        );
+        final job = escapeVCardQrText(
+          _controllers['job']?.text.trim() ?? '',
+        );
+        final phone = escapeVCardQrText(
+          normalizeSingleLineQrField(_controllers['phone']?.text.trim() ?? ''),
+        );
+        final email = escapeVCardQrText(
+          normalizeSingleLineQrField(_controllers['email']?.text.trim() ?? ''),
+        );
+        final web = escapeVCardQrText(
+          normalizeSingleLineQrField(
+            _controllers['website']?.text.trim() ?? '',
+          ),
+        );
+        final addr = escapeVCardQrText(
+          _controllers['address']?.text.trim() ?? '',
+        );
+        final city = escapeVCardQrText(
+          _controllers['city']?.text.trim() ?? '',
+        );
+        final country = escapeVCardQrText(
+          _controllers['country']?.text.trim() ?? '',
+        );
         return 'BEGIN:VCARD\nVERSION:3.0\nN:$last;$first\nORG:$company\nTITLE:$job\nTEL:$phone\nEMAIL:$email\nURL:$web\nADR:;;$addr;$city;;;$country\nEND:VCARD';
       case QROptionType.business:
-        final company = _controllers['company']?.text.trim() ?? '';
-        final phone = _controllers['phone']?.text.trim() ?? '';
-        final email = _controllers['email']?.text.trim() ?? '';
-        final web = _controllers['website']?.text.trim() ?? '';
-        final addr = _controllers['address']?.text.trim() ?? '';
-        final city = _controllers['city']?.text.trim() ?? '';
-        final country = _controllers['country']?.text.trim() ?? '';
+        final company = escapeVCardQrText(
+          _controllers['company']?.text.trim() ?? '',
+        );
+        final phone = escapeVCardQrText(
+          normalizeSingleLineQrField(_controllers['phone']?.text.trim() ?? ''),
+        );
+        final email = escapeVCardQrText(
+          normalizeSingleLineQrField(_controllers['email']?.text.trim() ?? ''),
+        );
+        final web = escapeVCardQrText(
+          normalizeSingleLineQrField(
+            _controllers['website']?.text.trim() ?? '',
+          ),
+        );
+        final addr = escapeVCardQrText(
+          _controllers['address']?.text.trim() ?? '',
+        );
+        final city = escapeVCardQrText(
+          _controllers['city']?.text.trim() ?? '',
+        );
+        final country = escapeVCardQrText(
+          _controllers['country']?.text.trim() ?? '',
+        );
         return 'BEGIN:VCARD\nVERSION:3.0\nORG:$company\nTEL:$phone\nEMAIL:$email\nURL:$web\nADR:;;$addr;$city;;;$country\nEND:VCARD';
       case QROptionType.location:
-        final lat = _controllers['latitude']?.text.trim() ?? '0';
-        final lng = _controllers['longitude']?.text.trim() ?? '0';
-        return 'geo:$lat,$lng';
+        return buildGeoQrPayload(
+          latitudeRaw: _controllers['latitude']?.text ?? '',
+          longitudeRaw: _controllers['longitude']?.text ?? '',
+        );
     }
   }
 
   String? _validateInput() {
     final l10n = AppLocalizations.of(context);
     switch (widget.type.type) {
+      case QROptionType.website:
+        final website = _controllers['website']?.text.trim() ?? '';
+        if (website.isEmpty) return null;
+        if (!isLikelyValidWebsiteInput(website)) {
+          return l10n.validationInvalidInput;
+        }
+        return null;
+      case QROptionType.whatsapp:
+        final value = _controllers['whatsapp']?.text.trim() ?? '';
+        if (value.isEmpty) return null;
+        if (buildWhatsAppQrPayload(value).isEmpty) {
+          return l10n.validationInvalidInput;
+        }
+        return null;
+      case QROptionType.twitter:
+        final value = _controllers['twitter']?.text.trim() ?? '';
+        if (value.isEmpty) return null;
+        if (buildTwitterQrPayload(value).isEmpty) {
+          return l10n.validationInvalidInput;
+        }
+        return null;
+      case QROptionType.email:
+        final email = _controllers['email']?.text.trim() ?? '';
+        if (email.isEmpty) return null;
+        if (buildMailtoQrPayload(email).isEmpty) {
+          return l10n.authEmailInvalid;
+        }
+        return null;
+      case QROptionType.instagram:
+        final value = _controllers['instagram']?.text.trim() ?? '';
+        if (value.isEmpty) return null;
+        if (buildInstagramQrPayload(value).isEmpty) {
+          return l10n.validationInvalidInput;
+        }
+        return null;
+      case QROptionType.telephone:
+        final phone = _controllers['telephone']?.text.trim() ?? '';
+        if (phone.isEmpty) return null;
+        if (buildTelephoneQrPayload(phone).isEmpty) {
+          return l10n.validationInvalidInput;
+        }
+        return null;
       case QROptionType.sms:
         final number = _controllers['smsNumber']?.text.trim() ?? '';
         if (number.isEmpty) {
@@ -159,7 +238,7 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
         if (telegram.isEmpty) {
           return l10n.validationTelegramRequired;
         }
-        if (!_isValidTelegramInput(telegram)) {
+        if (buildTelegramQrPayload(telegram).isEmpty) {
           return l10n.validationTelegramInvalid;
         }
         return null;
@@ -168,54 +247,24 @@ class _GenerateCodeScreenState extends ConsumerState<GenerateCodeScreen> {
         if (linkedIn.isEmpty) {
           return l10n.validationLinkedinRequired;
         }
-        if (!_isValidLinkedInInput(linkedIn)) {
+        if (buildLinkedInQrPayload(linkedIn).isEmpty) {
           return l10n.validationLinkedinInvalid;
+        }
+        return null;
+      case QROptionType.location:
+        final latitude = _controllers['latitude']?.text.trim() ?? '';
+        final longitude = _controllers['longitude']?.text.trim() ?? '';
+        if (latitude.isEmpty && longitude.isEmpty) return null;
+        if (buildGeoQrPayload(
+          latitudeRaw: latitude,
+          longitudeRaw: longitude,
+        ).isEmpty) {
+          return l10n.validationInvalidInput;
         }
         return null;
       default:
         return null;
     }
-  }
-
-  bool _isValidTelegramInput(String value) {
-    final candidate = value.startsWith('@') ? value.substring(1) : value;
-    final uri = Uri.tryParse(candidate);
-    if (uri != null && uri.hasScheme) {
-      final host = uri.host.toLowerCase();
-      if (host == 't.me' || host == 'www.t.me') {
-        final segment = _firstNonEmptySegment(uri.pathSegments);
-        return segment != null && _telegramHandleRegex.hasMatch(segment);
-      }
-      if (host == 'telegram.me' || host == 'www.telegram.me') {
-        final segment = _firstNonEmptySegment(uri.pathSegments);
-        return segment != null && _telegramHandleRegex.hasMatch(segment);
-      }
-      return false;
-    }
-    return _telegramHandleRegex.hasMatch(candidate);
-  }
-
-  bool _isValidLinkedInInput(String value) {
-    final candidate = value.startsWith('@') ? value.substring(1) : value;
-    final uri = Uri.tryParse(candidate);
-    if (uri != null && uri.hasScheme) {
-      final host = uri.host.toLowerCase();
-      if (!(host == 'linkedin.com' || host.endsWith('.linkedin.com'))) {
-        return false;
-      }
-      if (uri.pathSegments.length < 2 || uri.pathSegments.first != 'in') {
-        return false;
-      }
-      return _linkedInHandleRegex.hasMatch(uri.pathSegments[1]);
-    }
-    return _linkedInHandleRegex.hasMatch(candidate);
-  }
-
-  String? _firstNonEmptySegment(List<String> segments) {
-    for (final segment in segments) {
-      if (segment.isNotEmpty) return segment;
-    }
-    return null;
   }
 
   /// Pick a contact from the phone's address book and fill the form fields.

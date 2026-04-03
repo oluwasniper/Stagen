@@ -55,6 +55,15 @@
     "rateUsDesc": "Sua melhor recompensa para nós",
     "shareApp": "Compartilhar",
     "shareDesc": "Compartilhe o aplicativo com outras pessoas.",
+    "shareAppMessage": "Confira o Scagen! {url}",
+    "@shareAppMessage": {
+        "description": "Mensagem usada ao compartilhar o link do aplicativo",
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
     "privacyPolicy": "Política de Privacidade",
     "privacyPolicyDesc": "Siga nossas políticas que beneficiam você",
 
@@ -147,6 +156,7 @@
     "validationTelegramInvalid": "Digite um usuário do Telegram ou link t.me válido",
     "validationLinkedinRequired": "O perfil do LinkedIn é obrigatório",
     "validationLinkedinInvalid": "Digite uma URL ou usuário do LinkedIn válido",
+    "validationInvalidInput": "Digite um valor válido",
     "locationUseCurrentLocation": "Usar localização atual",
     "locationGettingCurrentLocation": "Obtendo localização...",
     "locationOrDivider": "OU",
@@ -183,6 +193,13 @@
     },
     "authLogout": "Sair",
     "authLogoutDesc": "Sair da sua conta",
+    "cancel": "Cancelar",
+    "authDeleteAccount": "Excluir conta",
+    "authDeleteAccountDesc": "Exclua permanentemente sua conta e todos os dados",
+    "authDeleteAccountConfirmTitle": "Excluir conta?",
+    "authDeleteAccountConfirmBody": "Isso excluirá permanentemente sua conta e todo o histórico de QR. Esta ação não pode ser desfeita.",
+    "authDeleteAccountConfirmButton": "Excluir",
+    "authDeleteAccountSuccess": "Sua conta foi excluída",
     "authAccount": "Conta",
     "linkAccountTitle": "Vincular conta",
     "linkAccountSubtitle": "Atualizar para conta com e-mail e senha",
@@ -235,5 +252,13 @@
     "failedToShare": "Falha ao compartilhar",
     "unableToOpenContent": "Não foi possível abrir este conteúdo",
     "noInternet": "Sem conexão com a internet",
-    "scanGenerateShare": "Escanear · Gerar · Compartilhar"
+    "scanGenerateShare": "Escanear · Gerar · Compartilhar",
+
+    "openUrlWarningTitle": "Abrir este link?",
+    "openUrlWarningBody": "Este link veio de um código QR. Certifique-se de confiar nele antes de continuar.\n\n{url}",
+    "openUrlWarningInsecure": "⚠ Este link usa HTTP não criptografado. Seus dados podem estar visíveis para outros.",
+    "openUrlWarningConfirm": "Abrir",
+    "openUrlWarningCancel": "Cancelar",
+    "authNetworkError": "Erro de rede. Verifique sua conexão com a internet e tente novamente.",
+    "authGenericError": "Algo deu errado. Por favor, tente novamente."
 }

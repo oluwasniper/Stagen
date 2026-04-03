@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:revolutionary_stuff/utils/external_text_classifier.dart';
-import 'package:revolutionary_stuff/widgets/generate_qr_widget.dart';
+import 'package:scagen/utils/external_text_classifier.dart';
+import 'package:scagen/widgets/generate_qr_widget.dart';
 
 void main() {
   test('classifies SMSTO payload into sms type with prefill', () {

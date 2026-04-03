@@ -9,6 +9,7 @@ class SettingsListTile extends StatelessWidget {
   final bool? showSwitch;
   final void Function()? onTap;
   final void Function(bool)? onSwitchChanged;
+  final Color? foregroundColor;
   const SettingsListTile({
     super.key,
     required this.isSwitched,
@@ -18,6 +19,7 @@ class SettingsListTile extends StatelessWidget {
     this.showSwitch,
     this.onTap,
     this.onSwitchChanged,
+    this.foregroundColor,
   });
 
   @override
@@ -31,13 +33,13 @@ class SettingsListTile extends StatelessWidget {
       ),
       leading: Icon(
         iconData,
-        color: const Color(0xffFDB623),
+        color: foregroundColor ?? const Color(0xffFDB623),
         size: 25,
       ),
       title: Text(title,
-          style: const TextStyle(
+          style: TextStyle(
               fontFamily: "Inter",
-              color: Color(0xffE2E2E2),
+              color: foregroundColor ?? const Color(0xffE2E2E2),
               fontSize: 16,
               fontWeight: FontWeight.w400)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

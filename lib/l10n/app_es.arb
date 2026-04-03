@@ -55,6 +55,15 @@
     "rateUsDesc": "Su mejor recompensa para nosotros",
     "shareApp": "Compartir",
     "shareDesc": "Compartir aplicación con otras personas.",
+    "shareAppMessage": "¡Descubre Scagen! {url}",
+    "@shareAppMessage": {
+        "description": "Mensaje usado al compartir el enlace de la aplicación",
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
     "privacyPolicy": "Política de Privacidad",
     "privacyPolicyDesc": "Siga nuestras políticas que le beneficien.",
 
@@ -163,6 +172,7 @@
     "validationTelegramInvalid": "Ingrese un usuario de Telegram o enlace t.me válido",
     "validationLinkedinRequired": "El perfil de LinkedIn es obligatorio",
     "validationLinkedinInvalid": "Ingrese una URL o usuario de LinkedIn válido",
+    "validationInvalidInput": "Ingrese un valor válido",
     "locationUseCurrentLocation": "Usar ubicación actual",
     "locationGettingCurrentLocation": "Obteniendo ubicación...",
     "locationOrDivider": "O",
@@ -194,6 +204,13 @@
     },
     "authLogout": "Cerrar sesión",
     "authLogoutDesc": "Cerrar sesión de tu cuenta",
+    "cancel": "Cancelar",
+    "authDeleteAccount": "Eliminar cuenta",
+    "authDeleteAccountDesc": "Elimina permanentemente tu cuenta y todos los datos",
+    "authDeleteAccountConfirmTitle": "¿Eliminar cuenta?",
+    "authDeleteAccountConfirmBody": "Esto eliminará permanentemente tu cuenta y todo tu historial de QR. Esta acción no se puede deshacer.",
+    "authDeleteAccountConfirmButton": "Eliminar",
+    "authDeleteAccountSuccess": "Tu cuenta ha sido eliminada",
     "authAccount": "Cuenta",
     "linkAccountTitle": "Vincular cuenta",
     "linkAccountSubtitle": "Actualizar a cuenta con email y contraseña",
@@ -246,5 +263,13 @@
     "failedToShare": "Error al compartir",
     "unableToOpenContent": "No se puede abrir este contenido",
     "noInternet": "Sin conexión a internet",
-    "scanGenerateShare": "Escanear · Generar · Compartir"
+    "scanGenerateShare": "Escanear · Generar · Compartir",
+
+    "openUrlWarningTitle": "¿Abrir este enlace?",
+    "openUrlWarningBody": "Este enlace proviene de un código QR. Asegúrate de confiar en él antes de continuar.\n\n{url}",
+    "openUrlWarningInsecure": "⚠ Este enlace usa HTTP sin cifrar. Tus datos pueden ser visibles para otros.",
+    "openUrlWarningConfirm": "Abrir",
+    "openUrlWarningCancel": "Cancelar",
+    "authNetworkError": "Error de red. Comprueba tu conexión a internet e inténtalo de nuevo.",
+    "authGenericError": "Algo salió mal. Por favor, inténtalo de nuevo."
 }

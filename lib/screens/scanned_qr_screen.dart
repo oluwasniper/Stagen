@@ -18,6 +18,7 @@ import '../providers/qr_providers.dart';
 import '../services/telemetry_service.dart';
 import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
+import '../utils/qr_link_utils.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
 
@@ -29,16 +30,6 @@ class ScannedQRScreen extends ConsumerStatefulWidget {
 }
 
 class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
-  static const Set<String> _openableSchemes = {
-    'http',
-    'https',
-    'mailto',
-    'tel',
-    'sms',
-    'smsto',
-    'geo',
-  };
-
   final _qrKey = GlobalKey();
   bool _copied = false;
 
@@ -79,15 +70,17 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
   }
 
   Future<void> _shareQrImage() async {
+    File? tempFile;
     try {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
       final tempDir = await getTemporaryDirectory();
-      final file = File('${tempDir.path}/qr_code.png');
-      await file.writeAsBytes(bytes);
+      tempFile = File(
+          '${tempDir.path}/qr_code_${DateTime.now().microsecondsSinceEpoch}.png');
+      await tempFile.writeAsBytes(bytes);
       await SharePlus.instance.share(
         ShareParams(
-          files: [XFile(file.path)],
+          files: [XFile(tempFile.path)],
           fileNameOverrides: ['scanned_qr.png'],
         ),
       );
@@ -102,19 +95,24 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
     } catch (e, st) {
       dev.log('[ScannedQRScreen] share failed: $e',
           stackTrace: st, name: 'ScannedQRScreen');
+    } finally {
+      // Delete the temp file immediately once the share sheet is dismissed.
+      try {
+        if (tempFile != null && await tempFile.exists()) {
+          await tempFile.delete();
+        }
+      } catch (_) {}
     }
   }
 
   bool _canOpenScannedValue(String value) {
-    final uri = Uri.tryParse(value);
-    if (uri == null || !uri.hasScheme) return false;
-    return _openableSchemes.contains(uri.scheme.toLowerCase());
+    return tryParseSafeExternalActionUri(value) != null;
   }
 
   Future<void> _openScannedValue(String value) async {
     final l10n = AppLocalizations.of(context);
-    final uri = Uri.tryParse(value);
-    if (uri == null || !uri.hasScheme) {
+    final uri = tryParseSafeExternalActionUri(value);
+    if (uri == null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.unableToOpenContent)),
@@ -131,12 +129,50 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
       return;
     }
 
+    // Show a phishing-warning dialog before opening any external URL.
+    final scheme = uri.scheme.toLowerCase();
+    final isInsecureHttp = scheme == 'http';
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        scrollable: true,
+        title: Text(l10n.openUrlWarningTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.openUrlWarningBody(uri.toString())),
+            if (isInsecureHttp) ...[
+              const SizedBox(height: 12),
+              Text(
+                l10n.openUrlWarningInsecure,
+                style: const TextStyle(color: Colors.orange),
+              ),
+            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.openUrlWarningCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.openUrlWarningConfirm),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+    if (!mounted) return;
+
     AppHaptics.light(context);
     AppSounds.click();
     await launchUrl(uri, mode: LaunchMode.externalApplication);
     ref.read(telemetryServiceProvider).track(
       TelemetryEvents.qrUrlOpened,
-      properties: {'scheme': uri.scheme.toLowerCase()},
+      properties: {'scheme': scheme},
     );
   }
 

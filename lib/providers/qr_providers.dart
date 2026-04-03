@@ -12,7 +12,7 @@ import 'auth_provider.dart';
 // ─── Appwrite Client & Service Providers ───
 
 final appwriteClientProvider = Provider<Client>((ref) {
-  return client;
+  return buildAppwriteClient();
 });
 
 final appwriteServiceProvider = Provider<AppwriteService>((ref) {

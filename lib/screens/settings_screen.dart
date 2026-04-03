@@ -20,28 +20,107 @@ import '../widgets/settings_list_tile.dart';
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  static const String _appUrl = AppConfig.appStoreUrl;
-  static const String _privacyUrl = AppConfig.privacyPolicyUrl;
-
-  Future<void> _rateApp() async {
-    final uri = Uri.parse(_appUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  Future<void> _rateApp(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final uri = AppConfig.appStoreUri;
+    if (uri == null || !await canLaunchUrl(uri)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.unableToOpenContent)),
+        );
+      }
+      return;
     }
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  Future<void> _shareApp() async {
-    final uri = Uri.parse(
-        'https://wa.me/?text=${Uri.encodeComponent('Check out Scagen! $_appUrl')}');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  Future<void> _shareApp(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final appStoreUri = AppConfig.appStoreUri;
+    if (appStoreUri == null) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.unableToOpenContent)),
+        );
+      }
+      return;
     }
+
+    final uri = Uri.https('wa.me', '/', {
+      'text': l10n.shareAppMessage(appStoreUri.toString()),
+    });
+    if (!await canLaunchUrl(uri)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.unableToOpenContent)),
+        );
+      }
+      return;
+    }
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  Future<void> _openPrivacyPolicy() async {
-    final uri = Uri.parse(_privacyUrl);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  Future<void> _openPrivacyPolicy(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
+    final uri = AppConfig.privacyPolicyUri;
+    if (uri == null || !await canLaunchUrl(uri)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.unableToOpenContent)),
+        );
+      }
+      return;
+    }
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  Future<void> _confirmDeleteAccount(
+      BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.authDeleteAccountConfirmTitle),
+        content: Text(l10n.authDeleteAccountConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(ctx).colorScheme.error,
+            ),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.authDeleteAccountConfirmButton),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    final error = await ref.read(authProvider.notifier).deleteAccount();
+    if (!context.mounted) return;
+
+    if (error == null) {
+      AppGoRouter.router.go(AppPath.auth);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.authDeleteAccountSuccess),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } else {
+      final authState = ref.read(authProvider);
+      final message =
+          localizeApiError(l10n, authState.errorType, authState.error);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -275,7 +354,7 @@ class SettingsScreen extends ConsumerWidget {
         title: AppLocalizations.of(context).rateUs,
         subtitle: AppLocalizations.of(context).rateUsDesc,
         iconData: Icons.check_circle_rounded,
-        onTap: _rateApp,
+        onTap: () => _rateApp(context),
       ),
       const SizedBox(height: 20),
       SettingsListTile(
@@ -284,7 +363,7 @@ class SettingsScreen extends ConsumerWidget {
         title: AppLocalizations.of(context).shareBtn,
         subtitle: AppLocalizations.of(context).shareDesc,
         iconData: Icons.share_rounded,
-        onTap: _shareApp,
+        onTap: () => _shareApp(context),
       ),
       const SizedBox(height: 20),
       SettingsListTile(
@@ -293,7 +372,7 @@ class SettingsScreen extends ConsumerWidget {
         title: AppLocalizations.of(context).privacyPolicy,
         subtitle: AppLocalizations.of(context).privacyPolicyDesc,
         iconData: Icons.privacy_tip_rounded,
-        onTap: _openPrivacyPolicy,
+        onTap: () => _openPrivacyPolicy(context),
       ),
       const SizedBox(height: 50),
       Text(
@@ -332,6 +411,16 @@ class SettingsScreen extends ConsumerWidget {
             ),
           );
         },
+      ),
+      const SizedBox(height: 20),
+      SettingsListTile(
+        isSwitched: false,
+        showSwitch: false,
+        title: AppLocalizations.of(context).authDeleteAccount,
+        subtitle: AppLocalizations.of(context).authDeleteAccountDesc,
+        iconData: Icons.delete_forever_rounded,
+        foregroundColor: Theme.of(context).colorScheme.error,
+        onTap: () => _confirmDeleteAccount(context, ref),
       ),
       const SizedBox(height: 20),
     ];

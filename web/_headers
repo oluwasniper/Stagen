@@ -1,0 +1,18 @@
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  # HSTS: enforce HTTPS for 1 year, include subdomains, allow preload submission.
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  # Flutter web requires 'unsafe-inline' (service worker bootstrap) and
+  # 'unsafe-eval' (dart2js compiled output). wasm-unsafe-eval covers WASM builds.
+  # worker-src covers the Flutter service worker.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://fra.cloud.appwrite.io https://app.posthog.com https://us.i.posthog.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; manifest-src 'self'; frame-ancestors 'none'
+
+/account-deletion
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://formspree.io; form-action https://formspree.io; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
+  Cache-Control: public, max-age=86400
+
+/privacy-policy
+  Cache-Control: public, max-age=86400

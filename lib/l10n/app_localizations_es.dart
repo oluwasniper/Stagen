@@ -157,6 +157,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shareDesc => 'Compartir aplicación con otras personas.';
 
   @override
+  String shareAppMessage(String url) {
+    return '¡Descubre Scagen! $url';
+  }
+
+  @override
   String get privacyPolicy => 'Política de Privacidad';
 
   @override
@@ -410,6 +415,9 @@ class AppLocalizationsEs extends AppLocalizations {
       'Ingrese una URL o usuario de LinkedIn válido';
 
   @override
+  String get validationInvalidInput => 'Ingrese un valor válido';
+
+  @override
   String get locationUseCurrentLocation => 'Usar ubicación actual';
 
   @override
@@ -488,6 +496,29 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get authLogoutDesc => 'Cerrar sesión de tu cuenta';
+
+  @override
+  String get cancel => 'Cancelar';
+
+  @override
+  String get authDeleteAccount => 'Eliminar cuenta';
+
+  @override
+  String get authDeleteAccountDesc =>
+      'Elimina permanentemente tu cuenta y todos los datos';
+
+  @override
+  String get authDeleteAccountConfirmTitle => '¿Eliminar cuenta?';
+
+  @override
+  String get authDeleteAccountConfirmBody =>
+      'Esto eliminará permanentemente tu cuenta y todo tu historial de QR. Esta acción no se puede deshacer.';
+
+  @override
+  String get authDeleteAccountConfirmButton => 'Eliminar';
+
+  @override
+  String get authDeleteAccountSuccess => 'Tu cuenta ha sido eliminada';
 
   @override
   String get authAccount => 'Cuenta';
@@ -631,4 +662,28 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get scanGenerateShare => 'Escanear · Generar · Compartir';
+
+  @override
+  String get openUrlWarningTitle => '¿Abrir este enlace?';
+
+  @override
+  String openUrlWarningBody(String url) {
+    return 'Este enlace proviene de un código QR. Asegúrate de confiar en él antes de continuar.\n\n$url';
+  }
+
+  @override
+  String get openUrlWarningInsecure =>
+      '⚠ Este enlace usa HTTP sin cifrar. Tus datos pueden ser visibles para otros.';
+
+  @override
+  String get openUrlWarningConfirm => 'Abrir';
+
+  @override
+  String get openUrlWarningCancel => 'Cancelar';
+
+  @override
+  String get authNetworkError => 'Error de red. Comprueba tu conexión a internet e inténtalo de nuevo.';
+
+  @override
+  String get authGenericError => 'Algo salió mal. Por favor, inténtalo de nuevo.';
 }

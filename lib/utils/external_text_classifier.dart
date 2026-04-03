@@ -10,7 +10,23 @@ class ClassifiedExternalText {
   });
 }
 
+/// Maximum number of UTF-16 code units accepted by the classifier.
+///
+/// QR codes can encode at most ~3 KB of binary data (version 40, 8-bit mode).
+/// 8192 code units is a generous ceiling that prevents ReDoS / memory exhaustion
+/// from artificially large payloads injected via other code paths (e.g. deep links).
+/// Note: this limit is in Dart string code units, not bytes.
+const _kMaxInputCodeUnits = 8192;
+
 ClassifiedExternalText classifyExternalText(String input) {
+  // Reject oversized payloads before any regex work.
+  if (input.length > _kMaxInputCodeUnits) {
+    return ClassifiedExternalText(
+      type: QROptionType.text,
+      prefill: {'text': input.substring(0, _kMaxInputCodeUnits)},
+    );
+  }
+
   final text = input.trim();
   final lower = text.toLowerCase();
 
@@ -248,7 +264,7 @@ String? _extractWifiValue(String source, String key) {
 
 Map<String, String> _parseVCard(String vcard) {
   final fields = <String, String>{};
-  final lines = vcard.split(RegExp(r'\r?\n'));
+  final lines = vcard.split(RegExp(r'\r?\n')).take(200).toList();
 
   final n = _lineValue(lines, 'N');
   if (n != null) {
@@ -279,7 +295,7 @@ Map<String, String> _parseVCard(String vcard) {
 }
 
 Map<String, String> _parseVEvent(String vevent) {
-  final lines = vevent.split(RegExp(r'\r?\n'));
+  final lines = vevent.split(RegExp(r'\r?\n')).take(200).toList();
   final fields = <String, String>{};
 
   final summary = _lineValue(lines, 'SUMMARY');

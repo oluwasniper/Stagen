@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:revolutionary_stuff/providers/settings_provider.dart';
+import 'package:scagen/providers/settings_provider.dart';
 
 void main() {
   test('SettingsState defaults to vibrate/beep enabled and analytics disabled',

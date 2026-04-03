@@ -390,6 +390,12 @@ abstract class AppLocalizations {
   /// **'Share app with others.'**
   String get shareDesc;
 
+  /// Message used when sharing the app link
+  ///
+  /// In en, this message translates to:
+  /// **'Check out Scagen! {url}'**
+  String shareAppMessage(String url);
+
   /// Button to view the privacy policy
   ///
   /// In en, this message translates to:
@@ -882,6 +888,12 @@ abstract class AppLocalizations {
   /// **'Enter a valid LinkedIn profile URL or username'**
   String get validationLinkedinInvalid;
 
+  /// Generic validation error for invalid QR form input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid value'**
+  String get validationInvalidInput;
+
   /// Button label to use the device current location
   ///
   /// In en, this message translates to:
@@ -1037,6 +1049,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign out of your account'**
   String get authLogoutDesc;
+
+  /// Generic cancel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Delete account button label
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get authDeleteAccount;
+
+  /// Delete account tile subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete your account and all data'**
+  String get authDeleteAccountDesc;
+
+  /// Title of the delete account confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account?'**
+  String get authDeleteAccountConfirmTitle;
+
+  /// Body of the delete account confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete your account and all your QR history. This cannot be undone.'**
+  String get authDeleteAccountConfirmBody;
+
+  /// Confirm delete button label in the delete account dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get authDeleteAccountConfirmButton;
+
+  /// Snackbar shown after successful account deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been deleted'**
+  String get authDeleteAccountSuccess;
 
   /// Account section header
   ///
@@ -1283,6 +1337,44 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scan · Generate · Share'**
   String get scanGenerateShare;
+
+  /// Title of the phishing-warning dialog shown before opening a scanned URL
+  ///
+  /// In en, this message translates to:
+  /// **'Open this link?'**
+  String get openUrlWarningTitle;
+
+  /// Body of the phishing-warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This link came from a QR code. Make sure you trust it before continuing.\n\n{url}'**
+  String openUrlWarningBody(String url);
+
+  /// Extra warning line shown when the URL scheme is http (not https)
+  ///
+  /// In en, this message translates to:
+  /// **'⚠ This link uses unencrypted HTTP. Your data may be visible to others.'**
+  String get openUrlWarningInsecure;
+
+  /// Confirm button in the phishing-warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get openUrlWarningConfirm;
+
+  /// Cancel button in the phishing-warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get openUrlWarningCancel;
+
+  /// In en, this message translates to:
+  /// **'Network error. Check your internet connection and try again.'**
+  String get authNetworkError;
+
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get authGenericError;
 }
 
 class _AppLocalizationsDelegate
