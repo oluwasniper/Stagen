@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+// Matches the classifier's internal _kMaxInputCodeUnits ceiling so oversized
+// payloads are dropped at the channel boundary — before any regex work runs.
+const int _kMaxProcessTextLength = 8192;
+
 class ExternalProcessTextService {
   ExternalProcessTextService._();
 
@@ -15,16 +19,23 @@ class ExternalProcessTextService {
 
   Stream<String> get textStream => _streamController.stream;
 
+  /// Trims and gates a raw native string. Returns null for empty or oversized
+  /// values so they are silently dropped before reaching the classifier.
+  String? _sanitize(String? raw) {
+    if (raw == null) return null;
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty || trimmed.length > _kMaxProcessTextLength) return null;
+    return trimmed;
+  }
+
   Future<void> initialize() async {
     if (_initialized) return;
     _initialized = true;
 
     _channel.setMethodCallHandler((call) async {
       if (call.method == 'onText') {
-        final text = call.arguments as String?;
-        if (text != null && text.trim().isNotEmpty) {
-          _streamController.add(text.trim());
-        }
+        final text = _sanitize(call.arguments as String?);
+        if (text != null) _streamController.add(text);
       }
     });
 
@@ -32,16 +43,12 @@ class ExternalProcessTextService {
       final initialTexts =
           await _channel.invokeMethod<dynamic>('getInitialText');
       if (initialTexts is String) {
-        final text = initialTexts.trim();
-        if (text.isNotEmpty) {
-          _streamController.add(text);
-        }
+        final text = _sanitize(initialTexts);
+        if (text != null) _streamController.add(text);
       } else if (initialTexts is List) {
         for (final text in initialTexts.whereType<String>()) {
-          final trimmed = text.trim();
-          if (trimmed.isNotEmpty) {
-            _streamController.add(trimmed);
-          }
+          final sanitized = _sanitize(text);
+          if (sanitized != null) _streamController.add(sanitized);
         }
       }
     } on MissingPluginException {
