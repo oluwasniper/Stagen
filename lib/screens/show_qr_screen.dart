@@ -15,6 +15,7 @@ import 'package:share_plus/share_plus.dart';
 import '../l10n/app_localizations.dart';
 import '../models/qr_record.dart';
 import '../utils/app_motion.dart';
+import '../utils/qr_link_utils.dart';
 import '../widgets/background_screen_widget.dart';
 
 class ShowQrScreen extends StatefulWidget {
@@ -91,13 +92,7 @@ class _ShowQrScreenState extends State<ShowQrScreen>
   }
 
   String _tempShareFileName(String qrType) {
-    final sanitizedType = qrType
-        .trim()
-        .toLowerCase()
-        .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
-        .replaceAll(RegExp(r'_+'), '_')
-        .replaceAll(RegExp(r'^_|_$'), '');
-    final safeType = sanitizedType.isEmpty ? 'qr' : sanitizedType;
+    final safeType = sanitizeShareFileStem(qrType, fallback: 'qr');
     return '${safeType}_qr_${DateTime.now().microsecondsSinceEpoch}.png';
   }
 
@@ -129,7 +124,9 @@ class _ShowQrScreenState extends State<ShowQrScreen>
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(tempFile.path)],
-          fileNameOverrides: ['${qrType}_qr.png'],
+          fileNameOverrides: [
+            '${sanitizeShareFileStem(qrType, fallback: 'qr')}_qr.png',
+          ],
         ),
       );
     } catch (e, st) {

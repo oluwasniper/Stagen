@@ -18,6 +18,7 @@ import '../providers/qr_providers.dart';
 import '../services/telemetry_service.dart';
 import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
+import '../utils/qr_link_utils.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
 
@@ -29,16 +30,6 @@ class ScannedQRScreen extends ConsumerStatefulWidget {
 }
 
 class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
-  static const Set<String> _openableSchemes = {
-    'http',
-    'https',
-    'mailto',
-    'tel',
-    'sms',
-    'smsto',
-    'geo',
-  };
-
   final _qrKey = GlobalKey();
   bool _copied = false;
 
@@ -84,7 +75,8 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
       final bytes = await _captureQrImage();
       if (bytes == null) return;
       final tempDir = await getTemporaryDirectory();
-      tempFile = File('${tempDir.path}/qr_code_${DateTime.now().microsecondsSinceEpoch}.png');
+      tempFile = File(
+          '${tempDir.path}/qr_code_${DateTime.now().microsecondsSinceEpoch}.png');
       await tempFile.writeAsBytes(bytes);
       await SharePlus.instance.share(
         ShareParams(
@@ -114,15 +106,13 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
   }
 
   bool _canOpenScannedValue(String value) {
-    final uri = Uri.tryParse(value);
-    if (uri == null || !uri.hasScheme) return false;
-    return _openableSchemes.contains(uri.scheme.toLowerCase());
+    return tryParseSafeExternalActionUri(value) != null;
   }
 
   Future<void> _openScannedValue(String value) async {
     final l10n = AppLocalizations.of(context);
-    final uri = Uri.tryParse(value);
-    if (uri == null || !uri.hasScheme) {
+    final uri = tryParseSafeExternalActionUri(value);
+    if (uri == null) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.unableToOpenContent)),
@@ -151,7 +141,7 @@ class _ScannedQRScreenState extends ConsumerState<ScannedQRScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l10n.openUrlWarningBody(value)),
+            Text(l10n.openUrlWarningBody(uri.toString())),
             if (isInsecureHttp) ...[
               const SizedBox(height: 12),
               Text(

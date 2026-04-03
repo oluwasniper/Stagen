@@ -17,6 +17,7 @@ import '../providers/qr_providers.dart';
 import '../services/telemetry_service.dart';
 import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
+import '../utils/qr_link_utils.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
 
@@ -84,7 +85,9 @@ class _GeneratedQRScreenState extends ConsumerState<GeneratedQRScreen> {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
-          fileNameOverrides: ['${label}_qr.png'],
+          fileNameOverrides: [
+            '${sanitizeShareFileStem(label, fallback: 'generated')}_qr.png',
+          ],
         ),
       );
       if (mounted) {
