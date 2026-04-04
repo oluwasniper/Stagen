@@ -19,6 +19,7 @@ abstract final class TelemetryEvents {
   static const String authSigninAnonymous = 'auth_signin_anonymous';
   static const String authAccountLinked = 'auth_account_linked';
   static const String authSignout = 'auth_signout';
+  static const String authAccountDeleted = 'auth_account_deleted';
   static const String authError = 'auth_error';
   static const String sessionResumed = 'session_resumed';
 
@@ -50,6 +51,33 @@ abstract final class TelemetryEvents {
   static const String languageChanged = 'language_changed';
   static const String telemetryOptedOut = 'telemetry_opted_out';
   static const String telemetryOptedIn = 'telemetry_opted_in';
+
+  // App Quality
+  static const String appStartupComplete = 'app_startup_complete';
+  static const String appException = 'app_exception';
+  static const String screenView = 'screen_view';
+  static const String screenDwell = 'screen_dwell';
+  static const String frameJankWindow = 'frame_jank_window';
+  static const String memoryPressureHandled = 'memory_pressure_handled';
+  static const String backgroundSyncCompleted = 'background_sync_completed';
+  static const String backgroundSyncFailed = 'background_sync_failed';
+
+  // Push Notifications
+  static const String pushRegistrationAttempted = 'push_registration_attempted';
+  static const String pushRegistrationFailed = 'push_registration_failed';
+  static const String pushNotificationReceived = 'push_notification_received';
+  static const String pushNotificationOpened = 'push_notification_opened';
+
+  // In-App Notifications
+  static const String inAppNotificationShown = 'in_app_notification_shown';
+  static const String inAppNotificationTapped = 'in_app_notification_tapped';
+  static const String inAppNotificationDismissed =
+      'in_app_notification_dismissed';
+  static const String inAppNotificationInboxOpened =
+      'in_app_notification_inbox_opened';
+  static const String inAppNotificationMarkedRead =
+      'in_app_notification_marked_read';
+  static const String inAppNotificationCleared = 'in_app_notification_cleared';
 }
 
 // ─── TelemetryService ─────────────────────────────────────────────────────────
@@ -131,9 +159,17 @@ final telemetryServiceProvider = Provider<TelemetryService>((ref) {
 /// or [SettingsNotifier] are initialised.
 Future<void> initPostHog() async {
   if (AppConfig.posthogApiKey.isEmpty) return;
+  final posthogHostUri = AppConfig.posthogHostUri;
+  if (posthogHostUri == null) {
+    dev.log(
+      '[TelemetryService] invalid POSTHOG_HOST; skipping analytics initialization.',
+      name: 'TelemetryService',
+    );
+    return;
+  }
 
   final config = PostHogConfig(AppConfig.posthogApiKey)
-    ..host = AppConfig.posthogHost
+    ..host = posthogHostUri.toString()
     ..debug = false
     ..captureApplicationLifecycleEvents = false;
 
@@ -143,8 +179,7 @@ Future<void> initPostHog() async {
   try {
     const storage = FlutterSecureStorage();
     final analyticsValue = await storage.read(key: kSettingAnalyticsKey);
-    // Mirror SettingsNotifier: only 'true' enables analytics; null (first-run)
-    // and any other value are treated as disabled.
+    // Mirror SettingsNotifier: analytics is enabled only for explicit opt-in.
     if (analyticsValue != 'true') {
       try {
         await Posthog().disable();

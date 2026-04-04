@@ -10,7 +10,23 @@ class ClassifiedExternalText {
   });
 }
 
+/// Maximum number of UTF-16 code units accepted by the classifier.
+///
+/// QR codes can encode at most ~3 KB of binary data (version 40, 8-bit mode).
+/// 8192 code units is a generous ceiling that prevents ReDoS / memory exhaustion
+/// from artificially large payloads injected via other code paths (e.g. deep links).
+/// Note: this limit is in Dart string code units, not bytes.
+const _kMaxInputCodeUnits = 8192;
+
 ClassifiedExternalText classifyExternalText(String input) {
+  // Reject oversized payloads before any regex work.
+  if (input.length > _kMaxInputCodeUnits) {
+    return ClassifiedExternalText(
+      type: QROptionType.text,
+      prefill: {'text': input.substring(0, _kMaxInputCodeUnits)},
+    );
+  }
+
   final text = input.trim();
   final lower = text.toLowerCase();
 
@@ -40,6 +56,14 @@ ClassifiedExternalText classifyExternalText(String input) {
     );
   }
 
+  if (lower.startsWith('smsto:') || lower.startsWith('sms:')) {
+    final payload = _parseSmsPayload(text);
+    return ClassifiedExternalText(
+      type: QROptionType.sms,
+      prefill: payload,
+    );
+  }
+
   final uri = Uri.tryParse(text);
   if (uri != null && uri.hasScheme) {
     final scheme = uri.scheme.toLowerCase();
@@ -62,6 +86,16 @@ ClassifiedExternalText classifyExternalText(String input) {
         prefill: {
           if (coords.isNotEmpty) 'latitude': coords[0],
           if (coords.length > 1) 'longitude': coords[1],
+        },
+      );
+    }
+    if (scheme == 'sms' || scheme == 'smsto') {
+      return ClassifiedExternalText(
+        type: QROptionType.sms,
+        prefill: {
+          if (uri.path.isNotEmpty) 'smsNumber': uri.path,
+          if (uri.queryParameters['body']?.isNotEmpty == true)
+            'smsMessage': uri.queryParameters['body']!,
         },
       );
     }
@@ -92,6 +126,29 @@ ClassifiedExternalText classifyExternalText(String input) {
           prefill: {'instagram': pathSegments.first},
         );
       }
+      if ((host == 't.me' ||
+              host.endsWith('.t.me') ||
+              host == 'telegram.me' ||
+              host.endsWith('.telegram.me')) &&
+          pathSegments.isNotEmpty) {
+        return ClassifiedExternalText(
+          type: QROptionType.telegram,
+          prefill: {'telegram': pathSegments.first},
+        );
+      }
+      if ((host == 'linkedin.com' || host.endsWith('.linkedin.com')) &&
+          pathSegments.length >= 2) {
+        final root = pathSegments.first.toLowerCase();
+        if (root == 'in' || root == 'pub') {
+          final handle = pathSegments[1].trim();
+          if (handle.isNotEmpty) {
+            return ClassifiedExternalText(
+              type: QROptionType.linkedin,
+              prefill: {'linkedin': handle},
+            );
+          }
+        }
+      }
       return ClassifiedExternalText(
         type: QROptionType.website,
         prefill: {'website': text},
@@ -110,6 +167,22 @@ ClassifiedExternalText classifyExternalText(String input) {
     return ClassifiedExternalText(
       type: QROptionType.telephone,
       prefill: {'telephone': text},
+    );
+  }
+
+  final telegramMatch = _telegramRegex.firstMatch(text);
+  if (telegramMatch != null) {
+    return ClassifiedExternalText(
+      type: QROptionType.telegram,
+      prefill: {'telegram': telegramMatch.group(1) ?? ''},
+    );
+  }
+
+  final linkedInMatch = _linkedInRegex.firstMatch(text);
+  if (linkedInMatch != null) {
+    return ClassifiedExternalText(
+      type: QROptionType.linkedin,
+      prefill: {'linkedin': linkedInMatch.group(1) ?? ''},
     );
   }
 
@@ -137,6 +210,44 @@ ClassifiedExternalText classifyExternalText(String input) {
   );
 }
 
+Map<String, String> _parseSmsPayload(String input) {
+  final normalized = input.trim();
+  final withoutScheme = normalized.replaceFirst(
+    RegExp(r'^sms(to)?:', caseSensitive: false),
+    '',
+  );
+  final colonIndex = withoutScheme.indexOf(':');
+
+  String number = '';
+  String message = '';
+  String queryPart = '';
+
+  if (colonIndex != -1) {
+    number = withoutScheme.substring(0, colonIndex);
+    message = withoutScheme.substring(colonIndex + 1);
+  } else {
+    final bodySeparator = withoutScheme.indexOf('?');
+    final mainPart = bodySeparator == -1
+        ? withoutScheme
+        : withoutScheme.substring(0, bodySeparator);
+    queryPart =
+        bodySeparator == -1 ? '' : withoutScheme.substring(bodySeparator + 1);
+    number = mainPart;
+  }
+
+  if (queryPart.isNotEmpty) {
+    final qp = Uri.splitQueryString(queryPart);
+    if ((qp['body'] ?? '').trim().isNotEmpty) {
+      message = qp['body']!.trim();
+    }
+  }
+
+  return {
+    if (number.trim().isNotEmpty) 'smsNumber': number.trim(),
+    if (message.trim().isNotEmpty) 'smsMessage': message.trim(),
+  };
+}
+
 String? _extractWifiValue(String source, String key) {
   // Match values that may contain backslash-escaped characters (including \;).
   final escapedKey = RegExp.escape(key);
@@ -153,7 +264,7 @@ String? _extractWifiValue(String source, String key) {
 
 Map<String, String> _parseVCard(String vcard) {
   final fields = <String, String>{};
-  final lines = vcard.split(RegExp(r'\r?\n'));
+  final lines = vcard.split(RegExp(r'\r?\n')).take(200).toList();
 
   final n = _lineValue(lines, 'N');
   if (n != null) {
@@ -184,7 +295,7 @@ Map<String, String> _parseVCard(String vcard) {
 }
 
 Map<String, String> _parseVEvent(String vevent) {
-  final lines = vevent.split(RegExp(r'\r?\n'));
+  final lines = vevent.split(RegExp(r'\r?\n')).take(200).toList();
   final fields = <String, String>{};
 
   final summary = _lineValue(lines, 'SUMMARY');
@@ -221,6 +332,14 @@ String? _lineValue(List<String> lines, String key) {
 final _emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 final _phoneRegex = RegExp(r'^\+?[0-9][0-9\-\s().]{5,}$');
 final _domainRegex = RegExp(r'^(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}([/?#].*)?$');
+final _telegramRegex = RegExp(
+  r'^(?:https?://)?(?:t\.me|telegram\.me)/([A-Za-z0-9_]{3,})/?$',
+  caseSensitive: false,
+);
+final _linkedInRegex = RegExp(
+  r'^(?:https?://)?(?:[a-z]+\.)?linkedin\.com/(?:in|pub)/([A-Za-z0-9_-]+)/?$',
+  caseSensitive: false,
+);
 final _coordRegex = RegExp(
   r'^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$',
 );

@@ -1,31 +1,18 @@
-import 'package:appwrite/appwrite.dart';
 import 'dart:async';
+
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../config/app_config.dart';
+
 import '../models/qr_record.dart';
 import '../services/appwrite_service.dart';
+import '../services/appwrite_client.dart';
 import '../services/offline_history_service.dart';
 import 'auth_provider.dart';
 
 // ─── Appwrite Client & Service Providers ───
 
 final appwriteClientProvider = Provider<Client>((ref) {
-  final configError = AppConfig.appwriteConfigError;
-  if (configError != null) {
-    throw StateError(
-      '$configError '
-      'Pass --dart-define-from-file=.env or explicit --dart-define flags.',
-    );
-  }
-  if (AppConfig.appwriteProjectId.isEmpty) {
-    throw StateError('AppConfig.appwriteProjectId is not configured. '
-        'Pass --dart-define=APPWRITE_PROJECT_ID=<value> at build time.');
-  }
-  final client = Client();
-  client
-      .setEndpoint(AppConfig.appwriteEndpoint)
-      .setProject(AppConfig.appwriteProjectId);
-  return client;
+  return buildAppwriteClient();
 });
 
 final appwriteServiceProvider = Provider<AppwriteService>((ref) {
@@ -72,6 +59,7 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
   final AppwriteService _service;
   final String _type;
   final String? _userId;
+  int _fetchGeneration = 0;
 
   QRRecordListNotifier(
     this._offline,
@@ -83,59 +71,113 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
     fetchRecords();
   }
 
-  Future<void> fetchRecords() async {
-    state = const AsyncValue.loading();
+  void _setDataState() {
+    if (!mounted) return;
+    state = AsyncValue.data(
+      _offline.getVisibleRecords(type: _type, userId: _userId),
+    );
+  }
+
+  Future<void> fetchRecords({
+    bool silent = false,
+    FetchCancellationToken? cancellationToken,
+  }) async {
+    final fetchId = ++_fetchGeneration;
+    if (_shouldAbortFetch(fetchId, cancellationToken)) return;
+    if (!silent || !state.hasValue) {
+      state = const AsyncValue.loading();
+    }
     try {
       // Local-first: always show encrypted offline cache.
       var records = _offline.getVisibleRecords(type: _type, userId: _userId);
+      if (_shouldAbortFetch(fetchId, cancellationToken)) return;
       state = AsyncValue.data(records);
 
       // If authenticated, try syncing in background and refresh.
       if (_userId != null) {
-        await _syncWithRemote();
+        await _syncWithRemote(
+          shouldAbort: () => _shouldAbortFetch(fetchId, cancellationToken),
+        );
+        if (_shouldAbortFetch(fetchId, cancellationToken)) return;
         records = _offline.getVisibleRecords(type: _type, userId: _userId);
       }
+      if (_shouldAbortFetch(fetchId, cancellationToken)) return;
       state = AsyncValue.data(records);
     } catch (e, st) {
+      if (_shouldAbortFetch(fetchId, cancellationToken)) return;
       state = AsyncValue.error(e, st);
     }
+  }
+
+  void cancelInFlightFetch() {
+    _fetchGeneration++;
+  }
+
+  bool _shouldAbortFetch(
+    int fetchId,
+    FetchCancellationToken? cancellationToken,
+  ) {
+    return !mounted ||
+        fetchId != _fetchGeneration ||
+        (cancellationToken?.isCancelled ?? false);
   }
 
   Future<void> addRecord(QRRecord record) async {
+    if (!mounted) return;
     try {
       await _offline.addPendingCreate(record, userId: _userId);
-      state = AsyncValue.data(
-        _offline.getVisibleRecords(type: _type, userId: _userId),
-      );
-      unawaited(fetchRecords());
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
+      if (!mounted) return;
+      if (_userId != null) {
+        await _syncWithRemote();
+        if (!mounted) return;
+      }
+      _setDataState();
+    } catch (_) {
+      // Show whatever is locally cached even on error.
+      _setDataState();
     }
   }
 
-  Future<void> deleteRecord(String localId) async {
+  Future<bool> deleteRecord(String localId) async {
+    if (!mounted) return false;
     try {
       await _offline.markPendingDelete(localId);
-      state = AsyncValue.data(
-        _offline.getVisibleRecords(type: _type, userId: _userId),
-      );
-      unawaited(fetchRecords());
+      if (!mounted) return false;
+      _setDataState();
+      if (_userId == null) {
+        return true;
+      }
+      try {
+        await _syncWithRemote();
+        if (!mounted) return true;
+        _setDataState();
+      } catch (e, st) {
+        if (!mounted) return true;
+        state = AsyncValue.error(e, st);
+      }
+      return true;
     } catch (e, st) {
+      if (!mounted) return false;
       state = AsyncValue.error(e, st);
+      return false;
     }
   }
 
-  Future<void> _syncWithRemote() async {
+  Future<void> _syncWithRemote({bool Function()? shouldAbort}) async {
+    if (!mounted || (shouldAbort?.call() ?? false)) return;
     final userId = _userId;
     if (userId == null) return;
 
     // Push pending creates
     final creates = await _offline.pendingCreates(type: _type, userId: userId);
+    if (!mounted || (shouldAbort?.call() ?? false)) return;
     for (final local in creates) {
+      if (!mounted || (shouldAbort?.call() ?? false)) return;
       // Re-check that the entry is still pending before pushing remotely.
       // A concurrent delete can remove it from the pending list between the
       // snapshot above and this iteration, which would create a ghost record.
       final stillPending = await _offline.isPendingCreate(local.localId);
+      if (!mounted || (shouldAbort?.call() ?? false)) return;
       if (!stillPending) continue;
       try {
         final saved = await _service.saveQRRecord(
@@ -164,7 +206,9 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
 
     // Push pending deletes
     final deletes = await _offline.pendingDeletes(type: _type, userId: userId);
+    if (!mounted || (shouldAbort?.call() ?? false)) return;
     for (final local in deletes) {
+      if (!mounted || (shouldAbort?.call() ?? false)) return;
       try {
         if (local.remoteId != null) {
           await _service.deleteQRRecord(local.remoteId!);
@@ -179,7 +223,9 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
     try {
       final remoteRecords =
           await _service.getQRRecords(type: _type, userId: userId);
+      if (!mounted || (shouldAbort?.call() ?? false)) return;
       await _offline.upsertAllFromRemote(remoteRecords, userId: userId);
+      if (!mounted || (shouldAbort?.call() ?? false)) return;
       final remoteIds = {
         for (final r in remoteRecords)
           if (r.id != null) r.id!,
@@ -193,10 +239,21 @@ class QRRecordListNotifier extends StateNotifier<AsyncValue<List<QRRecord>>> {
           userId: userId,
           remoteIds: remoteIds,
         );
+        if (!mounted || (shouldAbort?.call() ?? false)) return;
       }
     } catch (_) {
       // Pull failed; keep local cache visible.
     }
+  }
+}
+
+class FetchCancellationToken {
+  bool _isCancelled = false;
+
+  bool get isCancelled => _isCancelled;
+
+  void cancel() {
+    _isCancelled = true;
   }
 }
 

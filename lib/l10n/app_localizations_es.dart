@@ -25,6 +25,23 @@ class AppLocalizationsEs extends AppLocalizations {
   String get onboardingSkipButton => 'Vamos';
 
   @override
+  String get onboardingNext => 'Siguiente';
+
+  @override
+  String get onboardingPage2Title => 'Genera códigos QR';
+
+  @override
+  String get onboardingPage2Subtitle =>
+      'Crea códigos QR para texto, Wi‑Fi, contactos, eventos y más en segundos.';
+
+  @override
+  String get onboardingPage3Title => 'Consulta tu historial';
+
+  @override
+  String get onboardingPage3Subtitle =>
+      'Todos tus códigos QR escaneados y generados se guardan de forma segura y se sincronizan entre dispositivos.';
+
+  @override
   String get errorText => 'Error: Página no encontrada';
 
   @override
@@ -73,6 +90,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get telephoneQR => 'Teléfono';
 
   @override
+  String get smsQR => 'SMS';
+
+  @override
+  String get telegramQR => 'Telegram';
+
+  @override
+  String get linkedinQR => 'LinkedIn';
+
+  @override
   String get generateCode => 'Generar un Código';
 
   @override
@@ -83,6 +109,18 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get scan => 'Escanear';
+
+  @override
+  String get qrCodeDetected => '✓  Código QR detectado';
+
+  @override
+  String get openGallery => 'Abrir galería';
+
+  @override
+  String get toggleTorch => 'Alternar linterna';
+
+  @override
+  String get switchCamera => 'Cambiar cámara';
 
   @override
   String get create => 'Crear';
@@ -119,6 +157,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shareDesc => 'Compartir aplicación con otras personas.';
 
   @override
+  String shareAppMessage(String url) {
+    return '¡Descubre Scagen! $url';
+  }
+
+  @override
   String get privacyPolicy => 'Política de Privacidad';
 
   @override
@@ -138,6 +181,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get openBtn => 'Abrir';
+
+  @override
+  String get backToGenerate => 'Volver a generar';
+
+  @override
+  String get scanAnother => 'Escanear otro';
 
   @override
   String get qrCode => 'Código QR';
@@ -320,6 +369,76 @@ class AppLocalizationsEs extends AppLocalizations {
   String get phoneNumberHint => '+[código de país] xxxxxxxxx';
 
   @override
+  String get smsNumberLabel => 'Número SMS';
+
+  @override
+  String get smsNumberHint => 'Ingrese el número del destinatario';
+
+  @override
+  String get smsMessageLabel => 'Mensaje SMS';
+
+  @override
+  String get smsMessageHint => 'Ingrese el mensaje (opcional)';
+
+  @override
+  String get telegramUsernameLabel => 'Usuario de Telegram';
+
+  @override
+  String get telegramUsernameHint => 'Ingrese usuario o @usuario';
+
+  @override
+  String get linkedinProfileLabel => 'Perfil de LinkedIn';
+
+  @override
+  String get linkedinProfileHint => 'Ingrese URL del perfil o usuario';
+
+  @override
+  String get validationSmsNumberRequired => 'El número SMS es obligatorio';
+
+  @override
+  String get validationSmsNumberInvalid => 'Ingrese un número SMS válido';
+
+  @override
+  String get validationTelegramRequired =>
+      'El usuario de Telegram es obligatorio';
+
+  @override
+  String get validationTelegramInvalid =>
+      'Ingrese un usuario de Telegram o enlace t.me válido';
+
+  @override
+  String get validationLinkedinRequired =>
+      'El perfil de LinkedIn es obligatorio';
+
+  @override
+  String get validationLinkedinInvalid =>
+      'Ingrese una URL o usuario de LinkedIn válido';
+
+  @override
+  String get validationInvalidInput => 'Ingrese un valor válido';
+
+  @override
+  String get locationUseCurrentLocation => 'Usar ubicación actual';
+
+  @override
+  String get locationGettingCurrentLocation => 'Obteniendo ubicación...';
+
+  @override
+  String get locationOrDivider => 'O';
+
+  @override
+  String get locationLatitudeLabel => 'Latitud';
+
+  @override
+  String get locationLatitudeHint => 'Ingrese la latitud';
+
+  @override
+  String get locationLongitudeLabel => 'Longitud';
+
+  @override
+  String get locationLongitudeHint => 'Ingrese la longitud';
+
+  @override
   String get changeLanguage => 'Idioma';
 
   @override
@@ -377,6 +496,29 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get authLogoutDesc => 'Cerrar sesión de tu cuenta';
+
+  @override
+  String get cancel => 'Cancelar';
+
+  @override
+  String get authDeleteAccount => 'Eliminar cuenta';
+
+  @override
+  String get authDeleteAccountDesc =>
+      'Elimina permanentemente tu cuenta y todos los datos';
+
+  @override
+  String get authDeleteAccountConfirmTitle => '¿Eliminar cuenta?';
+
+  @override
+  String get authDeleteAccountConfirmBody =>
+      'Esto eliminará permanentemente tu cuenta y todo tu historial de QR. Esta acción no se puede deshacer.';
+
+  @override
+  String get authDeleteAccountConfirmButton => 'Eliminar';
+
+  @override
+  String get authDeleteAccountSuccess => 'Tu cuenta ha sido eliminada';
 
   @override
   String get authAccount => 'Cuenta';
@@ -511,4 +653,39 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get failedToShare => 'Error al compartir';
+
+  @override
+  String get unableToOpenContent => 'No se puede abrir este contenido';
+
+  @override
+  String get noInternet => 'Sin conexión a internet';
+
+  @override
+  String get scanGenerateShare => 'Escanear · Generar · Compartir';
+
+  @override
+  String get openUrlWarningTitle => '¿Abrir este enlace?';
+
+  @override
+  String openUrlWarningBody(String url) {
+    return 'Este enlace proviene de un código QR. Asegúrate de confiar en él antes de continuar.\n\n$url';
+  }
+
+  @override
+  String get openUrlWarningInsecure =>
+      '⚠ Este enlace usa HTTP sin cifrar. Tus datos pueden ser visibles para otros.';
+
+  @override
+  String get openUrlWarningConfirm => 'Abrir';
+
+  @override
+  String get openUrlWarningCancel => 'Cancelar';
+
+  @override
+  String get authNetworkError =>
+      'Error de red. Comprueba tu conexión a internet e inténtalo de nuevo.';
+
+  @override
+  String get authGenericError =>
+      'Algo salió mal. Por favor, inténtalo de nuevo.';
 }

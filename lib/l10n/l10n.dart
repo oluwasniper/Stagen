@@ -12,4 +12,15 @@ class L10n {
     const Locale('fr', 'FR'), // French
     const Locale('es', 'ES'), // Spanish
   ];
+
+  static const languageNames = {
+    'en': 'English',
+    'pt': 'Português (Brasil)',
+    'fr': 'Français',
+    'es': 'Español',
+  };
+
+  static String displayNameOf(Locale locale) {
+    return languageNames[locale.languageCode] ?? locale.languageCode;
+  }
 }

@@ -23,4 +23,7 @@ class AppAsset {
   static const String twitterIconSvg = 'assets/svgs/twitterIcon.svg';
   static const String instagramIconSvg = 'assets/svgs/instagramIcon.svg';
   static const String telephoneIconSvg = 'assets/svgs/telephoneIcon.svg';
+  static const String smsIconSvg = 'assets/svgs/smsIcon.svg';
+  static const String telegramIconSvg = 'assets/svgs/telegramIcon.svg';
+  static const String linkedinIconSvg = 'assets/svgs/linkedinIcon.svg';
 }

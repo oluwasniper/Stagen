@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+// QR v40 can hold at most 2953 bytes in binary mode; this is the hard ceiling
+// for any user-supplied QR field. Appwrite's `data` attribute is 4096 chars,
+// so this also prevents writes that exceed the DB column limit.
+const int _kQrInputMaxLength = 2953;
 
 class KTextField extends StatelessWidget {
   final String labelText;
   final String hintText;
   final bool? autoFocus;
   final int? maxLines;
+  /// Hard character limit enforced via [LengthLimitingTextInputFormatter].
+  /// Defaults to [_kQrInputMaxLength] (2953). Pass a smaller value for fields
+  /// that have their own stricter format constraints (e.g. phone numbers).
+  final int maxLength;
+  final TextInputType keyboardType;
   final TextEditingController? controller;
   const KTextField({
     super.key,
@@ -12,6 +23,8 @@ class KTextField extends StatelessWidget {
     required this.hintText,
     this.autoFocus,
     this.maxLines,
+    this.maxLength = _kQrInputMaxLength,
+    this.keyboardType = TextInputType.text,
     this.controller,
   });
 
@@ -75,6 +88,7 @@ class KTextField extends StatelessWidget {
             fontWeight: FontWeight.w500,
           ),
           maxLines: maxLines ?? 1,
+          inputFormatters: [LengthLimitingTextInputFormatter(maxLength)],
           autofocus: autoFocus ?? false,
           cursorColor: Color(0xffD9D9D9),
           cursorOpacityAnimates: true,
@@ -82,7 +96,7 @@ class KTextField extends StatelessWidget {
           showCursor: true,
           scrollPhysics: BouncingScrollPhysics(),
           cursorWidth: 2,
-          keyboardType: TextInputType.text,
+          keyboardType: keyboardType,
         ),
       ],
     );

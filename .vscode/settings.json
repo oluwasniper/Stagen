@@ -12,5 +12,11 @@
     "statusBar.noFolderBackground": "#58112A",
     "statusBar.noFolderForeground": "#FEFBFC"
   },
-  "dart.flutterSdkPath": ".fvm/versions/3.27.3"
+  "dart.flutterSdkPath": ".fvm/versions/3.27.3",
+  "files.exclude": {
+    "linux/": true
+  },
+  "C_Cpp.files.exclude": {
+    "linux/**": true
+  }
 }

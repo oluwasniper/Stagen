@@ -10,6 +10,14 @@ class AuthService {
 
   AuthService({required Client client}) : _account = Account(client);
 
+  bool _isNoActiveSessionError(Object error) {
+    if (error is! AppwriteException) return false;
+    return error.code == 401 ||
+        error.type == 'user_unauthorized' ||
+        error.type == 'general_unauthorized_scope' ||
+        (error.code == 404 && error.type == 'user_session_not_found');
+  }
+
   // ─── Session Management ───
 
   /// Get the currently logged-in user, or `null` if there is no active session.
@@ -81,12 +89,35 @@ class AuthService {
 
   // ─── Sign Out ───
 
+  /// Block and sign out the current user account.
+  ///
+  /// Appwrite's client SDK can only *block* an account (not hard-delete it).
+  /// Blocking prevents all future sign-ins, which satisfies store policy
+  /// requirements. Full erasure of the server record requires a server-side
+  /// function or admin action.
+  Future<void> blockAndDeleteAccount() async {
+    await _account.updateStatus(); // blocks the account
+    await logout(); // clear the local session
+  }
+
   /// Delete the current session (sign out).
   Future<void> logout() async {
     try {
       await _account.deleteSession(sessionId: 'current');
-    } catch (_) {
-      // Session may already be expired / deleted
+      return;
+    } catch (error) {
+      // If there is no active session, we're already signed out.
+      if (_isNoActiveSessionError(error)) return;
+
+      // Fallback: try deleting all sessions.
+      try {
+        await _account.deleteSessions();
+        return;
+      } catch (fallbackError) {
+        // If fallback says there is no active session, treat as success.
+        if (_isNoActiveSessionError(fallbackError)) return;
+        rethrow;
+      }
     }
   }
 }

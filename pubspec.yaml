@@ -1,4 +1,4 @@
-name: revolutionary_stuff
+name: scagen
 description: "A new Flutter project for qr-code scanning and generation"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -40,8 +40,8 @@ dependencies:
   flutter_secure_storage: ^9.2.2 # Secure storage
   page_transition: ^2.1.0 # Page transitions
   qr_flutter: ^4.1.0 # QR code generation
-  appwrite: ^17.0.1 # Appwrite
-  flutter_web_auth_2: ^4.1.0 # Web authentication
+  appwrite: ^21.1.0 # Appwrite
+  flutter_web_auth_2: ^5.0.1 # Web authentication
   flutter_localizations:
     sdk: flutter 
   intl: ">=0.19.0 <0.21.0" # Internationalization (compatible with Flutter SDK pinning across versions)
@@ -61,7 +61,13 @@ dependencies:
   hive_flutter: ^1.1.0
   posthog_flutter: ^5.17.0
   share_plus: ^12.0.1 # Sharing content
+  path_provider: ^2.1.0 # Temp directory for sharing files
   image_picker: ^1.1.2 # Pick image from gallery for QR scan
+  pasteboard: ^0.5.0
+  connectivity_plus: ^7.0.0
+  uuid: ^4.5.1
+  firebase_core: ^3.0.0
+  firebase_messaging: ^15.0.0
 
 dev_dependencies:
   flutter_test:

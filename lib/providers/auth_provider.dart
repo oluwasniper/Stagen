@@ -1,3 +1,4 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -91,6 +92,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
     initComplete = _init();
   }
 
+  AuthNotifier.misconfigured(String message, Ref ref)
+      : _authService = _PlaceholderAuthService(message),
+        _ref = ref,
+        super(AuthState(status: AuthStatus.unauthenticated, error: message)) {
+    initComplete = Future.value();
+  }
+
   TelemetryService get _telemetry => _ref.read(telemetryServiceProvider);
 
   /// Check for existing session on startup.
@@ -109,9 +117,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> signInAnonymously() async {
     state = state.copyWith(status: AuthStatus.loading);
     try {
-      // Always clear any stale local session first, then create fresh
+      // Always clear any stale local session first, then create fresh.
       await _authService.logout();
-      await _authService.createAnonymousSession();
+      try {
+        await _authService.createAnonymousSession();
+      } catch (e) {
+        // If Appwrite still reports a session exists, force-clear and retry.
+        if (appwriteErrorType(e) == 'user_session_already_exists') {
+          await _authService.logout();
+          await _authService.createAnonymousSession();
+        } else {
+          rethrow;
+        }
+      }
       final user = await _authService.getCurrentUser();
       state = AuthState(status: AuthStatus.authenticated, user: user);
       try {
@@ -197,23 +215,156 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Delete all user data and block the account, then sign out.
+  ///
+  /// Returns an error string if the operation fails, or null on success.
+  Future<String?> deleteAccount() async {
+    final user = state.user;
+    state = state.copyWith(status: AuthStatus.loading);
+
+    try {
+      // 1. Delete all user data first (while we still have a valid session).
+      //    This covers QR records and in-app notification documents so that
+      //    no PII lingers after the account is blocked (GDPR erasure).
+      if (user != null) {
+        final appwriteService = _ref.read(appwriteServiceProvider);
+        await Future.wait([
+          appwriteService.deleteAllUserData(user.$id),
+          appwriteService.deleteAllUserNotifications(user.$id),
+        ]);
+      }
+
+      // 2. Track deletion intent (errors here must not block the deletion).
+      try {
+        _telemetry.track(TelemetryEvents.authAccountDeleted);
+      } catch (_) {}
+
+      // 3. Block account + delete session.
+      await _authService.blockAndDeleteAccount();
+
+      // 4. Reset telemetry identity only after successful deletion.
+      try {
+        _telemetry.reset();
+      } catch (_) {}
+
+      // 5. Invalidate cached history.
+      _ref.invalidate(scannedHistoryProvider);
+      _ref.invalidate(generatedHistoryProvider);
+
+      state = const AuthState(status: AuthStatus.unauthenticated);
+      return null;
+    } catch (e) {
+      try {
+        _telemetry.track(TelemetryEvents.authError,
+            properties: {'error_type': appwriteErrorType(e) ?? 'unknown'});
+      } catch (_) {}
+      state = state.copyWith(
+        status: AuthStatus.authenticated,
+        error: e.toString(),
+        errorType: appwriteErrorType(e),
+      );
+      return e.toString();
+    }
+  }
+
   /// Sign out and clear state.
   Future<void> signOut() async {
-    _telemetry.track(TelemetryEvents.authSignout);
-    await _authService.logout();
+    final previousUser = state.user;
+    state = state.copyWith(
+      status: AuthStatus.loading,
+      error: null,
+      errorType: null,
+    );
+
     try {
-      _telemetry.reset();
+      _telemetry.track(TelemetryEvents.authSignout);
     } catch (_) {}
-    state = const AuthState(status: AuthStatus.unauthenticated);
-    // Invalidate history providers so they re-fetch on next sign-in
-    _ref.invalidate(scannedHistoryProvider);
-    _ref.invalidate(generatedHistoryProvider);
+
+    try {
+      await _authService.logout();
+      try {
+        _telemetry.reset();
+      } catch (_) {}
+      state = const AuthState(status: AuthStatus.unauthenticated);
+      // Invalidate history providers so they re-fetch on next sign-in
+      _ref.invalidate(scannedHistoryProvider);
+      _ref.invalidate(generatedHistoryProvider);
+    } catch (e) {
+      try {
+        _telemetry.track(
+          TelemetryEvents.authError,
+          properties: {'error_type': appwriteErrorType(e) ?? 'unknown'},
+        );
+      } catch (_) {}
+
+      models.User? currentUser;
+      try {
+        currentUser = await _authService.getCurrentUser();
+      } catch (_) {
+        currentUser = previousUser;
+      }
+      state = AuthState(
+        status: currentUser == null
+            ? AuthStatus.unauthenticated
+            : AuthStatus.authenticated,
+        user: currentUser ?? previousUser,
+        error: e.toString(),
+        errorType: appwriteErrorType(e),
+      );
+    }
   }
+}
+
+// ─── Placeholder (used when Appwrite is not configured) ───
+
+class _PlaceholderAuthService extends AuthService {
+  _PlaceholderAuthService(this._message) : super(client: Client());
+
+  final String _message;
+
+  StateError get _misconfiguredError => StateError(_message);
+
+  @override
+  Future<models.User?> getCurrentUser() async => null;
+
+  @override
+  Future<void> logout() async {}
+
+  @override
+  Future<models.Session> createAnonymousSession() =>
+      Future.error(_misconfiguredError);
+
+  @override
+  Future<models.User> createAccount({
+    required String email,
+    required String password,
+    String? name,
+  }) =>
+      Future.error(_misconfiguredError);
+
+  @override
+  Future<models.Session> createEmailSession({
+    required String email,
+    required String password,
+  }) =>
+      Future.error(_misconfiguredError);
+
+  @override
+  Future<models.User> convertAnonymousToFull({
+    required String email,
+    required String password,
+    String? name,
+  }) =>
+      Future.error(_misconfiguredError);
 }
 
 // ─── Provider ───
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final authService = ref.watch(authServiceProvider);
-  return AuthNotifier(authService, ref);
+  try {
+    final authService = ref.watch(authServiceProvider);
+    return AuthNotifier(authService, ref);
+  } on StateError catch (e) {
+    return AuthNotifier.misconfigured(e.message, ref);
+  }
 });

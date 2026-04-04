@@ -8,6 +8,7 @@ import '../providers/auth_provider.dart';
 import '../providers/settings_provider.dart';
 import '../utils/app_router.dart';
 import '../utils/error_localizer.dart';
+import '../utils/app_motion.dart';
 import '../utils/route/app_path.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
@@ -77,17 +78,16 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   void _showError(String message, [String? errorType]) {
     final l10n = AppLocalizations.of(context);
 
-    // Strip Appwrite exception wrapper for a fallback message
-    String fallback = message;
-    if (fallback.contains('AppwriteException:')) {
-      fallback = fallback.split('AppwriteException:').last.trim();
-      fallback = fallback.replaceAll(RegExp(r'\s*\(\d+\)\s*$'), '');
-      // Remove the error type prefix (e.g. "user_already_exists, ")
-      fallback = fallback.replaceAll(RegExp(r'^[a-z_]+,\s*'), '');
-    }
-    if (fallback.contains('Failed host lookup')) {
-      fallback =
-          'Network error: unable to reach Appwrite host. Check internet/DNS and APPWRITE_ENDPOINT.';
+    // Derive a safe fallback that does NOT expose raw server exception strings.
+    // Network errors get a specific hint; everything else gets a generic message
+    // to avoid leaking Appwrite internals (error types, codes, server text).
+    final String fallback;
+    if (message.contains('Failed host lookup') ||
+        message.contains('SocketException') ||
+        message.contains('NetworkException')) {
+      fallback = l10n.authNetworkError;
+    } else {
+      fallback = l10n.authGenericError;
     }
 
     final localized = localizeApiError(l10n, errorType, fallback);
@@ -105,6 +105,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final auth = ref.watch(authProvider);
     final l10n = AppLocalizations.of(context);
     final isLoading = auth.status == AuthStatus.loading;
+    final motion = AppMotion.of(context);
 
     return Scaffold(
       backgroundColor: const Color(0xff333333),
@@ -130,8 +131,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       color: const Color(0xffFDB623),
                     )
                         .animate()
-                        .fadeIn(duration: 500.ms)
-                        .scale(begin: const Offset(0.5, 0.5), duration: 500.ms),
+                        .fadeIn(duration: motion.duration(AppMotion.slow))
+                        .scale(
+                          begin: const Offset(0.5, 0.5),
+                          duration: motion.duration(AppMotion.slow),
+                          curve: motion.curve(AppMotion.spring),
+                        ),
                     const SizedBox(height: 12),
                     Text(
                       l10n.appName,
@@ -140,7 +145,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                       ),
-                    ).animate().fadeIn(delay: 200.ms, duration: 400.ms),
+                    ).animate().fadeIn(
+                        delay: motion.delay(AppMotion.fast),
+                        duration: motion.duration(AppMotion.medium)),
                     const SizedBox(height: 40),
 
                     // ─── Email / Password Form ───
@@ -187,7 +194,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                 _obscurePassword
                                     ? Icons.visibility_off_rounded
                                     : Icons.visibility_rounded,
-                                color: const Color(0xffFDB623).withValues(alpha: 0.7),
+                                color: const Color(0xffFDB623)
+                                    .withValues(alpha: 0.7),
                               ),
                               onPressed: () {
                                 setState(
@@ -241,8 +249,19 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           ),
                         ],
                       ),
-                    ).animate().fadeIn(delay: 300.ms, duration: 500.ms).slideY(
-                        begin: 0.1, end: 0, delay: 300.ms, duration: 500.ms),
+                    )
+                        .animate()
+                        .fadeIn(
+                          delay: motion.delay(AppMotion.fast),
+                          duration: motion.duration(AppMotion.slow),
+                        )
+                        .slideY(
+                          begin: 0.1,
+                          end: 0,
+                          delay: motion.delay(AppMotion.fast),
+                          duration: motion.duration(AppMotion.slow),
+                          curve: motion.curve(AppMotion.enter),
+                        ),
 
                     const SizedBox(height: 14),
 
@@ -309,8 +328,19 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           ),
                         ),
                       ),
-                    ).animate().fadeIn(delay: 500.ms, duration: 400.ms).slideY(
-                        begin: 0.1, end: 0, delay: 500.ms, duration: 400.ms),
+                    )
+                        .animate()
+                        .fadeIn(
+                          delay: motion.delay(AppMotion.slow),
+                          duration: motion.duration(AppMotion.medium),
+                        )
+                        .slideY(
+                          begin: 0.1,
+                          end: 0,
+                          delay: motion.delay(AppMotion.slow),
+                          duration: motion.duration(AppMotion.medium),
+                          curve: motion.curve(AppMotion.enter),
+                        ),
 
                     const SizedBox(height: 40),
                   ],
@@ -341,7 +371,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4)),
-        prefixIcon: Icon(icon, color: const Color(0xffFDB623).withValues(alpha: 0.7)),
+        prefixIcon:
+            Icon(icon, color: const Color(0xffFDB623).withValues(alpha: 0.7)),
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: const Color(0xff444444),
@@ -375,15 +406,9 @@ class _LanguageChip extends StatelessWidget {
   final WidgetRef ref;
   const _LanguageChip({required this.ref});
 
-  static const _languageNames = {
-    'en': 'English',
-    'pt': 'Português',
-    'fr': 'Français',
-    'es': 'Español',
-  };
-
   void _showPicker(BuildContext context) {
     final currentLocale = ref.read(localeProvider);
+    final motion = AppMotion.of(context);
 
     showModalBottomSheet(
       context: context,
@@ -410,12 +435,11 @@ class _LanguageChip extends StatelessWidget {
                 final locale = entry.value;
                 final isSelected =
                     locale.languageCode == currentLocale.languageCode;
-                final name =
-                    _languageNames[locale.languageCode] ?? locale.languageCode;
+                final name = L10n.displayNameOf(locale);
 
                 return ListTile(
                   leading: AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
+                    duration: motion.duration(AppMotion.fast),
                     width: 24,
                     height: 24,
                     decoration: BoxDecoration(
@@ -451,15 +475,17 @@ class _LanguageChip extends StatelessWidget {
                 )
                     .animate()
                     .fadeIn(
-                      delay: Duration(milliseconds: 60 * index),
-                      duration: const Duration(milliseconds: 250),
+                      delay: motion.delay(Duration(milliseconds: 60 * index)),
+                      duration:
+                          motion.duration(const Duration(milliseconds: 250)),
                     )
                     .slideX(
                       begin: 0.1,
                       end: 0,
-                      delay: Duration(milliseconds: 60 * index),
-                      duration: const Duration(milliseconds: 250),
-                      curve: Curves.easeOut,
+                      delay: motion.delay(Duration(milliseconds: 60 * index)),
+                      duration:
+                          motion.duration(const Duration(milliseconds: 250)),
+                      curve: motion.curve(AppMotion.enter),
                     );
               }),
               const SizedBox(height: 12),
@@ -472,6 +498,7 @@ class _LanguageChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
     final code = ref.watch(localeProvider).languageCode.toUpperCase();
 
     return Material(
@@ -504,6 +531,9 @@ class _LanguageChip extends StatelessWidget {
           ),
         ),
       ),
-    ).animate().fadeIn(delay: 600.ms, duration: 400.ms);
+    ).animate().fadeIn(
+          delay: motion.delay(const Duration(milliseconds: 600)),
+          duration: motion.duration(AppMotion.medium),
+        );
   }
 }

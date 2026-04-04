@@ -22,6 +22,26 @@
     "@onboardingSkipButton":{
         "description": "Button to skip the onboarding screen"
     },
+    "onboardingNext": "Next",
+    "@onboardingNext":{
+        "description": "Button label to move to the next onboarding page"
+    },
+    "onboardingPage2Title": "Generate QR Codes",
+    "@onboardingPage2Title":{
+        "description": "Onboarding page 2 title"
+    },
+    "onboardingPage2Subtitle": "Create QR codes for text, Wi-Fi, contacts, events and more in seconds.",
+    "@onboardingPage2Subtitle":{
+        "description": "Onboarding page 2 subtitle"
+    },
+    "onboardingPage3Title": "Track Your History",
+    "@onboardingPage3Title":{
+        "description": "Onboarding page 3 title"
+    },
+    "onboardingPage3Subtitle": "All your scanned and generated QR codes are stored securely and synced across devices.",
+    "@onboardingPage3Subtitle":{
+        "description": "Onboarding page 3 subtitle"
+    },
 
     "errorText": "Error: Page not found",
     "@errorText":{
@@ -91,6 +111,18 @@
     "@telephoneQR":{
         "description": "Telephone details to be converted to QR code"
     },
+    "smsQR": "SMS",
+    "@smsQR":{
+        "description": "SMS details to be converted to QR code"
+    },
+    "telegramQR": "Telegram",
+    "@telegramQR":{
+        "description": "Telegram details to be converted to QR code"
+    },
+    "linkedinQR": "LinkedIn",
+    "@linkedinQR":{
+        "description": "LinkedIn details to be converted to QR code"
+    },
 
     "generateCode": "Generate a Code",
     "@generateCode":{
@@ -109,6 +141,22 @@
     "scan": "Scan",
     "@scan":{
         "description": "Tab to scan a QR code"
+    },
+    "qrCodeDetected": "✓  QR Code Detected",
+    "@qrCodeDetected":{
+        "description": "Scanner success banner when a QR is detected"
+    },
+    "openGallery": "Open gallery",
+    "@openGallery": {
+        "description": "Accessibility label and tooltip for opening the image gallery from scanner controls"
+    },
+    "toggleTorch": "Toggle torch",
+    "@toggleTorch": {
+        "description": "Accessibility label and tooltip for toggling the scanner flashlight"
+    },
+    "switchCamera": "Switch camera",
+    "@switchCamera": {
+        "description": "Accessibility label and tooltip for switching between front and rear cameras in scanner controls"
     },
 
     "create": "Create",
@@ -165,6 +213,15 @@
     "@shareDesc":{
         "description": "Description to share the app"
     },
+    "shareAppMessage": "Check out Scagen! {url}",
+    "@shareAppMessage": {
+        "description": "Message used when sharing the app link",
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
 
     "privacyPolicy": "Privacy Policy",
     "@privacyPolicy":{
@@ -201,6 +258,14 @@
     "openBtn": "Open",
     "@openBtn" :{
         "description": "Button to open a scanned URL"
+    },
+    "backToGenerate": "Back to Generate",
+    "@backToGenerate" :{
+        "description": "Button label to return to QR generation home"
+    },
+    "scanAnother": "Scan Another",
+    "@scanAnother" :{
+        "description": "Button label to return to scan home"
     },
 
     "qrCode": "QR Code",
@@ -489,6 +554,94 @@
     "@phoneNumberHint" :{
         "description": "Hint for the phone number input"
     },
+    "smsNumberLabel": "SMS Number",
+    "@smsNumberLabel": {
+        "description": "Label for the SMS recipient number input"
+    },
+    "smsNumberHint": "Enter recipient number",
+    "@smsNumberHint": {
+        "description": "Hint for the SMS recipient number input"
+    },
+    "smsMessageLabel": "SMS Message",
+    "@smsMessageLabel": {
+        "description": "Label for the SMS message body input"
+    },
+    "smsMessageHint": "Enter message (optional)",
+    "@smsMessageHint": {
+        "description": "Hint for the SMS message body input"
+    },
+    "telegramUsernameLabel": "Telegram Username",
+    "@telegramUsernameLabel": {
+        "description": "Label for Telegram username input"
+    },
+    "telegramUsernameHint": "Enter username or @handle",
+    "@telegramUsernameHint": {
+        "description": "Hint for Telegram username input"
+    },
+    "linkedinProfileLabel": "LinkedIn Profile",
+    "@linkedinProfileLabel": {
+        "description": "Label for LinkedIn profile input"
+    },
+    "linkedinProfileHint": "Enter profile URL or username",
+    "@linkedinProfileHint": {
+        "description": "Hint for LinkedIn profile input"
+    },
+    "validationSmsNumberRequired": "SMS number is required",
+    "@validationSmsNumberRequired": {
+        "description": "Validation error when SMS number is missing"
+    },
+    "validationSmsNumberInvalid": "Enter a valid SMS number",
+    "@validationSmsNumberInvalid": {
+        "description": "Validation error when SMS number format is invalid"
+    },
+    "validationTelegramRequired": "Telegram username is required",
+    "@validationTelegramRequired": {
+        "description": "Validation error when Telegram username is missing"
+    },
+    "validationTelegramInvalid": "Enter a valid Telegram username or t.me link",
+    "@validationTelegramInvalid": {
+        "description": "Validation error when Telegram input is invalid"
+    },
+    "validationLinkedinRequired": "LinkedIn profile is required",
+    "@validationLinkedinRequired": {
+        "description": "Validation error when LinkedIn profile is missing"
+    },
+    "validationLinkedinInvalid": "Enter a valid LinkedIn profile URL or username",
+    "@validationLinkedinInvalid": {
+        "description": "Validation error when LinkedIn input is invalid"
+    },
+    "validationInvalidInput": "Enter a valid value",
+    "@validationInvalidInput": {
+        "description": "Generic validation error for invalid QR form input"
+    },
+    "locationUseCurrentLocation": "Use Current Location",
+    "@locationUseCurrentLocation": {
+        "description": "Button label to use the device current location"
+    },
+    "locationGettingCurrentLocation": "Getting location...",
+    "@locationGettingCurrentLocation": {
+        "description": "Button label shown while fetching current location"
+    },
+    "locationOrDivider": "OR",
+    "@locationOrDivider": {
+        "description": "Divider text between current location action and manual coordinate entry"
+    },
+    "locationLatitudeLabel": "Latitude",
+    "@locationLatitudeLabel": {
+        "description": "Label for the latitude input"
+    },
+    "locationLatitudeHint": "Enter latitude",
+    "@locationLatitudeHint": {
+        "description": "Hint for the latitude input"
+    },
+    "locationLongitudeLabel": "Longitude",
+    "@locationLongitudeLabel": {
+        "description": "Label for the longitude input"
+    },
+    "locationLongitudeHint": "Enter longitude",
+    "@locationLongitudeHint": {
+        "description": "Hint for the longitude input"
+    },
 
     "changeLanguage": "Language",
     "@changeLanguage" :{
@@ -566,6 +719,34 @@
     "authLogoutDesc": "Sign out of your account",
     "@authLogoutDesc" :{
         "description": "Log out description"
+    },
+    "cancel": "Cancel",
+    "@cancel": {
+        "description": "Generic cancel button label"
+    },
+    "authDeleteAccount": "Delete Account",
+    "@authDeleteAccount": {
+        "description": "Delete account button label"
+    },
+    "authDeleteAccountDesc": "Permanently delete your account and all data",
+    "@authDeleteAccountDesc": {
+        "description": "Delete account tile subtitle"
+    },
+    "authDeleteAccountConfirmTitle": "Delete account?",
+    "@authDeleteAccountConfirmTitle": {
+        "description": "Title of the delete account confirmation dialog"
+    },
+    "authDeleteAccountConfirmBody": "This will permanently delete your account and all your QR history. This cannot be undone.",
+    "@authDeleteAccountConfirmBody": {
+        "description": "Body of the delete account confirmation dialog"
+    },
+    "authDeleteAccountConfirmButton": "Delete",
+    "@authDeleteAccountConfirmButton": {
+        "description": "Confirm delete button label in the delete account dialog"
+    },
+    "authDeleteAccountSuccess": "Your account has been deleted",
+    "@authDeleteAccountSuccess": {
+        "description": "Snackbar shown after successful account deletion"
     },
     "authAccount": "Account",
     "@authAccount" :{
@@ -727,5 +908,49 @@
     "failedToShare": "Failed to share",
     "@failedToShare": {
         "description": "Error message shown when sharing fails"
+    },
+    "unableToOpenContent": "Unable to open this content",
+    "@unableToOpenContent": {
+        "description": "Error message shown when scanned content cannot be opened"
+    },
+    "noInternet": "No internet connection",
+    "@noInternet": {
+        "description": "Banner shown when the device has no internet connection"
+    },
+    "scanGenerateShare": "Scan · Generate · Share",
+    "@scanGenerateShare": {
+        "description": "Tagline shown on the splash screen"
+    },
+
+    "openUrlWarningTitle": "Open this link?",
+    "@openUrlWarningTitle": {
+        "description": "Title of the phishing-warning dialog shown before opening a scanned URL"
+    },
+    "openUrlWarningBody": "This link came from a QR code. Make sure you trust it before continuing.\n\n{url}",
+    "@openUrlWarningBody": {
+        "description": "Body of the phishing-warning dialog",
+        "placeholders": {
+            "url": { "type": "String" }
+        }
+    },
+    "openUrlWarningInsecure": "⚠ This link uses unencrypted HTTP. Your data may be visible to others.",
+    "@openUrlWarningInsecure": {
+        "description": "Extra warning line shown when the URL scheme is http (not https)"
+    },
+    "openUrlWarningConfirm": "Open",
+    "@openUrlWarningConfirm": {
+        "description": "Confirm button in the phishing-warning dialog"
+    },
+    "openUrlWarningCancel": "Cancel",
+    "@openUrlWarningCancel": {
+        "description": "Cancel button in the phishing-warning dialog"
+    },
+    "authNetworkError": "Network error. Check your internet connection and try again.",
+    "@authNetworkError": {
+        "description": "Shown when authentication fails due to a network/DNS issue"
+    },
+    "authGenericError": "Something went wrong. Please try again.",
+    "@authGenericError": {
+        "description": "Generic auth error shown when no specific localisation matches"
     }
 }

@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
+
 /// Compile-time configuration values injected via --dart-define flags.
 ///
 /// Pass these at build time:
 ///   flutter run \
 ///     --dart-define=APPWRITE_ENDPOINT=https://fra.cloud.appwrite.io/v1 \
 ///     --dart-define=APPWRITE_PROJECT_ID=your_project_id \
+///     --dart-define=APPWRITE_PROJECT_NAME=your_project_name \
 ///     --dart-define=POSTHOG_API_KEY=phc_your_key \
 ///     --dart-define=POSTHOG_HOST=https://us.i.posthog.com
 ///
@@ -32,7 +35,8 @@ class AppConfig {
         .trim();
     if (raw.isEmpty) return '';
 
-    final sanitized = _stripWrappingQuotes(raw).replaceFirst(RegExp(r'/+$'), '');
+    final sanitized =
+        _stripWrappingQuotes(raw).replaceFirst(RegExp(r'/+$'), '');
     if (sanitized.isEmpty) return '';
     if (sanitized.endsWith('/v1')) return sanitized;
     return '$sanitized/v1';
@@ -46,16 +50,25 @@ class AppConfig {
     }
 
     final uri = Uri.tryParse(endpoint);
-    final validScheme = uri?.scheme == 'https' || uri?.scheme == 'http';
-    if (uri == null || !uri.isAbsolute || !validScheme || uri.host.isEmpty) {
+    if (!_isAllowedRemoteUri(uri, allowLoopbackHttpInDebug: true)) {
       return 'Invalid Appwrite endpoint "$endpoint". '
-          'Expected a full URL like https://fra.cloud.appwrite.io/v1';
+          'Use HTTPS, or HTTP only for localhost/loopback in debug builds.';
+    }
+
+    if (appwriteProjectId.trim().isEmpty) {
+      return 'Appwrite project ID is missing. Pass APPWRITE_PROJECT_ID '
+          'via --dart-define.';
     }
     return null;
   }
 
   static const String appwriteProjectId = String.fromEnvironment(
     'APPWRITE_PROJECT_ID',
+    defaultValue: '',
+  );
+
+  static const String appwriteProjectName = String.fromEnvironment(
+    'APPWRITE_PROJECT_NAME',
     defaultValue: '',
   );
 
@@ -71,6 +84,35 @@ class AppConfig {
     defaultValue: 'https://us.i.posthog.com',
   );
 
+  static Uri? get posthogHostUri => _parseTrustedUri(
+        posthogHost,
+        allowLoopbackHttpInDebug: true,
+      );
+
+  static const String appStoreUrl = String.fromEnvironment(
+    'APP_STORE_URL',
+    defaultValue: 'https://apps.apple.com',
+  );
+
+  static Uri? get appStoreUri => _parseTrustedUri(appStoreUrl);
+
+  static const String privacyPolicyUrl = String.fromEnvironment(
+    'PRIVACY_POLICY_URL',
+    defaultValue: 'https://example.com/privacy',
+  );
+
+  static Uri? get privacyPolicyUri => _parseTrustedUri(privacyPolicyUrl);
+
+  /// Appwrite Messaging provider ID for push notifications (FCM or APNs).
+  ///
+  /// Obtain this from Appwrite Console → Messaging → Providers after creating
+  /// your FCM or APNs provider. See the SETUP CHECKLIST in
+  /// lib/services/appwrite_messaging_service.dart for full instructions.
+  static const String messagingProviderId = String.fromEnvironment(
+    'APPWRITE_MESSAGING_PROVIDER_ID',
+    defaultValue: '',
+  );
+
   static String _stripWrappingQuotes(String value) {
     if (value.length < 2) return value;
     final first = value[0];
@@ -79,5 +121,48 @@ class AppConfig {
       return value.substring(1, value.length - 1).trim();
     }
     return value;
+  }
+
+  static Uri? _parseTrustedUri(
+    String raw, {
+    bool allowLoopbackHttpInDebug = false,
+  }) {
+    final sanitized = _stripWrappingQuotes(raw).trim();
+    if (sanitized.isEmpty) return null;
+    final uri = Uri.tryParse(sanitized);
+    if (!_isAllowedRemoteUri(
+      uri,
+      allowLoopbackHttpInDebug: allowLoopbackHttpInDebug,
+    )) {
+      return null;
+    }
+    return uri;
+  }
+
+  static bool _isAllowedRemoteUri(
+    Uri? uri, {
+    required bool allowLoopbackHttpInDebug,
+  }) {
+    if (uri == null ||
+        !uri.isAbsolute ||
+        uri.host.isEmpty ||
+        uri.userInfo.isNotEmpty) {
+      return false;
+    }
+
+    final scheme = uri.scheme.toLowerCase();
+    if (scheme == 'https') return true;
+
+    return allowLoopbackHttpInDebug &&
+        kDebugMode &&
+        scheme == 'http' &&
+        _isLoopbackHost(uri.host);
+  }
+
+  static bool _isLoopbackHost(String host) {
+    final normalized = host.trim().toLowerCase();
+    return normalized == 'localhost' ||
+        normalized == '127.0.0.1' ||
+        normalized == '::1';
   }
 }

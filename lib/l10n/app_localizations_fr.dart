@@ -25,6 +25,23 @@ class AppLocalizationsFr extends AppLocalizations {
   String get onboardingSkipButton => 'Allons-y';
 
   @override
+  String get onboardingNext => 'Suivant';
+
+  @override
+  String get onboardingPage2Title => 'Générez des QR codes';
+
+  @override
+  String get onboardingPage2Subtitle =>
+      'Créez des QR codes pour du texte, le Wi‑Fi, des contacts, des événements et plus en quelques secondes.';
+
+  @override
+  String get onboardingPage3Title => 'Suivez votre historique';
+
+  @override
+  String get onboardingPage3Subtitle =>
+      'Tous vos QR codes scannés et générés sont stockés en toute sécurité et synchronisés entre vos appareils.';
+
+  @override
   String get errorText => 'Erreur: Page non trouvée';
 
   @override
@@ -73,6 +90,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get telephoneQR => 'Téléphone';
 
   @override
+  String get smsQR => 'SMS';
+
+  @override
+  String get telegramQR => 'Telegram';
+
+  @override
+  String get linkedinQR => 'LinkedIn';
+
+  @override
   String get generateCode => 'Générer un code';
 
   @override
@@ -83,6 +109,18 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get scan => 'Balayer';
+
+  @override
+  String get qrCodeDetected => '✓  QR code détecté';
+
+  @override
+  String get openGallery => 'Ouvrir la galerie';
+
+  @override
+  String get toggleTorch => 'Basculer la lampe torche';
+
+  @override
+  String get switchCamera => 'Changer de caméra';
 
   @override
   String get create => 'Créer';
@@ -118,6 +156,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shareDesc => 'Partager l\'application avec d\'autres personnes.';
 
   @override
+  String shareAppMessage(String url) {
+    return 'Découvrez Scagen ! $url';
+  }
+
+  @override
   String get privacyPolicy => 'Politique de confidentialité';
 
   @override
@@ -137,6 +180,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get openBtn => 'Ouvrir';
+
+  @override
+  String get backToGenerate => 'Retour à Générer';
+
+  @override
+  String get scanAnother => 'Scanner un autre';
 
   @override
   String get qrCode => 'Code QR';
@@ -318,6 +367,77 @@ class AppLocalizationsFr extends AppLocalizations {
   String get phoneNumberHint => '+55xxxxxxxxx';
 
   @override
+  String get smsNumberLabel => 'Numéro SMS';
+
+  @override
+  String get smsNumberHint => 'Entrez le numéro du destinataire';
+
+  @override
+  String get smsMessageLabel => 'Message SMS';
+
+  @override
+  String get smsMessageHint => 'Entrez le message (facultatif)';
+
+  @override
+  String get telegramUsernameLabel => 'Nom d\'utilisateur Telegram';
+
+  @override
+  String get telegramUsernameHint =>
+      'Entrez le nom d\'utilisateur ou @identifiant';
+
+  @override
+  String get linkedinProfileLabel => 'Profil LinkedIn';
+
+  @override
+  String get linkedinProfileHint =>
+      'Entrez l\'URL du profil ou le nom d\'utilisateur';
+
+  @override
+  String get validationSmsNumberRequired => 'Le numéro SMS est requis';
+
+  @override
+  String get validationSmsNumberInvalid => 'Entrez un numéro SMS valide';
+
+  @override
+  String get validationTelegramRequired =>
+      'Le nom d\'utilisateur Telegram est requis';
+
+  @override
+  String get validationTelegramInvalid =>
+      'Entrez un nom d\'utilisateur Telegram ou un lien t.me valide';
+
+  @override
+  String get validationLinkedinRequired => 'Le profil LinkedIn est requis';
+
+  @override
+  String get validationLinkedinInvalid =>
+      'Entrez une URL ou un nom d\'utilisateur LinkedIn valide';
+
+  @override
+  String get validationInvalidInput => 'Entrez une valeur valide';
+
+  @override
+  String get locationUseCurrentLocation => 'Utiliser la position actuelle';
+
+  @override
+  String get locationGettingCurrentLocation => 'Récupération de la position...';
+
+  @override
+  String get locationOrDivider => 'OU';
+
+  @override
+  String get locationLatitudeLabel => 'Latitude';
+
+  @override
+  String get locationLatitudeHint => 'Entrez la latitude';
+
+  @override
+  String get locationLongitudeLabel => 'Longitude';
+
+  @override
+  String get locationLongitudeHint => 'Entrez la longitude';
+
+  @override
   String get changeLanguage => 'Langue';
 
   @override
@@ -375,6 +495,29 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get authLogoutDesc => 'Se déconnecter de votre compte';
+
+  @override
+  String get cancel => 'Annuler';
+
+  @override
+  String get authDeleteAccount => 'Supprimer le compte';
+
+  @override
+  String get authDeleteAccountDesc =>
+      'Supprimez définitivement votre compte et toutes vos données';
+
+  @override
+  String get authDeleteAccountConfirmTitle => 'Supprimer le compte ?';
+
+  @override
+  String get authDeleteAccountConfirmBody =>
+      'Cela supprimera définitivement votre compte et tout votre historique QR. Cette action est irréversible.';
+
+  @override
+  String get authDeleteAccountConfirmButton => 'Supprimer';
+
+  @override
+  String get authDeleteAccountSuccess => 'Votre compte a été supprimé';
 
   @override
   String get authAccount => 'Compte';
@@ -504,4 +647,39 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get failedToShare => 'Échec du partage';
+
+  @override
+  String get unableToOpenContent => 'Impossible d\'ouvrir ce contenu';
+
+  @override
+  String get noInternet => 'Pas de connexion internet';
+
+  @override
+  String get scanGenerateShare => 'Scanner · Générer · Partager';
+
+  @override
+  String get openUrlWarningTitle => 'Ouvrir ce lien ?';
+
+  @override
+  String openUrlWarningBody(String url) {
+    return 'Ce lien provient d\'un code QR. Assurez-vous d\'y faire confiance avant de continuer.\n\n$url';
+  }
+
+  @override
+  String get openUrlWarningInsecure =>
+      '⚠ Ce lien utilise HTTP non chiffré. Vos données peuvent être visibles par d\'autres.';
+
+  @override
+  String get openUrlWarningConfirm => 'Ouvrir';
+
+  @override
+  String get openUrlWarningCancel => 'Annuler';
+
+  @override
+  String get authNetworkError =>
+      'Erreur réseau. Vérifiez votre connexion internet et réessayez.';
+
+  @override
+  String get authGenericError =>
+      'Une erreur s\'est produite. Veuillez réessayer.';
 }

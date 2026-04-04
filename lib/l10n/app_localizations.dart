@@ -132,6 +132,36 @@ abstract class AppLocalizations {
   /// **'Let\'s Go'**
   String get onboardingSkipButton;
 
+  /// Button label to move to the next onboarding page
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNext;
+
+  /// Onboarding page 2 title
+  ///
+  /// In en, this message translates to:
+  /// **'Generate QR Codes'**
+  String get onboardingPage2Title;
+
+  /// Onboarding page 2 subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Create QR codes for text, Wi-Fi, contacts, events and more in seconds.'**
+  String get onboardingPage2Subtitle;
+
+  /// Onboarding page 3 title
+  ///
+  /// In en, this message translates to:
+  /// **'Track Your History'**
+  String get onboardingPage3Title;
+
+  /// Onboarding page 3 subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'All your scanned and generated QR codes are stored securely and synced across devices.'**
+  String get onboardingPage3Subtitle;
+
   /// Error message when page is not found
   ///
   /// In en, this message translates to:
@@ -228,6 +258,24 @@ abstract class AppLocalizations {
   /// **'Telephone'**
   String get telephoneQR;
 
+  /// SMS details to be converted to QR code
+  ///
+  /// In en, this message translates to:
+  /// **'SMS'**
+  String get smsQR;
+
+  /// Telegram details to be converted to QR code
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram'**
+  String get telegramQR;
+
+  /// LinkedIn details to be converted to QR code
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn'**
+  String get linkedinQR;
+
   /// Button to generate a code
   ///
   /// In en, this message translates to:
@@ -251,6 +299,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Scan'**
   String get scan;
+
+  /// Scanner success banner when a QR is detected
+  ///
+  /// In en, this message translates to:
+  /// **'✓  QR Code Detected'**
+  String get qrCodeDetected;
+
+  /// Accessibility label and tooltip for opening the image gallery from scanner controls
+  ///
+  /// In en, this message translates to:
+  /// **'Open gallery'**
+  String get openGallery;
+
+  /// Accessibility label and tooltip for toggling the scanner flashlight
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle torch'**
+  String get toggleTorch;
+
+  /// Accessibility label and tooltip for switching between front and rear cameras in scanner controls
+  ///
+  /// In en, this message translates to:
+  /// **'Switch camera'**
+  String get switchCamera;
 
   /// Tab to create a QR code
   ///
@@ -318,6 +390,12 @@ abstract class AppLocalizations {
   /// **'Share app with others.'**
   String get shareDesc;
 
+  /// Message used when sharing the app link
+  ///
+  /// In en, this message translates to:
+  /// **'Check out Scagen! {url}'**
+  String shareAppMessage(String url);
+
   /// Button to view the privacy policy
   ///
   /// In en, this message translates to:
@@ -359,6 +437,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open'**
   String get openBtn;
+
+  /// Button label to return to QR generation home
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Generate'**
+  String get backToGenerate;
+
+  /// Button label to return to scan home
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Another'**
+  String get scanAnother;
 
   /// The QR code
   ///
@@ -714,6 +804,138 @@ abstract class AppLocalizations {
   /// **'+92xxxxxxxxxx'**
   String get phoneNumberHint;
 
+  /// Label for the SMS recipient number input
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Number'**
+  String get smsNumberLabel;
+
+  /// Hint for the SMS recipient number input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter recipient number'**
+  String get smsNumberHint;
+
+  /// Label for the SMS message body input
+  ///
+  /// In en, this message translates to:
+  /// **'SMS Message'**
+  String get smsMessageLabel;
+
+  /// Hint for the SMS message body input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter message (optional)'**
+  String get smsMessageHint;
+
+  /// Label for Telegram username input
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram Username'**
+  String get telegramUsernameLabel;
+
+  /// Hint for Telegram username input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter username or @handle'**
+  String get telegramUsernameHint;
+
+  /// Label for LinkedIn profile input
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn Profile'**
+  String get linkedinProfileLabel;
+
+  /// Hint for LinkedIn profile input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter profile URL or username'**
+  String get linkedinProfileHint;
+
+  /// Validation error when SMS number is missing
+  ///
+  /// In en, this message translates to:
+  /// **'SMS number is required'**
+  String get validationSmsNumberRequired;
+
+  /// Validation error when SMS number format is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid SMS number'**
+  String get validationSmsNumberInvalid;
+
+  /// Validation error when Telegram username is missing
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram username is required'**
+  String get validationTelegramRequired;
+
+  /// Validation error when Telegram input is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid Telegram username or t.me link'**
+  String get validationTelegramInvalid;
+
+  /// Validation error when LinkedIn profile is missing
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn profile is required'**
+  String get validationLinkedinRequired;
+
+  /// Validation error when LinkedIn input is invalid
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid LinkedIn profile URL or username'**
+  String get validationLinkedinInvalid;
+
+  /// Generic validation error for invalid QR form input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid value'**
+  String get validationInvalidInput;
+
+  /// Button label to use the device current location
+  ///
+  /// In en, this message translates to:
+  /// **'Use Current Location'**
+  String get locationUseCurrentLocation;
+
+  /// Button label shown while fetching current location
+  ///
+  /// In en, this message translates to:
+  /// **'Getting location...'**
+  String get locationGettingCurrentLocation;
+
+  /// Divider text between current location action and manual coordinate entry
+  ///
+  /// In en, this message translates to:
+  /// **'OR'**
+  String get locationOrDivider;
+
+  /// Label for the latitude input
+  ///
+  /// In en, this message translates to:
+  /// **'Latitude'**
+  String get locationLatitudeLabel;
+
+  /// Hint for the latitude input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter latitude'**
+  String get locationLatitudeHint;
+
+  /// Label for the longitude input
+  ///
+  /// In en, this message translates to:
+  /// **'Longitude'**
+  String get locationLongitudeLabel;
+
+  /// Hint for the longitude input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter longitude'**
+  String get locationLongitudeHint;
+
   /// Label for the language setting
   ///
   /// In en, this message translates to:
@@ -827,6 +1049,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign out of your account'**
   String get authLogoutDesc;
+
+  /// Generic cancel button label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Delete account button label
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get authDeleteAccount;
+
+  /// Delete account tile subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete your account and all data'**
+  String get authDeleteAccountDesc;
+
+  /// Title of the delete account confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account?'**
+  String get authDeleteAccountConfirmTitle;
+
+  /// Body of the delete account confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This will permanently delete your account and all your QR history. This cannot be undone.'**
+  String get authDeleteAccountConfirmBody;
+
+  /// Confirm delete button label in the delete account dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get authDeleteAccountConfirmButton;
+
+  /// Snackbar shown after successful account deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been deleted'**
+  String get authDeleteAccountSuccess;
 
   /// Account section header
   ///
@@ -1055,6 +1319,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to share'**
   String get failedToShare;
+
+  /// Error message shown when scanned content cannot be opened
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open this content'**
+  String get unableToOpenContent;
+
+  /// Banner shown when the device has no internet connection
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternet;
+
+  /// Tagline shown on the splash screen
+  ///
+  /// In en, this message translates to:
+  /// **'Scan · Generate · Share'**
+  String get scanGenerateShare;
+
+  /// Title of the phishing-warning dialog shown before opening a scanned URL
+  ///
+  /// In en, this message translates to:
+  /// **'Open this link?'**
+  String get openUrlWarningTitle;
+
+  /// Body of the phishing-warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This link came from a QR code. Make sure you trust it before continuing.\n\n{url}'**
+  String openUrlWarningBody(String url);
+
+  /// Extra warning line shown when the URL scheme is http (not https)
+  ///
+  /// In en, this message translates to:
+  /// **'⚠ This link uses unencrypted HTTP. Your data may be visible to others.'**
+  String get openUrlWarningInsecure;
+
+  /// Confirm button in the phishing-warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get openUrlWarningConfirm;
+
+  /// Cancel button in the phishing-warning dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get openUrlWarningCancel;
+
+  /// Shown when authentication fails due to a network/DNS issue
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Check your internet connection and try again.'**
+  String get authNetworkError;
+
+  /// Generic auth error shown when no specific localisation matches
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get authGenericError;
 }
 
 class _AppLocalizationsDelegate

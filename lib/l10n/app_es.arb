@@ -6,6 +6,11 @@
     "onboardingHeader": "Empezar",
     "onboardingSubHeader": "Ve y disfruta de nuestras funciones de forma gratuita y haz tu vida más fácil con nosotros.",
     "onboardingSkipButton": "Vamos",
+    "onboardingNext": "Siguiente",
+    "onboardingPage2Title": "Genera códigos QR",
+    "onboardingPage2Subtitle": "Crea códigos QR para texto, Wi‑Fi, contactos, eventos y más en segundos.",
+    "onboardingPage3Title": "Consulta tu historial",
+    "onboardingPage3Subtitle": "Todos tus códigos QR escaneados y generados se guardan de forma segura y se sincronizan entre dispositivos.",
 
     "errorText": "Error: Página no encontrada",
     "errorOR": "O",
@@ -25,12 +30,19 @@
     "twitterQR": "Twitter",
     "instagramQR": "Instagram",
     "telephoneQR": "Teléfono",
+    "smsQR": "SMS",
+    "telegramQR": "Telegram",
+    "linkedinQR": "LinkedIn",
 
     "generateCode": "Generar un Código",
 
     "history": "Historial",
     "generate": "Generar",
     "scan": "Escanear",
+    "qrCodeDetected": "✓  Código QR detectado",
+    "openGallery": "Abrir galería",
+    "toggleTorch": "Alternar linterna",
+    "switchCamera": "Cambiar cámara",
     "create": "Crear",
 
     "settings": "Ajustes",
@@ -43,6 +55,15 @@
     "rateUsDesc": "Su mejor recompensa para nosotros",
     "shareApp": "Compartir",
     "shareDesc": "Compartir aplicación con otras personas.",
+    "shareAppMessage": "¡Descubre Scagen! {url}",
+    "@shareAppMessage": {
+        "description": "Mensaje usado al compartir el enlace de la aplicación",
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
     "privacyPolicy": "Política de Privacidad",
     "privacyPolicyDesc": "Siga nuestras políticas que le beneficien.",
 
@@ -52,6 +73,8 @@
     "shareBtn": "Compartir",
     "copyBtn": "Copiar",
     "openBtn": "Abrir",
+    "backToGenerate": "Volver a generar",
+    "scanAnother": "Escanear otro",
 
     "qrCode": "Código QR",
     "generatedLabel": "Generado",
@@ -135,6 +158,28 @@
 
     "phoneNumberLabel": "Número de teléfono",
     "phoneNumberHint": "+[código de país] xxxxxxxxx",
+    "smsNumberLabel": "Número SMS",
+    "smsNumberHint": "Ingrese el número del destinatario",
+    "smsMessageLabel": "Mensaje SMS",
+    "smsMessageHint": "Ingrese el mensaje (opcional)",
+    "telegramUsernameLabel": "Usuario de Telegram",
+    "telegramUsernameHint": "Ingrese usuario o @usuario",
+    "linkedinProfileLabel": "Perfil de LinkedIn",
+    "linkedinProfileHint": "Ingrese URL del perfil o usuario",
+    "validationSmsNumberRequired": "El número SMS es obligatorio",
+    "validationSmsNumberInvalid": "Ingrese un número SMS válido",
+    "validationTelegramRequired": "El usuario de Telegram es obligatorio",
+    "validationTelegramInvalid": "Ingrese un usuario de Telegram o enlace t.me válido",
+    "validationLinkedinRequired": "El perfil de LinkedIn es obligatorio",
+    "validationLinkedinInvalid": "Ingrese una URL o usuario de LinkedIn válido",
+    "validationInvalidInput": "Ingrese un valor válido",
+    "locationUseCurrentLocation": "Usar ubicación actual",
+    "locationGettingCurrentLocation": "Obteniendo ubicación...",
+    "locationOrDivider": "O",
+    "locationLatitudeLabel": "Latitud",
+    "locationLatitudeHint": "Ingrese la latitud",
+    "locationLongitudeLabel": "Longitud",
+    "locationLongitudeHint": "Ingrese la longitud",
 
     "changeLanguage": "Idioma",
     "changeLanguageDesc": "Cambiar el idioma de la aplicación",
@@ -159,6 +204,13 @@
     },
     "authLogout": "Cerrar sesión",
     "authLogoutDesc": "Cerrar sesión de tu cuenta",
+    "cancel": "Cancelar",
+    "authDeleteAccount": "Eliminar cuenta",
+    "authDeleteAccountDesc": "Elimina permanentemente tu cuenta y todos los datos",
+    "authDeleteAccountConfirmTitle": "¿Eliminar cuenta?",
+    "authDeleteAccountConfirmBody": "Esto eliminará permanentemente tu cuenta y todo tu historial de QR. Esta acción no se puede deshacer.",
+    "authDeleteAccountConfirmButton": "Eliminar",
+    "authDeleteAccountSuccess": "Tu cuenta ha sido eliminada",
     "authAccount": "Cuenta",
     "linkAccountTitle": "Vincular cuenta",
     "linkAccountSubtitle": "Actualizar a cuenta con email y contraseña",
@@ -208,5 +260,16 @@
     "privacy": "Privacidad",
     "shareAnalytics": "Compartir análisis",
     "shareAnalyticsSubtitle": "Ayuda a mejorar Scagen compartiendo datos de uso anónimos",
-    "failedToShare": "Error al compartir"
+    "failedToShare": "Error al compartir",
+    "unableToOpenContent": "No se puede abrir este contenido",
+    "noInternet": "Sin conexión a internet",
+    "scanGenerateShare": "Escanear · Generar · Compartir",
+
+    "openUrlWarningTitle": "¿Abrir este enlace?",
+    "openUrlWarningBody": "Este enlace proviene de un código QR. Asegúrate de confiar en él antes de continuar.\n\n{url}",
+    "openUrlWarningInsecure": "⚠ Este enlace usa HTTP sin cifrar. Tus datos pueden ser visibles para otros.",
+    "openUrlWarningConfirm": "Abrir",
+    "openUrlWarningCancel": "Cancelar",
+    "authNetworkError": "Error de red. Comprueba tu conexión a internet e inténtalo de nuevo.",
+    "authGenericError": "Algo salió mal. Por favor, inténtalo de nuevo."
 }

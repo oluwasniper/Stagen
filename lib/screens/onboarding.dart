@@ -1,161 +1,262 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../l10n/app_localizations.dart';
+import '../utils/app_asset.dart';
+import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
-import '../widgets/splash_logo_widget.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    ///Use MediaQuery to get the size of the screen
-    ///Use it to calculate the size of the icon
-    final iconSize = MediaQuery.sizeOf(context).width * 0.6;
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
 
-    /// Creates an [AnnotatedRegion] widget that applies system UI overlay styles
-    /// to its descendant widgets.
-    ///
-    /// The [AnnotatedRegion] widget is typically used to modify the appearance of
-    /// system UI elements like the status bar and navigation bar on the device.
-    /// This widget must be properly configured with a value parameter that defines
-    /// the desired system UI overlay settings.
-    return AnnotatedRegion(
-      value:
-          SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
-        SystemUiOverlay.bottom,
-        SystemUiOverlay.top,
-      ]),
-      child: AnnotatedRegion(
-          value: SystemUiOverlayStyle(
-            // shorebird test
-            statusBarColor: Color(0xffFDB623),
-            statusBarIconBrightness: Brightness.light,
-            systemNavigationBarColor: Color(0xff333333),
-            systemNavigationBarIconBrightness: Brightness.light,
-            systemNavigationBarDividerColor: Color(0xff333333),
-          ),
-          child: Scaffold(
-              backgroundColor: Color(0xffFDB623),
-              body: Column(
-                children: <Widget>[
-                  SplashLogoWidget(),
-                  Spacer(),
-                  Container(
-                    height: iconSize,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(61),
-                        topRight: Radius.circular(61),
-                      ),
-                      color: Color(0xff333333),
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  static const _totalPages = 3;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _next() {
+    AppHaptics.light(context);
+    final motion = AppMotion.of(context);
+    if (_currentPage < _totalPages - 1) {
+      _pageController.nextPage(
+        duration: motion.duration(const Duration(milliseconds: 420)),
+        curve: motion.curve(AppMotion.standard),
+      );
+    } else {
+      AppGoRouter.router.go(AppPath.auth);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final motion = AppMotion.of(context);
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Color(0xffFDB623),
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Color(0xff222222),
+        systemNavigationBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        backgroundColor: const Color(0xffFDB623),
+        body: Column(
+          children: [
+            // Logo area — fixed, doesn't scroll
+            Expanded(
+              flex: 5,
+              child: Center(
+                child: Image.asset(
+                  AppAsset.icon,
+                  width: MediaQuery.sizeOf(context).width * 0.32,
+                  filterQuality: FilterQuality.high,
+                )
+                    .animate()
+                    .scale(
+                      begin: const Offset(0.7, 0.7),
+                      end: const Offset(1.0, 1.0),
+                      duration:
+                          motion.duration(const Duration(milliseconds: 600)),
+                      curve: motion.curve(AppMotion.spring),
+                    )
+                    .fade(
+                      begin: 0,
+                      end: 1,
+                      duration: motion.duration(AppMotion.medium),
                     ),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Container(
+              ),
+            ),
+
+            // Card area
+            Expanded(
+              flex: 7,
+              child: Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Color(0xff222222),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(36),
+                    topRight: Radius.circular(36),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    // Page indicator
+                    Padding(
+                      padding: const EdgeInsets.only(top: 18, bottom: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          _totalPages,
+                          (i) => AnimatedContainer(
+                            duration: motion.duration(AppMotion.fast),
+                            curve: motion.curve(AppMotion.standard),
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
                             height: 5,
-                            width: 120,
-                            margin: EdgeInsets.only(top: 15, bottom: 10),
+                            width: _currentPage == i ? 28 : 8,
                             decoration: BoxDecoration(
-                              color: Color(0xffFDB623),
-                              borderRadius: BorderRadius.circular(4),
+                              color: _currentPage == i
+                                  ? const Color(0xffFDB623)
+                                  : Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(3),
                             ),
                           ),
-                          Text(
-                            /// Returns the onboarding header text string from the localized resources
-                            /// based on the current context's locale.
-                            AppLocalizations.of(context).onboardingHeader,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 42,
-                              fontWeight: FontWeight.w400,
-                            ),
+                        ),
+                      ),
+                    ),
+
+                    // Page content
+                    Expanded(
+                      child: PageView(
+                        controller: _pageController,
+                        onPageChanged: (i) => setState(() => _currentPage = i),
+                        children: [
+                          _OnboardingPage(
+                            svgAsset: AppAsset.scanIconSvg,
+                            title:
+                                AppLocalizations.of(context).onboardingHeader,
+                            subtitle: AppLocalizations.of(context)
+                                .onboardingSubHeader,
                           ),
-                          SizedBox(
-                            width: 350,
-                            child: Text(
-                              AppLocalizations.of(context).onboardingSubHeader,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
+                          _OnboardingPage(
+                            svgAsset: AppAsset.generateIconSvg,
+                            title: _localTitle(context, 1),
+                            subtitle: _localSub(context, 1),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xffFDB623),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              // padding: EdgeInsets.symmetric(horizontal: 90),
-                              fixedSize: Size(350, 50),
-                            ),
-                            onPressed: () {
-                              /// Navigates to the home screen using the goRouter instance.
-                              ///
-                              /// Different routing options available:
-                              /// - `go(path)`: Simple navigation, adds to history stack
-                              /// - `push(path)`: Pushes route on top of stack
-                              /// - `replace(path)`: Replaces current route
-                              /// - `goNamed(name)`: Navigates using named route
-                              /// - `pushNamed(name)`: Pushes named route
-                              /// - `replaceNamed(name)`: Replaces with named route
-                              ///
-                              /// For routes with parameters:
-                              /// - Include params in path: `/user/:id`
-                              /// - Or pass params object: `go('/user', params: {'id': '123'})`
-                              ///
-                              /// Can also pass extra data:
-                              /// ```
-                              /// go(path, extra: yourData)
-                              /// ```
-                              AppGoRouter.router.go(AppPath.auth);
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Icon(
-                                  Icons.arrow_forward,
-                                  color: Color(0xffFDB623),
-                                ),
-                                Text(
-                                    AppLocalizations.of(context)
-                                        .onboardingSkipButton,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w300,
-                                    )),
-                                Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.black,
-                                ),
-                              ],
-                            ),
+                          _OnboardingPage(
+                            svgAsset: AppAsset.historyIconSvg,
+                            title: _localTitle(context, 2),
+                            subtitle: _localSub(context, 2),
                           ),
                         ],
                       ),
                     ),
 
-                    /// Applies a fade-in and slide animation to the widget using the Animate extension.
-                    /// Part of the widget's animation chain for onboarding screen transitions.
-                  ).animate().fadeIn().slide(
-                      begin: Offset(0, 1.5),
-                      end: Offset(0, 0),
-                      curve: Curves.easeInOutCubic,
-                      duration: Duration(milliseconds: 1500)),
-                ],
-              ))),
+                    // CTA button
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(28, 0, 28, 48),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 54,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xffFDB623),
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            elevation: 0,
+                          ),
+                          onPressed: _next,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                _currentPage == _totalPages - 1
+                                    ? AppLocalizations.of(context)
+                                        .onboardingSkipButton
+                                    : AppLocalizations.of(context)
+                                        .onboardingNext,
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.3,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.arrow_forward_rounded, size: 20),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _localTitle(BuildContext context, int page) {
+    final l10n = AppLocalizations.of(context);
+    return page == 1 ? l10n.onboardingPage2Title : l10n.onboardingPage3Title;
+  }
+
+  String _localSub(BuildContext context, int page) {
+    final l10n = AppLocalizations.of(context);
+    return page == 1
+        ? l10n.onboardingPage2Subtitle
+        : l10n.onboardingPage3Subtitle;
+  }
+}
+
+class _OnboardingPage extends StatelessWidget {
+  final String svgAsset;
+  final String title;
+  final String subtitle;
+
+  const _OnboardingPage({
+    required this.svgAsset,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            svgAsset,
+            colorFilter: const ColorFilter.mode(
+              Color(0xffFDB623),
+              BlendMode.srcIn,
+            ),
+            width: 52,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 28,
+              fontWeight: FontWeight.w600,
+              height: 1.2,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            subtitle,
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.6),
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              height: 1.55,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,0 +1,3 @@
+// Copy this file to `ios/Flutter/local.xcconfig` and set your Apple team ID.
+// This file is intentionally not referenced directly by git-tracked settings.
+APP_DEVELOPMENT_TEAM = YOUR_TEAM_ID_HERE

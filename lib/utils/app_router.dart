@@ -12,9 +12,11 @@ import '../screens/history_screen.dart';
 import '../screens/onboarding.dart';
 import '../screens/scan_home_screen.dart';
 import '../screens/scanned_qr_screen.dart';
+import '../screens/notifications_screen.dart';
 import '../screens/settings_screen.dart';
 import '../screens/splash_screen.dart';
 import '../widgets/generate_qr_widget.dart';
+import 'app_motion.dart';
 import 'route/app_name.dart';
 import 'route/app_path.dart';
 import 'route/error_screen.dart';
@@ -101,7 +103,7 @@ class AppGoRouter {
 
   static final GoRouter _router = GoRouter(
     /// debugLogDiagnostics: true, will print the diagnostics in the console
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: false,
 
     /// The global navigation key for the app's main navigator.
     /// This key allows navigation actions to be performed from anywhere in the app
@@ -188,14 +190,17 @@ class AppGoRouter {
                     state: state,
                   );
                 },
-                // routes: [
-                //   GoRoute(
-                //     parentNavigatorKey: generateHomeTabNavigatorKey,
-                //     path: AppPath.settings,
-                //     name: PathName.nestedGenerateHomeSettings,
-                //     builder: (context, state) => SettingsScreen(),
-                //   )
-                // ],
+                routes: [
+                  GoRoute(
+                    path: AppPath.generateCodeSegment,
+                    name: PathName.generateCode,
+                    parentNavigatorKey: generateHomeTabNavigatorKey,
+                    pageBuilder: (context, state) => getPage(
+                      child: _buildGenerateCodeScreen(context, state),
+                      state: state,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -327,24 +332,36 @@ class AppGoRouter {
 
       /// A route configuration for the splash screen.
       GoRoute(
-          path: AppPath.splash,
-          name: PathName.splash,
-          builder: (context, state) => SplashScreen(),
-          parentNavigatorKey: mainNavigatorKey),
+        path: AppPath.splash,
+        name: PathName.splash,
+        pageBuilder: (context, state) => getPage(
+          child: SplashScreen(),
+          state: state,
+        ),
+        parentNavigatorKey: mainNavigatorKey,
+      ),
 
       /// A route configuration for the onboarding screen.
       GoRoute(
-          path: AppPath.onboarding,
-          name: PathName.onboarding,
-          builder: (context, state) => OnboardingScreen(),
-          parentNavigatorKey: mainNavigatorKey),
+        path: AppPath.onboarding,
+        name: PathName.onboarding,
+        pageBuilder: (context, state) => getPage(
+          child: OnboardingScreen(),
+          state: state,
+        ),
+        parentNavigatorKey: mainNavigatorKey,
+      ),
 
       /// A route configuration for the auth screen.
       GoRoute(
-          path: AppPath.auth,
-          name: PathName.auth,
-          builder: (context, state) => const AuthScreen(),
-          parentNavigatorKey: mainNavigatorKey),
+        path: AppPath.auth,
+        name: PathName.auth,
+        pageBuilder: (context, state) => getPage(
+          child: const AuthScreen(),
+          state: state,
+        ),
+        parentNavigatorKey: mainNavigatorKey,
+      ),
       // GoRoute(
       //   path: AppPath.nestedGenerateHomeSettings,
       //   name: PathName.nestedGenerateHomeSettings,
@@ -362,55 +379,37 @@ class AppGoRouter {
       GoRoute(
         path: AppPath.settings,
         name: PathName.settings,
-        builder: (context, state) => SettingsScreen(),
+        pageBuilder: (context, state) => getPage(
+          child: SettingsScreen(),
+          state: state,
+        ),
         parentNavigatorKey: mainNavigatorKey,
       ),
 
-      /// A route configuration for the generate code screen.
       GoRoute(
-        path: AppPath.generateCode,
-        name: PathName.generateCode,
-        builder: (context, state) {
-          final extra = state.extra;
-          QROption type;
-          Map<String, String>? initialValues;
-
-          if (extra is QROption) {
-            type = extra;
-          } else if (extra is Map) {
-            final typeName = extra['type']?.toString();
-            final qrType = QROptionType.values.firstWhere(
-              (value) => value.name == typeName,
-              orElse: () => QROptionType.text,
-            );
-            type = QROptions.fromType(context, qrType);
-
-            final rawPrefill = extra['prefill'];
-            if (rawPrefill is Map) {
-              initialValues = rawPrefill.map(
-                (key, value) => MapEntry(
-                  key.toString(),
-                  value?.toString() ?? '',
-                ),
-              );
-            }
-          } else {
-            type = QROptions.fromType(context, QROptionType.text);
-          }
-
-          return GenerateCodeScreen(
-            type: type,
-            initialValues: initialValues,
-          );
-        },
+        path: AppPath.notifications,
+        name: PathName.notifications,
+        pageBuilder: (context, state) => getPage(
+          child: const NotificationsScreen(),
+          state: state,
+        ),
         parentNavigatorKey: mainNavigatorKey,
+      ),
+
+      /// Legacy deep-link support for old /generateCode path.
+      GoRoute(
+        path: AppPath.generateCodeLegacy,
+        redirect: (_, __) => AppPath.generateCode,
       ),
 
       /// A route configuration for the generated QR result screen.
       GoRoute(
         path: AppPath.generatedQRResult,
         name: PathName.generatedQRResult,
-        builder: (context, state) => GeneratedQRScreen(),
+        pageBuilder: (context, state) => getPage(
+          child: GeneratedQRScreen(),
+          state: state,
+        ),
         parentNavigatorKey: mainNavigatorKey,
       ),
 
@@ -418,11 +417,49 @@ class AppGoRouter {
       GoRoute(
         path: AppPath.scannedQRResult,
         name: PathName.scannedQRResult,
-        builder: (context, state) => ScannedQRScreen(),
+        pageBuilder: (context, state) => getPage(
+          child: ScannedQRScreen(),
+          state: state,
+        ),
         parentNavigatorKey: mainNavigatorKey,
       ),
     ],
   );
+
+  static Widget _buildGenerateCodeScreen(
+      BuildContext context, GoRouterState state) {
+    final extra = state.extra;
+    QROption type;
+    Map<String, String>? initialValues;
+
+    if (extra is QROption) {
+      type = extra;
+    } else if (extra is Map) {
+      final typeName = extra['type']?.toString();
+      final qrType = QROptionType.values.firstWhere(
+        (value) => value.name == typeName,
+        orElse: () => QROptionType.text,
+      );
+      type = QROptions.fromType(context, qrType);
+
+      final rawPrefill = extra['prefill'];
+      if (rawPrefill is Map) {
+        initialValues = rawPrefill.map(
+          (key, value) => MapEntry(
+            key.toString(),
+            value?.toString() ?? '',
+          ),
+        );
+      }
+    } else {
+      type = QROptions.fromType(context, QROptionType.text);
+    }
+
+    return GenerateCodeScreen(
+      type: type,
+      initialValues: initialValues,
+    );
+  }
 
   /// Returns a [Page] based on the provided parameters.
   ///
@@ -435,27 +472,120 @@ class AppGoRouter {
     required Widget child,
     required GoRouterState state,
   }) {
+    const transitionDuration = AppMotion.slow;
+    const reverseTransitionDuration = AppMotion.medium;
+
     return CustomTransitionPage(
       key: state.pageKey,
       child: child,
-      transitionDuration: const Duration(milliseconds: 300),
-      reverseTransitionDuration: const Duration(milliseconds: 250),
+      transitionDuration: transitionDuration,
+      reverseTransitionDuration: reverseTransitionDuration,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        final curved = CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeInOut,
-        );
-        return FadeTransition(
-          opacity: curved,
-          child: SlideTransition(
+        final mediaQuery = MediaQuery.maybeOf(context);
+        final disableAnimations = (mediaQuery?.disableAnimations ?? false) ||
+            (mediaQuery?.accessibleNavigation ?? false);
+        if (disableAnimations) return child;
+
+        final platform = Theme.of(context).platform;
+        final isCupertinoPlatform =
+            platform == TargetPlatform.iOS || platform == TargetPlatform.macOS;
+
+        if (isCupertinoPlatform) {
+          final primary = CurvedAnimation(
+            parent: animation,
+            curve: AppMotion.emphasized,
+            reverseCurve: AppMotion.exit,
+          );
+          final secondary = CurvedAnimation(
+            parent: secondaryAnimation,
+            curve: AppMotion.emphasized,
+          );
+
+          return SlideTransition(
             position: Tween<Offset>(
-              begin: const Offset(0.04, 0),
+              begin: const Offset(0.08, 0),
               end: Offset.zero,
-            ).animate(curved),
-            child: child,
+            ).animate(primary),
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: Offset.zero,
+                end: const Offset(-0.03, 0),
+              ).animate(secondary),
+              child: FadeTransition(
+                opacity: Tween<double>(begin: 0.92, end: 1.0).animate(primary),
+                child: child,
+              ),
+            ),
+          );
+        }
+
+        // Spring-style forward curve (fast out, then settle)
+        final forwardCurved = CurvedAnimation(
+          parent: animation,
+          curve: const _SpringCurve(),
+          reverseCurve: AppMotion.exit,
+        );
+
+        // Secondary animation: outgoing screen fades and scales slightly
+        final secondaryCurved = CurvedAnimation(
+          parent: secondaryAnimation,
+          curve: AppMotion.exit,
+        );
+
+        return FadeTransition(
+          opacity: Tween<double>(begin: 0.0, end: 1.0).animate(forwardCurved),
+          child: FadeTransition(
+            opacity:
+                Tween<double>(begin: 1.0, end: 0.92).animate(secondaryCurved),
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0.055, 0),
+                end: Offset.zero,
+              ).animate(forwardCurved),
+              child: ScaleTransition(
+                scale:
+                    Tween<double>(begin: 0.97, end: 1.0).animate(forwardCurved),
+                child: child,
+              ),
+            ),
           ),
         );
       },
     );
+  }
+}
+
+/// Approximates iOS spring physics: fast start, gentle overshoot, smooth settle.
+class _SpringCurve extends Curve {
+  const _SpringCurve();
+
+  @override
+  double transformInternal(double t) {
+    // Cubic bezier approximation of a spring: fast out, tiny overshoot, settle
+    // Equivalent to cubic-bezier(0.34, 1.56, 0.64, 1) from CSS springs
+    return _cubicBezier(t, 0.34, 1.56, 0.64, 1.0);
+  }
+
+  /// Evaluates a cubic bezier at parameter [t] using numerical solve.
+  static double _cubicBezier(
+      double t, double x1, double y1, double x2, double y2) {
+    double cx = 3 * x1;
+    double bx = 3 * (x2 - x1) - cx;
+    double ax = 1 - cx - bx;
+
+    double cy = 3 * y1;
+    double by = 3 * (y2 - y1) - cy;
+    double ay = 1 - cy - by;
+
+    // Solve for u such that bezierX(u) == t
+    double u = t;
+    for (int i = 0; i < 4; i++) {
+      double x = ((ax * u + bx) * u + cx) * u - t;
+      double dx = (3 * ax * u + 2 * bx) * u + cx;
+      if (dx.abs() < 1e-6) break;
+      u -= x / dx;
+    }
+    u = u.clamp(0.0, 1.0);
+    return ((ay * u + by) * u + cy) * u;
   }
 }

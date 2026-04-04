@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../l10n/app_localizations.dart';
 import '../services/telemetry_service.dart';
+import '../utils/app_motion.dart';
 import '../utils/app_router.dart';
 import '../utils/route/app_path.dart';
 import '../widgets/background_screen_widget.dart';
-
 import '../widgets/generate_qr_widget.dart';
 
 class GenerateHomeScreen extends ConsumerWidget {
@@ -14,6 +15,9 @@ class GenerateHomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final options = QROptions.getOptions(context);
+    final motion = AppMotion.of(context);
+
     return BackgroundScreenWidget(
       screenTitle: AppLocalizations.of(context).generateQR,
       actionButton: () => AppGoRouter.router.push(AppPath.settings),
@@ -27,32 +31,35 @@ class GenerateHomeScreen extends ConsumerWidget {
             physics: BouncingScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3, crossAxisSpacing: 10, mainAxisSpacing: 40),
-            itemCount: QROptions.getOptions(context).length,
+            itemCount: options.length,
             itemBuilder: (context, index) {
-              final option = QROptions.getOptions(context)[index];
-              return GestureDetector(
-                      onTap: () {
-                        ref.read(telemetryServiceProvider).track(
-                          TelemetryEvents.qrTypeSelected,
-                          properties: {'qr_type': option.type.name},
-                        );
-                        AppGoRouter.router.push(
-                          AppPath.generateCode,
-                          extra: option,
-                        );
-                      },
-                      child: QROptionCard(option: option))
+              final option = options[index];
+              return QROptionCard(
+                option: option,
+                onTap: () {
+                  AppHaptics.light(context);
+                  AppSounds.click();
+                  ref.read(telemetryServiceProvider).track(
+                    TelemetryEvents.qrTypeSelected,
+                    properties: {'qr_type': option.type.name},
+                  );
+                  AppGoRouter.router.push(
+                    AppPath.generateCode,
+                    extra: option,
+                  );
+                },
+              )
                   .animate()
                   .fadeIn(
-                    delay: Duration(milliseconds: 60 * index),
-                    duration: const Duration(milliseconds: 400),
+                    delay: motion.delay(Duration(milliseconds: 60 * index)),
+                    duration: motion.duration(AppMotion.medium),
                   )
                   .scale(
                     begin: const Offset(0.8, 0.8),
                     end: const Offset(1, 1),
-                    delay: Duration(milliseconds: 60 * index),
-                    duration: const Duration(milliseconds: 400),
-                    curve: Curves.easeOutBack,
+                    delay: motion.delay(Duration(milliseconds: 60 * index)),
+                    duration: motion.duration(AppMotion.medium),
+                    curve: motion.curve(AppMotion.spring),
                   );
             },
           ),

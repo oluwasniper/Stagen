@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:wifi_scan/wifi_scan.dart';
+
 import '../l10n/app_localizations.dart';
 import 'generate_qr_widget.dart';
 import 'k_textfield_widget.dart';
@@ -39,6 +40,15 @@ class GenerateQRCodeBody extends StatelessWidget {
         return InstagramBody(controller: getController('instagram'));
       case QROptionType.telephone:
         return TelephoneBody(controller: getController('telephone'));
+      case QROptionType.sms:
+        return SmsBodyTextWidget(
+          numberController: getController('smsNumber'),
+          messageController: getController('smsMessage'),
+        );
+      case QROptionType.telegram:
+        return TelegramBody(controller: getController('telegram'));
+      case QROptionType.linkedin:
+        return LinkedInBody(controller: getController('linkedin'));
       case QROptionType.wifi:
         return WifiBodyTextWidget(
           networkController: getController('network'),
@@ -178,6 +188,69 @@ class TelephoneBody extends StatelessWidget {
     return OneTextWidget(
       labelText: AppLocalizations.of(context).phoneNumberLabel,
       hintText: AppLocalizations.of(context).phoneNumberHint,
+      controller: controller,
+    );
+  }
+}
+
+class SmsBodyTextWidget extends StatelessWidget {
+  final TextEditingController numberController;
+  final TextEditingController messageController;
+
+  const SmsBodyTextWidget({
+    super.key,
+    required this.numberController,
+    required this.messageController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        KTextField(
+          labelText: AppLocalizations.of(context).smsNumberLabel,
+          hintText: AppLocalizations.of(context).smsNumberHint,
+          autoFocus: true,
+          keyboardType: TextInputType.phone,
+          controller: numberController,
+        ),
+        const SizedBox(height: 20),
+        KTextField(
+          labelText: AppLocalizations.of(context).smsMessageLabel,
+          hintText: AppLocalizations.of(context).smsMessageHint,
+          maxLines: 3,
+          controller: messageController,
+        ),
+      ],
+    );
+  }
+}
+
+class TelegramBody extends StatelessWidget {
+  final TextEditingController controller;
+  const TelegramBody({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return OneTextWidget(
+      labelText: AppLocalizations.of(context).telegramUsernameLabel,
+      hintText: AppLocalizations.of(context).telegramUsernameHint,
+      controller: controller,
+    );
+  }
+}
+
+class LinkedInBody extends StatelessWidget {
+  final TextEditingController controller;
+  const LinkedInBody({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return OneTextWidget(
+      labelText: AppLocalizations.of(context).linkedinProfileLabel,
+      hintText: AppLocalizations.of(context).linkedinProfileHint,
       controller: controller,
     );
   }
@@ -677,8 +750,8 @@ class BusinessBodyTextWidget extends StatelessWidget {
           context: context,
           firstLabel: AppLocalizations.of(context).cityLabel,
           firstHint: AppLocalizations.of(context).cityHint,
-          secondLabel: AppLocalizations.of(context).companyLabel,
-          secondHint: AppLocalizations.of(context).companyHint,
+          secondLabel: AppLocalizations.of(context).countryLabel,
+          secondHint: AppLocalizations.of(context).countryHint,
           firstController: cityController,
           secondController: countryController,
         ),
@@ -800,6 +873,7 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -817,8 +891,8 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
                 : const Icon(Icons.my_location, color: Color(0xffFDB623)),
             label: Text(
               _isLoadingLocation
-                  ? 'Getting location...'
-                  : 'Use Current Location',
+                  ? l10n.locationGettingCurrentLocation
+                  : l10n.locationUseCurrentLocation,
               style: const TextStyle(color: Color(0xffFDB623)),
             ),
             style: OutlinedButton.styleFrom(
@@ -837,7 +911,7 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
-                'OR',
+                l10n.locationOrDivider,
                 style: TextStyle(color: Colors.white.withValues(alpha: 0.5)),
               ),
             ),
@@ -846,15 +920,15 @@ class _LocationBodyTextWidgetState extends State<LocationBodyTextWidget> {
         ),
         const SizedBox(height: 16),
         KTextField(
-          labelText: 'Latitude',
-          hintText: 'Enter latitude',
+          labelText: l10n.locationLatitudeLabel,
+          hintText: l10n.locationLatitudeHint,
           autoFocus: true,
           controller: widget.latitudeController,
         ),
         const SizedBox(height: 20),
         KTextField(
-          labelText: 'Longitude',
-          hintText: 'Enter longitude',
+          labelText: l10n.locationLongitudeLabel,
+          hintText: l10n.locationLongitudeHint,
           autoFocus: true,
           controller: widget.longitudeController,
         ),

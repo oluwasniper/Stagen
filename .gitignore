@@ -60,9 +60,24 @@ ios/Flutter/local.xcconfig
 .env
 .env.local
 .env.*.local
+.codemagic.env
 *.env
 !.env.example
+/android/key.properties
+/android/*.jks
+/android/*.keystore
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
+/ios/build/
 
 # VS Code launch.json contains --dart-define values with real secrets.
 # Use .vscode/launch.json.example as the committed template instead.
 .vscode/launch.json
+
+# Cloudflare Wrangler local state
+.wrangler/
+
+# Remotion video project
+remotion-video/node_modules/
+remotion-video/out/
+remotion-video/public/*.mp3

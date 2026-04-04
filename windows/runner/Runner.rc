@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "revolutionary_stuff" "\0"
+            VALUE "CompanyName", "com.scagen.app" "\0"
+            VALUE "FileDescription", "Scagen" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "revolutionary_stuff" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "revolutionary_stuff.exe" "\0"
-            VALUE "ProductName", "revolutionary_stuff" "\0"
+            VALUE "InternalName", "scagen" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 com.scagen.app. All rights reserved." "\0"
+            VALUE "OriginalFilename", "scagen.exe" "\0"
+            VALUE "ProductName", "Scagen" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

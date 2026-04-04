@@ -6,6 +6,11 @@
     "onboardingHeader": "Commencer",
     "onboardingSubHeader": "Allez et profitez de nos fonctionnalités gratuitement et facilitez-vous la vie avec nous.",
     "onboardingSkipButton": "Allons-y",
+    "onboardingNext": "Suivant",
+    "onboardingPage2Title": "Générez des QR codes",
+    "onboardingPage2Subtitle": "Créez des QR codes pour du texte, le Wi‑Fi, des contacts, des événements et plus en quelques secondes.",
+    "onboardingPage3Title": "Suivez votre historique",
+    "onboardingPage3Subtitle": "Tous vos QR codes scannés et générés sont stockés en toute sécurité et synchronisés entre vos appareils.",
 
     "errorText": "Erreur: Page non trouvée",
     "errorOR": "Ou",
@@ -25,11 +30,18 @@
     "emailQR": "Email",
     "twitterQR": "Twitter",
     "instagramQR": "Instagram",
-    "telephoneQR": "Téléphone", 
+    "telephoneQR": "Téléphone",
+    "smsQR": "SMS",
+    "telegramQR": "Telegram",
+    "linkedinQR": "LinkedIn",
     "generateCode": "Générer un code",
     "history": "Historique",
     "generate": "Générer",
     "scan": "Balayer",
+    "qrCodeDetected": "✓  QR code détecté",
+    "openGallery": "Ouvrir la galerie",
+    "toggleTorch": "Basculer la lampe torche",
+    "switchCamera": "Changer de caméra",
     "create": "Créer",
 
     
@@ -43,6 +55,15 @@
     "rateUsDesc": "Votre meilleure récompense pour nous",
     "shareApp": "Partager",
     "shareDesc": "Partager l'application avec d'autres personnes.",
+    "shareAppMessage": "Découvrez Scagen ! {url}",
+    "@shareAppMessage": {
+        "description": "Message utilisé lors du partage du lien de l'application",
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
     "privacyPolicy": "Politique de confidentialité",
     "privacyPolicyDesc": "Suivez nos politiques qui vous",
 
@@ -52,6 +73,8 @@
     "shareBtn": "Partager",
     "copyBtn": "Copier",
     "openBtn": "Ouvrir",
+    "backToGenerate": "Retour à Générer",
+    "scanAnother": "Scanner un autre",
 
     "qrCode": "Code QR",
     "generatedLabel": "Généré",
@@ -123,6 +146,28 @@
 
     "phoneNumberLabel": "Numéro de téléphone",
     "phoneNumberHint": "+55xxxxxxxxx",
+    "smsNumberLabel": "Numéro SMS",
+    "smsNumberHint": "Entrez le numéro du destinataire",
+    "smsMessageLabel": "Message SMS",
+    "smsMessageHint": "Entrez le message (facultatif)",
+    "telegramUsernameLabel": "Nom d'utilisateur Telegram",
+    "telegramUsernameHint": "Entrez le nom d'utilisateur ou @identifiant",
+    "linkedinProfileLabel": "Profil LinkedIn",
+    "linkedinProfileHint": "Entrez l'URL du profil ou le nom d'utilisateur",
+    "validationSmsNumberRequired": "Le numéro SMS est requis",
+    "validationSmsNumberInvalid": "Entrez un numéro SMS valide",
+    "validationTelegramRequired": "Le nom d'utilisateur Telegram est requis",
+    "validationTelegramInvalid": "Entrez un nom d'utilisateur Telegram ou un lien t.me valide",
+    "validationLinkedinRequired": "Le profil LinkedIn est requis",
+    "validationLinkedinInvalid": "Entrez une URL ou un nom d'utilisateur LinkedIn valide",
+    "validationInvalidInput": "Entrez une valeur valide",
+    "locationUseCurrentLocation": "Utiliser la position actuelle",
+    "locationGettingCurrentLocation": "Récupération de la position...",
+    "locationOrDivider": "OU",
+    "locationLatitudeLabel": "Latitude",
+    "locationLatitudeHint": "Entrez la latitude",
+    "locationLongitudeLabel": "Longitude",
+    "locationLongitudeHint": "Entrez la longitude",
 
     "changeLanguage": "Langue",
     "changeLanguageDesc": "Changer la langue de l'application",
@@ -143,15 +188,17 @@
     "authOr": "OU",
     "authContinueAnonymous": "Continuer sans compte",
     "@authContinueAnonymous": {
-        "description": "Bouton pour continuer en mode anonyme",
-        "placeholders": {
-            "error": {
-                "type": "String"
-            }
-        }
+        "description": "Bouton pour continuer en mode anonyme"
     },
     "authLogout": "Déconnexion",
     "authLogoutDesc": "Se déconnecter de votre compte",
+    "cancel": "Annuler",
+    "authDeleteAccount": "Supprimer le compte",
+    "authDeleteAccountDesc": "Supprimez définitivement votre compte et toutes vos données",
+    "authDeleteAccountConfirmTitle": "Supprimer le compte ?",
+    "authDeleteAccountConfirmBody": "Cela supprimera définitivement votre compte et tout votre historique QR. Cette action est irréversible.",
+    "authDeleteAccountConfirmButton": "Supprimer",
+    "authDeleteAccountSuccess": "Votre compte a été supprimé",
     "authAccount": "Compte",
     "linkAccountTitle": "Lier le compte",
     "linkAccountSubtitle": "Passer à un compte e-mail/mot de passe",
@@ -201,5 +248,16 @@
     "privacy": "Confidentialité",
     "shareAnalytics": "Partager les analyses",
     "shareAnalyticsSubtitle": "Aidez à améliorer Scagen en partageant des données d'utilisation anonymes",
-    "failedToShare": "Échec du partage"
+    "failedToShare": "Échec du partage",
+    "unableToOpenContent": "Impossible d'ouvrir ce contenu",
+    "noInternet": "Pas de connexion internet",
+    "scanGenerateShare": "Scanner · Générer · Partager",
+
+    "openUrlWarningTitle": "Ouvrir ce lien ?",
+    "openUrlWarningBody": "Ce lien provient d'un code QR. Assurez-vous d'y faire confiance avant de continuer.\n\n{url}",
+    "openUrlWarningInsecure": "⚠ Ce lien utilise HTTP non chiffré. Vos données peuvent être visibles par d'autres.",
+    "openUrlWarningConfirm": "Ouvrir",
+    "openUrlWarningCancel": "Annuler",
+    "authNetworkError": "Erreur réseau. Vérifiez votre connexion internet et réessayez.",
+    "authGenericError": "Une erreur s'est produite. Veuillez réessayer."
 }
