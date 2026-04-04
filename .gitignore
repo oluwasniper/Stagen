@@ -47,6 +47,14 @@ app.*.map.json
 # FVM Version Cache
 .fvm/
 
+# Node / JS tooling
+node_modules/
+.wrangler/
+web/.vercel/
+
+# iOS local config (machine-specific)
+ios/Flutter/local.xcconfig
+
 # ── Secrets & local overrides ────────────────────────────────────────────────
 # Real credentials live in .env (gitignored). Use .env.example as the template.
 .env
